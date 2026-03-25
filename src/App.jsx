@@ -3,9 +3,19 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import Button from './components/common/Button'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState(false)
+
+  const handleAsyncClick = () => {
+    setLoading(true)
+    setTimeout(() => {
+      setCount((c) => c + 1)
+      setLoading(false)
+    }, 1500)
+  }
 
   return (
     <>
@@ -18,15 +28,31 @@ function App() {
         <div>
           <h1>Get started</h1>
           <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+            Common Button Component Test
           </p>
         </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+        
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '24px', flexWrap: 'wrap' }}>
+          <Button type="primary" onClick={() => setCount(count + 1)}>
+            Primary: {count}
+          </Button>
+          
+          <Button type="secondary" onClick={() => alert('Secondary Clicked')}>
+            Secondary
+          </Button>
+          
+          <Button type="danger" onClick={() => alert('Danger Clicked')}>
+            Danger
+          </Button>
+          
+          <Button type="primary" loading={loading} onClick={handleAsyncClick}>
+            Loading Test
+          </Button>
+          
+          <Button type="primary" disabled>
+            Disabled
+          </Button>
+        </div>
       </section>
 
       <div className="ticks"></div>
