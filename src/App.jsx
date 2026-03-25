@@ -1,21 +1,22 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
-import Button from './components/common/Button'
+import { useState } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from './assets/vite.svg';
+import heroImg from './assets/hero.png';
+import './App.css';
+import Button from './components/common/Button';
+import Input from './components/common/Input';
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [loading, setLoading] = useState(false)
+  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleAsyncClick = () => {
-    setLoading(true)
+    setLoading(true);
     setTimeout(() => {
-      setCount((c) => c + 1)
-      setLoading(false)
-    }, 1500)
-  }
+      setCount((c) => c + 1);
+      setLoading(false);
+    }, 1500);
+  };
 
   return (
     <>
@@ -27,31 +28,56 @@ function App() {
         </div>
         <div>
           <h1>Get started</h1>
-          <p>
-            Common Button Component Test
-          </p>
+          <p>Common Button Component Test</p>
         </div>
-        
-        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '24px', flexWrap: 'wrap' }}>
+
+        <div
+          style={{
+            display: 'flex',
+            gap: '12px',
+            justifyContent: 'center',
+            marginTop: '24px',
+            flexWrap: 'wrap',
+          }}
+        >
           <Button type="primary" onClick={() => setCount(count + 1)}>
             Primary: {count}
           </Button>
-          
+
           <Button type="secondary" onClick={() => alert('Secondary Clicked')}>
             Secondary
           </Button>
-          
+
           <Button type="danger" onClick={() => alert('Danger Clicked')}>
             Danger
           </Button>
-          
+
           <Button type="primary" loading={loading} onClick={handleAsyncClick}>
             Loading Test
           </Button>
-          
+
           <Button type="primary" disabled>
             Disabled
           </Button>
+        </div>
+
+        <div
+          style={{
+            marginTop: '48px',
+            textAlign: 'left',
+            width: '100%',
+            maxWidth: '300px',
+            margin: '48px auto 0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px',
+          }}
+        >
+          <h3 style={{ margin: 0, padding: 0 }}>Input Component Test</h3>
+          <Input placeholder="Default Input" />
+          <Input placeholder="With helper text" helperText="This is a helper" />
+          <Input placeholder="Error State" error helperText="This is an error" />
+          <Input placeholder="Disabled Input" disabled value="Cannot edit this" />
         </div>
       </section>
 
@@ -88,11 +114,7 @@ function App() {
           <ul>
             <li>
               <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
+                <svg className="button-icon" role="presentation" aria-hidden="true">
                   <use href="/icons.svg#github-icon"></use>
                 </svg>
                 GitHub
@@ -100,11 +122,7 @@ function App() {
             </li>
             <li>
               <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
+                <svg className="button-icon" role="presentation" aria-hidden="true">
                   <use href="/icons.svg#discord-icon"></use>
                 </svg>
                 Discord
@@ -112,11 +130,7 @@ function App() {
             </li>
             <li>
               <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
+                <svg className="button-icon" role="presentation" aria-hidden="true">
                   <use href="/icons.svg#x-icon"></use>
                 </svg>
                 X.com
@@ -124,11 +138,7 @@ function App() {
             </li>
             <li>
               <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
+                <svg className="button-icon" role="presentation" aria-hidden="true">
                   <use href="/icons.svg#bluesky-icon"></use>
                 </svg>
                 Bluesky
@@ -141,7 +151,7 @@ function App() {
       <div className="ticks"></div>
       <section id="spacer"></section>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
