@@ -1,0 +1,34 @@
+.auth-layout-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #F5F5F5;
+  width: 100%;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: #FFFFFF;
+  padding: 32px;
+  border-radius: 12px;
+  border: 1px solid #D1D5DB;
+  box-sizing: border-box;
+}
+
+.auth-card-title {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 28px;
+  color: #22262B;
+  margin-top: 0;
+  margin-bottom: 24px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.auth-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

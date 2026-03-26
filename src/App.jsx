@@ -6,8 +6,12 @@ import './App.css';
 import Button from './components/common/Button';
 import Input from './components/common/Input';
 import Card from './components/common/Card';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
-function App() {
+function MainApp() {
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -21,6 +25,9 @@ function App() {
 
   return (
     <>
+      <div style={{ padding: '16px', background: '#e5e7eb', textAlign: 'center' }}>
+        <Link to="/login" style={{ fontWeight: 600, color: '#6366f1', textDecoration: 'none' }}>👉 인증 화면(AuthLayout) 예시 보러가기</Link>
+      </div>
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
@@ -190,6 +197,19 @@ function App() {
       <div className="ticks"></div>
       <section id="spacer"></section>
     </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainApp />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
