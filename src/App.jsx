@@ -5,6 +5,7 @@ import heroImg from './assets/hero.png';
 import './App.css';
 import Button from './components/common/Button';
 import Input from './components/common/Input';
+import Card from './components/common/Card';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -78,6 +79,44 @@ function App() {
           <Input placeholder="With helper text" helperText="This is a helper" />
           <Input placeholder="Error State" error helperText="This is an error" />
           <Input placeholder="Disabled Input" disabled value="Cannot edit this" />
+        </div>
+
+        <div
+          style={{
+            marginTop: '48px',
+            textAlign: 'left',
+            width: '100%',
+            maxWidth: '600px',
+            margin: '48px auto 0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px',
+          }}
+        >
+          <h3 style={{ margin: 0, padding: 0 }}>Card Component Test</h3>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: '20px',
+            }}
+          >
+            <Card title="Simple Card">
+              This is a simple card with a title and content.
+            </Card>
+
+            <Card title="Hoverable Card" hoverable onClick={() => alert('Card clicked!')}>
+              This card has a hover effect and an onClick handler. Try hovering and clicking!
+            </Card>
+
+            <Card>
+              This is a card without a title. It only shows the content.
+            </Card>
+
+            <Card title="Custom Styled Card" className="custom-card" style={{ border: '2px solid #6366F1' }}>
+              You can still pass custom styles or class names if needed.
+            </Card>
+          </div>
         </div>
       </section>
 
