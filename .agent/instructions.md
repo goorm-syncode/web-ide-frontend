@@ -2,8 +2,9 @@
 
 이 프로젝트는 Vite + React + JavaScript 기반의 프론트엔드 프로젝트입니다.
 
-이 문서는 AI 에이전트 및 팀 공용 개발 지침입니다.  
-기능 범위는 MVP_SCOPE.md를 기준으로 판단합니다.  
+이 문서는 AI 에이전트 및 팀 공용 개발 지침입니다.
+기능 범위는 MVP_SCOPE.md를 기준으로 판단합니다.
+상세 기능 동작은 FEATURE_SPEC.md를 기준으로 따른다.
 UI 스타일은 UI_RULES.md를 기준으로 반드시 통일합니다.
 
 ---
@@ -29,6 +30,7 @@ UI 스타일은 UI_RULES.md를 기준으로 반드시 통일합니다.
 - 코드와 구조는 최대한 단순하고 명확하게 유지한다
 - 파일명과 컴포넌트명은 영문 사용, 컴포넌트는 PascalCase 사용
 - 폴더 구조는 단순하게 유지하며 불필요한 계층 분리는 하지 않는다
+- UI 구현 시 HTML 기본 요소 대신 공통 컴포넌트를 우선 사용한다
 
 ---
 
@@ -95,6 +97,7 @@ UI 스타일은 UI_RULES.md를 기준으로 반드시 통일합니다.
 - 파일명은 `Dev{ComponentName}Page.jsx` 형식을 사용한다
 
 예시:
+
 - DevButtonPage.jsx
 - DevInputPage.jsx
 - DevCardPage.jsx
@@ -107,6 +110,7 @@ UI 스타일은 UI_RULES.md를 기준으로 반드시 통일합니다.
 - Dev 페이지는 `/dev/*` 경로로 라우터에 등록한다
 
 예시:
+
 - /dev/button
 - /dev/input
 - /dev/card
