@@ -6,6 +6,7 @@ import './App.css';
 import Button from './components/common/Button';
 import Input from './components/common/Input';
 import Card from './components/common/Card';
+import MessageBox from './components/common/MessageBox';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -101,22 +102,54 @@ function App() {
               gap: '20px',
             }}
           >
-            <Card title="Simple Card">
-              This is a simple card with a title and content.
-            </Card>
+            <Card title="Simple Card">This is a simple card with a title and content.</Card>
 
             <Card title="Hoverable Card" hoverable onClick={() => alert('Card clicked!')}>
               This card has a hover effect and an onClick handler. Try hovering and clicking!
             </Card>
 
-            <Card>
-              This is a card without a title. It only shows the content.
-            </Card>
+            <Card>This is a card without a title. It only shows the content.</Card>
 
-            <Card title="Custom Styled Card" className="custom-card" style={{ border: '2px solid #6366F1' }}>
+            <Card
+              title="Custom Styled Card"
+              className="custom-card"
+              style={{ border: '2px solid #6366F1' }}
+            >
               You can still pass custom styles or class names if needed.
             </Card>
           </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: '48px',
+            textAlign: 'left',
+            width: '100%',
+            maxWidth: '600px',
+            margin: '48px auto 0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: '24px',
+          }}
+        >
+          <h3 style={{ margin: 0, padding: 0 }}>MessageBox Component Test</h3>
+          <MessageBox type="success">
+            <div>회원가입이 성공적으로 완료되었습니다!</div>
+            <div style={{ marginTop: '4px', fontSize: '0.9em', color: '#8B95A1' }}>(Registration completed successfully!)</div>
+          </MessageBox>
+          <MessageBox type="warning">
+            <div>입력하신 정보가 정확한지 다시 한번 확인해주세요.</div>
+            <div style={{ marginTop: '4px', fontSize: '0.9em', color: '#8B95A1' }}>(Please double-check if the entered information is correct.)</div>
+          </MessageBox>
+          <MessageBox type="error">
+            <div>이메일 또는 비밀번호가 올바르지 않습니다.</div>
+            <div style={{ marginTop: '4px', fontSize: '0.9em', color: '#8B95A1' }}>(Invalid email or password.)</div>
+          </MessageBox>
+          <MessageBox type="error" showIcon={false}>
+            <div>아이콘 없이 표시되는 에러 메시지입니다.</div>
+            <div style={{ marginTop: '4px', fontSize: '0.9em', color: '#8B95A1' }}>(This is an error message displayed without an icon.)</div>
+          </MessageBox>
         </div>
       </section>
 

@@ -1,0 +1,23 @@
+/* Status Colors from UI_RULES.md */
+:root {
+  --status-success: #34c759;
+
+  --status-warning: #e7c85c;
+
+  --status-error: #ef4444;
+
+  /* Spacing and Radius from UI_RULES.md */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Typography */
+  --font-size-body: 14px;
+  --font-size-caption: 12px;
+}

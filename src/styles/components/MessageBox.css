@@ -1,0 +1,72 @@
+.message-box {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: flex-start;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background-color: #ffffff;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+  color: #22262b; /* Text Primary from UI_RULES.md */
+  animation: messageBoxFadeIn 0.3s ease-out;
+}
+
+/* Status variants */
+.message-box-success {
+  border-color: var(--status-success);
+}
+
+.message-box-warning {
+  border-color: var(--status-warning);
+}
+
+.message-box-error {
+  border-color: var(--status-error);
+}
+
+/* Icon styling */
+.message-box-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+}
+
+.message-box-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.message-box-success .message-box-icon {
+  color: var(--status-success);
+}
+
+.message-box-warning .message-box-icon {
+  color: var(--status-warning);
+}
+
+.message-box-error .message-box-icon {
+  color: var(--status-error);
+}
+
+/* Content styling */
+.message-box-content {
+  flex: 1;
+  word-break: break-word;
+}
+
+/* Animations */
+@keyframes messageBoxFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

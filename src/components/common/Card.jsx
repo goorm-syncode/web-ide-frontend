@@ -10,14 +10,7 @@ import '../../styles/components/Card.css';
  * @param {Function} [props.onClick] - 클릭 핸들러
  * @param {boolean} [props.hoverable=false] - 호버 효과 여부
  */
-const Card = ({
-  children,
-  title,
-  className = '',
-  onClick,
-  hoverable = false,
-  ...props
-}) => {
+const Card = ({ children, title, className = '', onClick, hoverable = false, ...props }) => {
   const handleClick = (e) => {
     if (onClick) {
       onClick(e);
