@@ -73,8 +73,8 @@ const MessageBox = ({
 }) => {
   if (!isOpen) return null;
 
-  // 모든 모달에서 확인 버튼은 기본 UI 색상(primary)으로 통일합니다.
-  const confirmBtnType = 'primary';
+  // error 타입일 경우 사용자의 요청에 따라 다시 위험(danger) 색상(#EF4444)을 사용합니다.
+  const confirmBtnType = type === 'error' ? 'danger' : 'primary';
 
   return (
     <div className="message-box-overlay">
