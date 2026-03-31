@@ -1,0 +1,71 @@
+/* src/styles/AuthLayout.css */
+
+.auth-layout-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.auth-layout-card-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.auth-page-title {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #22262B;
+  margin: 0 0 8px 0;
+}
+
+.auth-page-subtitle {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 14px;
+  color: #8B95A1;
+  margin: 0;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-submit-btn-wrapper {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.auth-submit-btn-wrapper > button {
+  width: 100%;
+}
+
+.auth-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.auth-link-text {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 14px;
+  color: #4B5563;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth-link-text:hover {
+  text-decoration: underline;
+  color: #6366F1;
+}

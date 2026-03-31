@@ -13,7 +13,9 @@ import '../../styles/components/Button.css';
  */
 const Button = ({
   children,
-  type = 'primary',
+  type = 'button',
+  primary = false,
+  fullWidth = false,
   loading = false,
   disabled = false,
   onClick,
@@ -22,10 +24,12 @@ const Button = ({
 }) => {
   const isDisabled = disabled || loading;
 
+  const btnType = primary ? 'primary' : type === 'button' ? 'primary' : type;
+
   return (
     <button
-      type="button"
-      className={`btn btn-${type} ${loading ? 'btn-loading' : ''} ${className}`}
+      type={type === 'button' || type === 'submit' || type === 'reset' ? type : 'button'}
+      className={`btn btn-${btnType} ${fullWidth ? 'btn-fullWidth' : ''} ${loading ? 'btn-loading' : ''} ${className}`}
       disabled={isDisabled}
       onClick={onClick}
       {...props}
