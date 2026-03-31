@@ -3,6 +3,7 @@ import App from '../App';
 import DevSignupPage from '../pages/dev/DevSignupPage';
 import DevMessageBoxPage from '../pages/dev/DevMessageBoxPage';
 import DevGnbPage from '../pages/dev/DevGnbPage';
+import DevFooterPage from '../pages/dev/DevFooterPage';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: '/dev/gnb',
     element: <DevGnbPage />,
+  },
+  {
+    path: '/dev/footer',
+    element: <DevFooterPage />,
   }
 ]);
 
