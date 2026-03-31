@@ -22,7 +22,8 @@ const SignupPage = () => {
         <Input type="password" placeholder="비밀번호를 입력하세요" name="password" required />
         <Input type="password" placeholder="비밀번호를 다시 확인합니다" name="passwordConfirm" required />
         <div className="auth-submit-btn-wrapper">
-          <Button type="submit" variant="primary" fullWidth>가입하기</Button>
+          <Button primary fullWidth onClick={handleSignup}>가입하기</Button>
+          <button type="submit" style={{ display: 'none' }} />
         </div>
       </form>
       
