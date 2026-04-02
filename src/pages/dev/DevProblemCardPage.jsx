@@ -1,4 +1,3 @@
-import React from 'react';
 import ProblemCard from '../../components/domain/ProblemCard';
 import '../../styles/pages/DevProblemCardPage.css';
 
