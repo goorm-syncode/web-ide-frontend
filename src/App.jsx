@@ -120,7 +120,7 @@ function App() {
         </div>
       </section>
 
-      <div className="ticks"></div>
+
 
       <section id="next-steps">
         <div id="docs">
@@ -187,7 +187,7 @@ function App() {
         </div>
       </section>
 
-      <div className="ticks"></div>
+
       <section id="spacer"></section>
     </>
   );
