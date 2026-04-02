@@ -80,9 +80,9 @@ const ProblemCard = ({
     const getButtonStyle = () => {
       switch (status) {
         case 'unattempted':
-          return { primary: true, className: '' };
-        case 'in_progress':
           return { primary: false, className: 'problem-btn-soft' };
+        case 'in_progress':
+          return { primary: true, className: '' };
         case 'solved':
           return { primary: false, className: 'problem-btn-light' };
         default:
