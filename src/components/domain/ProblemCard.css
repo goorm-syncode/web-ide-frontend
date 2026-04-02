@@ -1,0 +1,121 @@
+/* ProblemCard.css */
+
+.problem-card-container {
+  min-width: 320px;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 공통 Card 컴포넌트의 내부 content 영역이 전체 높이를 차지하도록 강제 및 패딩 16px 적용 */
+.problem-card-container > .card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px; /* 다시 16px 패딩 규칙 적용 */
+}
+
+.problem-card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* 부모 내에서 전체 공간 차지 */
+}
+
+.problem-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.problem-category {
+  font-size: 10px;
+  color: #8B95A1;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.problem-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.problem-status.solved { color: #34C759; }
+.problem-status.in_progress { color: #E7C85C; }
+.problem-status.unattempted { color: #8B95A1; }
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.status-dot.solved { background-color: #34C759; }
+.status-dot.in_progress { background-color: #E7C85C; }
+
+.problem-body {
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.problem-title {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #22262B;
+  line-height: 1.4;
+  letter-spacing: -0.025em; /* 자간이 벌어져 보이는 문제를 해결하기 위해 좁게 조정 */
+}
+
+.problem-description {
+  margin: 0;
+  font-size: 12px;
+  color: #4B5563;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 하단 영역(태그 + 버튼)을 바닥에 고정 */
+.problem-footer-section {
+  margin-top: auto; /* 상단 여백을 채워 바닥으로 밀어냄 */
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* 패딩 규칙 (16px) 준수 */
+}
+
+.problem-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.problem-footer-button {
+  width: 100%;
+}
+
+/* 버튼 크기 및 스타일 */
+.problem-card-container .problem-footer-button .btn.problem-card-btn {
+  border-radius: 8px;
+  height: 38px;
+  border: none;
+  font-size: 13px;
+}
+
+/* 완료 / 미완료 상태일 때의 연회색 + 인디고 텍스트 버튼 */
+.problem-card-container .problem-footer-button .btn.problem-btn-light {
+  background-color: #F3F4F6;
+  color: #6366F1;
+}
+
+.problem-card-container .problem-footer-button .btn.problem-btn-light:hover:not(:disabled) {
+  background-color: #E5E7EB;
+  box-shadow: none;
+}

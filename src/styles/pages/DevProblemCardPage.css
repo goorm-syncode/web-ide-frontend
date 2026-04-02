@@ -1,0 +1,45 @@
+/* DevProblemCardPage.css */
+
+.dev-problem-card-page {
+  padding: 40px;
+  background-color: #f5f5f5; /* Background Page */
+  min-height: 100vh;
+}
+
+.dev-problem-card-title {
+  margin-bottom: 40px;
+  font-size: 28px; /* Page Title */
+  color: #22262b; /* Primary Text */
+  text-align: left;
+}
+
+.dev-problem-card-grid {
+  display: grid;
+  gap: 24px;
+}
+
+/* 기본 (데스크탑): 3열 이상 자유 배치 */
+@media (min-width: 1025px) {
+  .dev-problem-card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
+
+/* 태블릿 (768px ~ 1024px): 2열 배치 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .dev-problem-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px; /* 규칙에 정의된 24px 적용 */
+  }
+}
+
+/* 스마트폰 (767px 이하): 1열 배치 */
+@media (max-width: 767px) {
+  .dev-problem-card-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .dev-problem-card-page {
+    padding: 24px 16px; /* 모바일 전용 페이지 여백 */
+  }
+}
