@@ -70,18 +70,33 @@ const ProblemCard = ({
   };
 
   const renderButton = () => {
-    const isProgress = status === 'in_progress';
     const buttonTextMap = {
       solved: '코드 리뷰',
       in_progress: '이어서 풀기',
       unattempted: '문제 시작',
     };
 
+    // 상태별 버튼 스타일 설정
+    const getButtonStyle = () => {
+      switch (status) {
+        case 'unattempted':
+          return { primary: true, className: '' };
+        case 'in_progress':
+          return { primary: false, className: 'problem-btn-soft' };
+        case 'solved':
+          return { primary: false, className: 'problem-btn-light' };
+        default:
+          return { primary: true, className: '' };
+      }
+    };
+
+    const { primary, className } = getButtonStyle();
+
     return (
       <Button
         type="button"
-        primary={isProgress}
-        className={!isProgress ? 'problem-btn-light problem-card-btn' : 'problem-card-btn'}
+        primary={primary}
+        className={`${className} problem-card-btn`.trim()}
         fullWidth
         onClick={onClickAction}
       >

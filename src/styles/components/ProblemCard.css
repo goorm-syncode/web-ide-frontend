@@ -145,3 +145,12 @@
   background-color: #e5e7eb;
   box-shadow: none;
 }
+/* 진행 중(이어서 풀기) 상태일 때의 소프트 인디고 버튼 */
+.problem-card-container .problem-footer-button .btn.problem-btn-soft {
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+
+.problem-card-container .problem-footer-button .btn.problem-btn-soft:hover:not(:disabled) {
+  background-color: #c7d2fe;
+}
