@@ -73,7 +73,7 @@ const ProblemCard = ({
     const buttonTextMap = {
       solved: '코드 리뷰',
       in_progress: '이어서 풀기',
-      unattempted: '문제 시작',
+      unattempted: '문제 풀기',
     };
 
     // 상태별 버튼 스타일 설정
@@ -100,7 +100,7 @@ const ProblemCard = ({
         fullWidth
         onClick={onClickAction}
       >
-        {buttonTextMap[status] || '문제 시작'}
+        {buttonTextMap[status] || '문제 풀기'}
       </Button>
     );
   };
