@@ -7,6 +7,20 @@
   width: 100%;
 }
 
+.input-inner-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  color: #8B95A1;
+  pointer-events: none;
+}
+
 .input-field {
   width: 100%;
   height: 40px;
@@ -20,6 +34,10 @@
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.2s ease;
+}
+
+.input-field.input-with-icon {
+  padding-left: 36px;
 }
 
 .input-field::placeholder {
