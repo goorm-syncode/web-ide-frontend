@@ -1,3 +1,4 @@
+import React from 'react';
 import Card from '../common/Card';
 import Button from '../common/Button';
 import TagBadge from './TagBadge';
@@ -26,20 +27,28 @@ const ProblemCard = ({
   // 난이도에 따른 뱃지 타입 맵핑
   const getDifficultyType = (level) => {
     switch (level) {
-      case 'EASY': return 'success';
-      case 'MEDIUM': return 'warning';
-      case 'HARD': return 'error';
-      default: return 'default';
+      case 'EASY':
+        return 'success';
+      case 'MEDIUM':
+        return 'warning';
+      case 'HARD':
+        return 'error';
+      default:
+        return 'default';
     }
   };
 
   // 난이도 한글 변환
   const getDifficultyText = (level) => {
     switch (level) {
-      case 'EASY': return '쉬움';
-      case 'MEDIUM': return '보통';
-      case 'HARD': return '어려움';
-      default: return level;
+      case 'EASY':
+        return '쉬움';
+      case 'MEDIUM':
+        return '보통';
+      case 'HARD':
+        return '어려움';
+      default:
+        return level;
     }
   };
 
@@ -69,11 +78,11 @@ const ProblemCard = ({
     };
 
     return (
-      <Button 
-        type="button" 
+      <Button
+        type="button"
         primary={isProgress}
-        className={!isProgress ? 'problem-btn-light problem-card-btn' : 'problem-card-btn'} 
-        fullWidth 
+        className={!isProgress ? 'problem-btn-light problem-card-btn' : 'problem-card-btn'}
+        fullWidth
         onClick={onClickAction}
       >
         {buttonTextMap[status] || '문제 시작'}
@@ -88,7 +97,7 @@ const ProblemCard = ({
           <span className="problem-category">{category}</span>
           {renderStatus()}
         </div>
-        
+
         <div className="problem-body">
           <h3 className="problem-title">{title}</h3>
           <p className="problem-description">{description}</p>
@@ -107,9 +116,7 @@ const ProblemCard = ({
           </div>
 
           {/* 하단 버튼 래퍼 */}
-          <div className="problem-footer-button">
-            {renderButton()}
-          </div>
+          <div className="problem-footer-button">{renderButton()}</div>
         </div>
       </div>
     </Card>

@@ -46,7 +46,7 @@
 
 .problem-category {
   font-size: 10px;
-  color: #8B95A1;
+  color: #8b95a1;
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -59,17 +59,27 @@
   font-weight: 600;
 }
 
-.problem-status.solved { color: #34C759; }
-.problem-status.in_progress { color: #E7C85C; }
-.problem-status.unattempted { color: #8B95A1; }
+.problem-status.solved {
+  color: #34c759;
+}
+.problem-status.in_progress {
+  color: #e7c85c;
+}
+.problem-status.unattempted {
+  color: #8b95a1;
+}
 
 .status-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
 }
-.status-dot.solved { background-color: #34C759; }
-.status-dot.in_progress { background-color: #E7C85C; }
+.status-dot.solved {
+  background-color: #34c759;
+}
+.status-dot.in_progress {
+  background-color: #e7c85c;
+}
 
 .problem-body {
   margin-bottom: 24px;
@@ -80,7 +90,7 @@
   margin: 0 0 8px 0;
   font-size: 16px;
   font-weight: 700;
-  color: #22262B;
+  color: #22262b;
   line-height: 1.4;
   letter-spacing: -0.025em; /* 자간이 벌어져 보이는 문제를 해결하기 위해 좁게 조정 */
 }
@@ -88,7 +98,7 @@
 .problem-description {
   margin: 0;
   font-size: 12px;
-  color: #4B5563;
+  color: #4b5563;
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -127,11 +137,11 @@
 
 /* 완료 / 미완료 상태일 때의 연회색 + 인디고 텍스트 버튼 */
 .problem-card-container .problem-footer-button .btn.problem-btn-light {
-  background-color: #F3F4F6;
-  color: #6366F1;
+  background-color: #f3f4f6;
+  color: #6366f1;
 }
 
 .problem-card-container .problem-footer-button .btn.problem-btn-light:hover:not(:disabled) {
-  background-color: #E5E7EB;
+  background-color: #e5e7eb;
   box-shadow: none;
 }
