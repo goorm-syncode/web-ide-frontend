@@ -20,7 +20,7 @@ const router = createBrowserRouter([
   {
     path: '/dev/gnb',
     element: <DevGnbPage />,
-  }
+  },
 ]);
 
 export default router;
