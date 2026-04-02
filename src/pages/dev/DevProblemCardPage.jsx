@@ -1,13 +1,12 @@
+import React from 'react';
 import ProblemCard from '../../components/domain/ProblemCard';
 import '../../styles/pages/DevProblemCardPage.css';
 
 const DevProblemCardPage = () => {
   return (
     <div className="dev-problem-card-page">
-      <h1 className="dev-problem-card-title">
-        Problem Card Component Test
-      </h1>
-      
+      <h1 className="dev-problem-card-title">Problem Card Component Test</h1>
+
       <div className="dev-problem-card-grid">
         {/* 완료 (Solved) 카드 테스트 */}
         <ProblemCard
