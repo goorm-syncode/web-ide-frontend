@@ -1,0 +1,23 @@
+.dev-problem-list-wrapper {
+  min-height: 100vh;
+  background-color: #F5F5F5; /* Page 배경색 규칙 반영 */
+  padding: 48px 24px;
+}
+
+.dev-problem-list-content {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.dev-title {
+  font-size: 28px;
+  color: #22262B;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.dev-subtitle {
+  font-size: 14px;
+  color: #8B95A1;
+  margin-bottom: 32px;
+}
