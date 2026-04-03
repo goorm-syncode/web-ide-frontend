@@ -1,0 +1,13 @@
+commit d68059b6ccb229b3dfc1ab3edc7ad1064b3f993e
+Author: AI Assistant <ai@example.com>
+Date:   Fri Apr 3 16:12:51 2026 +0900
+
+    feat: implement ProblemDescriptionPanel component with markdown rendering and copy-to-clipboard functionality
+
+package-lock.json
+package.json
+src/components/domain/ProblemDescriptionPanel.jsx
+src/pages/dev/DevProblemDescriptionPage.jsx
+src/router/index.jsx
+src/styles/components/ProblemDescriptionPanel.css
+src/styles/pages/DevProblemDescriptionPage.css
