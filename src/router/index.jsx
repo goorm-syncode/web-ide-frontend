@@ -4,14 +4,20 @@ import DevSignupPage from '../pages/dev/DevSignupPage';
 import DevMessageBoxPage from '../pages/dev/DevMessageBoxPage';
 import DevGnbPage from '../pages/dev/DevGnbPage';
 import DevInputPage from '../pages/dev/DevInputPage';
+import DevProgressBannerPage from '../pages/dev/DevProgressBannerPage';
 import DevFooterPage from '../pages/dev/DevFooterPage';
 import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
+import DevLoginPage from '../pages/dev/LoginPage';
 import DevProblemListPage from '../pages/dev/DevProblemListPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+  },
+  {
+    path: '/dev/login',
+    element: <DevLoginPage />,
   },
   {
     path: '/dev/signup',
@@ -29,6 +35,11 @@ const router = createBrowserRouter([
     path: '/dev/Input',
     element: <DevInputPage />,
   },
+  {
+    path: '/dev/progress-banner',
+    element: <DevProgressBannerPage />,
+  },
+  {
     path: '/dev/footer',
     element: <DevFooterPage />,
   },
