@@ -5,7 +5,6 @@ import DevMessageBoxPage from '../pages/dev/DevMessageBoxPage';
 import DevGnbPage from '../pages/dev/DevGnbPage';
 import DevFooterPage from '../pages/dev/DevFooterPage';
 import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
-import DevProblemListPage from '../pages/dev/DevProblemListPage';
 
 const router = createBrowserRouter([
   {
@@ -27,14 +26,8 @@ const router = createBrowserRouter([
   {
     path: '/dev/footer',
     element: <DevFooterPage />,
-  },
-  {
     path: '/dev/problem-card',
     element: <DevProblemCardPage />,
-  },
-  {
-    path: '/dev/problem-list',
-    element: <DevProblemListPage />,
   }
 ]);
 
