@@ -1,3 +1,4 @@
+import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
 import DevSignupPage from '../pages/dev/DevSignupPage';
@@ -12,6 +13,10 @@ import DevProblemListPage from '../pages/dev/DevProblemListPage';
 import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
 
 const router = createBrowserRouter([
+  {
+    path: '/dev/problem-description',
+    element: <DevProblemDescriptionPage />,
+  },
   {
     path: '/',
     element: <App />,
