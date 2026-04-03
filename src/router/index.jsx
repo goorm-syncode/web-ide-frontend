@@ -5,12 +5,17 @@ import DevMessageBoxPage from '../pages/dev/DevMessageBoxPage';
 import DevGnbPage from '../pages/dev/DevGnbPage';
 import DevFooterPage from '../pages/dev/DevFooterPage';
 import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
+import DevLoginPage from '../pages/dev/LoginPage';
 import DevProblemListPage from '../pages/dev/DevProblemListPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+  },
+  {
+    path: '/dev/login',
+    element: <DevLoginPage />,
   },
   {
     path: '/dev/signup',
