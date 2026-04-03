@@ -1,0 +1,14 @@
+.dev-footer-page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  width: 100%;
+  background-color: var(--bg); /* Use theme variable */
+}
+
+.dev-footer-page-content {
+  flex: 1;
+  padding: 24px;
+  color: #22262B; /* Primary Text from UI_RULES.md */
+  text-align: center;
+}

@@ -1,0 +1,33 @@
+.tag-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 난이도 매핑 (UI 규칙 Status 컬러 준수) */
+.tag-badge-success {
+  background-color: #34c759;
+  color: #ffffff;
+}
+
+.tag-badge-warning {
+  background-color: #e7c85c; /* 보통 난이도 */
+  color: #ffffff;
+}
+
+.tag-badge-error {
+  background-color: #ef4444; /* 어려움 난이도 */
+  color: #ffffff;
+}
+
+/* 기본 속성 태그 (회색조) */
+.tag-badge-default {
+  background-color: #f5f5f5; /* Background Page */
+  color: #4b5563; /* Text Secondary */
+}

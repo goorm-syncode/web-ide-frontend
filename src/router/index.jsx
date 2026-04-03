@@ -4,6 +4,9 @@ import DevSignupPage from '../pages/dev/DevSignupPage';
 import DevMessageBoxPage from '../pages/dev/DevMessageBoxPage';
 import DevGnbPage from '../pages/dev/DevGnbPage';
 import DevInputPage from '../pages/dev/DevInputPage';
+import DevFooterPage from '../pages/dev/DevFooterPage';
+import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
+import DevProblemListPage from '../pages/dev/DevProblemListPage';
 
 const router = createBrowserRouter([
   {
@@ -23,13 +26,20 @@ const router = createBrowserRouter([
     element: <DevGnbPage />,
   },
   {
-    path: '/dev/input',
-    element: <DevInputPage />,
-  },
-  {
     path: '/dev/Input',
     element: <DevInputPage />,
   },
+    path: '/dev/footer',
+    element: <DevFooterPage />,
+  },
+  {
+    path: '/dev/problem-card',
+    element: <DevProblemCardPage />,
+  },
+  {
+    path: '/dev/problem-list',
+    element: <DevProblemListPage />,
+  }
 ]);
 
 export default router;
