@@ -9,6 +9,7 @@ import DevFooterPage from '../pages/dev/DevFooterPage';
 import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
 import DevLoginPage from '../pages/dev/LoginPage';
 import DevProblemListPage from '../pages/dev/DevProblemListPage';
+import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
   {
     path: '/dev/problem-list',
     element: <DevProblemListPage />,
+  },
+  {
+    path: '/dev/execution-result',
+    element: <DevExecutionResultPage />,
   }
 ]);
 

@@ -1,0 +1,94 @@
+/* ExecutionResultPanel */
+
+.execution-panel {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid #e5e7eb;
+  min-height: 48px;
+  gap: 16px;
+}
+
+/* ── Tabs ── */
+
+.panel-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 100%;
+}
+
+.panel-tab {
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8b95a1;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  margin-bottom: -1px;
+}
+
+.panel-tab:hover {
+  color: #22262b;
+}
+
+.panel-tab--active {
+  color: #6366f1;
+  border-bottom-color: #6366f1;
+}
+
+/* ── Actions ── */
+
+.panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn-icon {
+  margin-right: 6px;
+}
+
+/* ── Content ── */
+
+.panel-content {
+  flex: 1;
+  padding: 16px;
+  overflow: auto;
+  min-height: 120px;
+}
+
+.panel-placeholder {
+  font-size: 14px;
+  color: #8b95a1;
+  margin: 0;
+}
+
+.panel-output {
+  font-size: 13px;
+  color: #22262b;
+  font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+  line-height: 1.6;
+}
