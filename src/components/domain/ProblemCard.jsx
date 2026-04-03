@@ -108,16 +108,20 @@ const ProblemCard = ({
   return (
     <Card className="problem-card-container">
       <div className="problem-card-content">
-        <div className="problem-card-header">
-          <span className="problem-category">{category}</span>
-          {renderStatus()}
+        {/* 상단 그룹: 카테고리 헤더 + 제목/설명 */}
+        <div className="problem-top-group">
+          <div className="problem-card-header">
+            <span className="problem-category">{category}</span>
+            {renderStatus()}
+          </div>
+
+          <div className="problem-body">
+            <h3 className="problem-title">{title}</h3>
+            <p className="problem-description">{description}</p>
+          </div>
         </div>
 
-        <div className="problem-body">
-          <h3 className="problem-title">{title}</h3>
-          <p className="problem-description">{description}</p>
-        </div>
-
+        {/* 하단 그룹: 태그 + 버튼 */}
         <div className="problem-footer-section">
           <div className="problem-tags">
             {/* 난이도 뱃지 (맨 앞) */}

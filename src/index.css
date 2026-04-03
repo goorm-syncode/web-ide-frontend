@@ -53,12 +53,12 @@ body {
 }
 
 #root {
-  width: 1126px;
+  width: 100%;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
   text-align: center;
   /* border-inline removed as requested */
-  min-height: 100svh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -107,3 +107,6 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* 공통 반응형 유틸리티 스타일 임포트 */
+@import './styles/responsive.css';

@@ -1,10 +1,10 @@
 .footer-container {
   width: 100%;
   margin-top: auto;
-  background-color: var(--bg); /* Use theme-aware background */
+  background-color: #FFFFFF; /* GNB와 동일한 배경색 적용 */
   color: #8b95a1; /* Muted Text from UI_RULES.md */
   text-align: center;
-  padding: 32px 16px; /* Spacing rule 32, 16 */
+  padding: 24px 16px; /* 12px -> 24px로 다시 확대하여 존재감 부여 */
   font-size: 12px; /* Caption size from UI_RULES.md */
   /* border-top removed */
   display: flex;

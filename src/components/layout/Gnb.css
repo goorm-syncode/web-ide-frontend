@@ -2,8 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
-  padding: 0 24px;
+  height: 65px; /* 80px -> 65px로 15px 축소 */
+  padding: 0 32px; /* 48px -> 32px로 여백 조정 */
   background-color: #FFFFFF;
 /* border-bottom removed as boundary line */
   font-family: 'Pretendard', sans-serif;
@@ -36,7 +36,7 @@
 }
 
 .gnb-title {
-  font-size: 20px;
+  font-size: 24px; /* 20px -> 24px로 확대 */
   font-weight: 700;
   color: #6366F1; /* Primary Indigo */
   margin: 0;
@@ -90,15 +90,15 @@
 @media screen and (max-width: 768px) {
   .gnb-container {
     height: 56px;
-    padding: 0 16px;
+    padding: 0 24px; /* 모바일: 콘텐츠 padding-left(24px)와 맞춤 */
   }
 
   .gnb-left {
     gap: 8px;
   }
 
-  .gnb-title {
-    font-size: 16px; /* 토큰: 16px */
+  .gnb-left .gnb-title {
+    font-size: 20px;
   }
 
   .gnb-right {
