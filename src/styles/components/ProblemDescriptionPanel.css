@@ -1,0 +1,183 @@
+.problem-description-wrapper {
+  padding: 24px;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: #FFFFFF;
+  color: #22262B;
+  font-family: Pretendard, system-ui, -apple-system, sans-serif;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.problem-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+  color: #22262B;
+}
+
+.panel-content {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #4B5563;
+}
+
+.panel-content p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.panel-content strong {
+  font-weight: 600;
+  color: #22262B;
+}
+
+.panel-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background-color: #F5F5F5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #6366F1;
+  font-size: 13px;
+}
+
+.example-box-wrapper {
+  display: block;
+  position: relative;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  border-left: 4px solid #6366F1;
+  background-color: #F8FAFC;
+}
+
+.copy-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 4px;
+  padding: 4px 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #94A3B8;
+  z-index: 10;
+}
+
+.copy-button:hover {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #475569;
+}
+
+.copy-button.copied {
+  background-color: #F0FDF4;
+  border-color: #BBF7D0;
+  color: #16A34A;
+}
+
+.copy-success-text {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.copy-icon {
+  opacity: 0.7;
+}
+
+.copy-button:hover .copy-icon {
+  opacity: 1;
+}
+
+/* Use more specific selectors to avoid !important */
+.panel-content .example-box-pre {
+  margin: 0; 
+  padding: 16px;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 400px;
+  tab-size: 4;
+  border: none; 
+  border-left: none;
+  background-color: transparent;
+}
+
+/* Hidden textarea for copy fallback - follows UI Rules (no inline styles) */
+.copy-fallback-textarea {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.example-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  color: #374151;
+}
+
+.panel-content pre code,
+.example-box-pre code {
+  background-color: transparent;
+  padding: 0;
+  color: #4B5563;
+  font-size: 13px;
+  line-height: 1.6;
+  display: block; /* Ensure the code block is a block container */
+}
+
+.code-line {
+  display: block;
+  min-height: 1.6em;
+  white-space: pre;
+}
+
+.space-indicator,
+.tab-indicator,
+.newline-indicator {
+  color: #6366F1; /* More prominent color */
+  font-weight: bold;
+  user-select: none;
+  opacity: 0.4;
+}
+
+.newline-indicator {
+  margin-left: 2px;
+}
+
+.tab-indicator {
+  margin-right: 2px;
+}
+
+.panel-content h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  color: #22262B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.panel-content ul {
+  padding-left: 20px;
+  margin-bottom: 16px;
+}
+
+.panel-content li {
+  margin-bottom: 8px;
+}
