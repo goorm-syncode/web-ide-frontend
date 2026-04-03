@@ -1,0 +1,49 @@
+.execution-result-panel {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  width: 100%;
+}
+
+/* 탭 영역 */
+.panel-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.panel-tab {
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8b95a1;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  line-height: 1;
+  margin-bottom: -1px;
+  transition: color 0.15s;
+}
+
+.panel-tab:hover {
+  color: #4b5563;
+}
+
+.panel-tab.active {
+  color: #6366f1;
+  border-bottom-color: #6366f1;
+}
+
+/* 콘텐츠 영역 */
+.panel-content {
+  padding: 16px;
+  flex: 1;
+}
+
+/* idle 상태 안내 문구 */
+.panel-idle-message {
+  font-size: 14px;
+  color: #8b95a1;
+}
