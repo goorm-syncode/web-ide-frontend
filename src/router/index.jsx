@@ -1,3 +1,4 @@
+import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
 import DevSignupPage from '../pages/dev/DevSignupPage';
@@ -8,6 +9,10 @@ import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
 import DevProblemListPage from '../pages/dev/DevProblemListPage';
 
 const router = createBrowserRouter([
+  {
+    path: '/dev/problem-description',
+    element: <DevProblemDescriptionPage />,
+  },
   {
     path: '/',
     element: <App />,
@@ -35,7 +40,7 @@ const router = createBrowserRouter([
   {
     path: '/dev/problem-list',
     element: <DevProblemListPage />,
-  }
+  },
 ]);
 
 export default router;
