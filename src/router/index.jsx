@@ -3,6 +3,7 @@ import App from '../App';
 import DevSignupPage from '../pages/dev/DevSignupPage';
 import DevMessageBoxPage from '../pages/dev/DevMessageBoxPage';
 import DevGnbPage from '../pages/dev/DevGnbPage';
+import DevProgressBannerPage from '../pages/dev/DevProgressBannerPage';
 import DevFooterPage from '../pages/dev/DevFooterPage';
 import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
 import DevLoginPage from '../pages/dev/LoginPage';
@@ -30,6 +31,9 @@ const router = createBrowserRouter([
     element: <DevGnbPage />,
   },
   {
+    path: '/dev/progress-banner',
+    element: <DevProgressBannerPage />,
+  },
     path: '/dev/footer',
     element: <DevFooterPage />,
   },
