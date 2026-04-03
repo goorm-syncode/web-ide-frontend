@@ -4,6 +4,9 @@ import DevSignupPage from '../pages/dev/DevSignupPage';
 import DevMessageBoxPage from '../pages/dev/DevMessageBoxPage';
 import DevGnbPage from '../pages/dev/DevGnbPage';
 import DevProgressBannerPage from '../pages/dev/DevProgressBannerPage';
+import DevFooterPage from '../pages/dev/DevFooterPage';
+import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
+import DevProblemListPage from '../pages/dev/DevProblemListPage';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +29,17 @@ const router = createBrowserRouter([
     path: '/dev/progress-banner',
     element: <DevProgressBannerPage />,
   },
+    path: '/dev/footer',
+    element: <DevFooterPage />,
+  },
+  {
+    path: '/dev/problem-card',
+    element: <DevProblemCardPage />,
+  },
+  {
+    path: '/dev/problem-list',
+    element: <DevProblemListPage />,
+  }
 ]);
 
 export default router;

@@ -1,0 +1,39 @@
+/* 
+  ProblemList.css
+  디자인 가이드라인(UI_RULES.md)에 따른 Spacing 규칙 준수: 16px, 24px, 32px 
+*/
+.problem-list-container {
+  display: grid;
+  /* 모바일(기본): 1열 배치 */
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+/* 태블릿: 768px 이상 */
+@media screen and (min-width: 768px) {
+  .problem-list-container {
+    /* 2열 배치 */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+/* 데스크탑: 1024px 이상 */
+@media screen and (min-width: 1024px) {
+  .problem-list-container {
+    /* 3열 배치 */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+}
+
+/* 울트라 와이드 데스크탑 & 최대 폭 제한: 1440px 이상 (오픈 퀘스천 반영) */
+@media screen and (min-width: 1440px) {
+  .problem-list-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    /* 최대 폭과 함께 3열의 안정적인 비율 사용을 유지하거나 4열로 확장 가능 */
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

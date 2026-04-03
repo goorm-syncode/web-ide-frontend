@@ -1,0 +1,22 @@
+.footer-container {
+  width: 100%;
+  margin-top: auto;
+  background-color: var(--bg); /* Use theme-aware background */
+  color: #8b95a1; /* Muted Text from UI_RULES.md */
+  text-align: center;
+  padding: 32px 16px; /* Spacing rule 32, 16 */
+  font-size: 12px; /* Caption size from UI_RULES.md */
+  /* border-top removed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.footer-text {
+  margin: 0;
+  padding: 0;
+  letter-spacing: 0.05em;
+  font-weight: 400;
+  text-align: center;
+}
