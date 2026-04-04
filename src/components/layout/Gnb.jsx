@@ -34,7 +34,7 @@ const Gnb = ({
             <BackArrowIcon />
           </button>
         )}
-        <h1 className="gnb-title" onClick={() => navigate('/')}>{title}</h1>
+        <h1 className="gnb-title" onClick={() => navigate('/dev/home')}>{title}</h1>
       </div>
       
       <div className="gnb-right">

@@ -1,3 +1,4 @@
+import DevHomePage from '../pages/dev/DevHomePage';
 import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
@@ -13,6 +14,10 @@ import DevProblemListPage from '../pages/dev/DevProblemListPage';
 import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
 
 const router = createBrowserRouter([
+  {
+    path: '/dev/home',
+    element: <DevHomePage />,
+  },
   {
     path: '/dev/problem-description',
     element: <DevProblemDescriptionPage />,
@@ -60,7 +65,7 @@ const router = createBrowserRouter([
   {
     path: '/dev/execution-result',
     element: <DevExecutionResultPage />,
-  }
+  },
 ]);
 
 export default router;

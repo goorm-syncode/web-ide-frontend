@@ -1,0 +1,168 @@
+/* ============================
+   1. 기본 스타일 (Mobile First)
+   ============================ */
+
+html, body {
+  background-color: #E2E8F0;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* GNB 포함 전체 창 컨테이너 */
+.dev-home-wrapper {
+  max-width: 1720px;
+  min-width: 900px;
+  height: auto;
+  min-height: 800px;
+  margin: 60px auto; /* 20px -> 60px로 늘려 아래로 좀 더 배치 */
+  background-color: #F5F5F5;
+  position: relative;
+  border: 1px solid #D1D5DB;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+/* GNB 아래 본문 영역 */
+.dev-home-content {
+  max-width: 1660px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px 32px; /* 상하 패딩 24px -> 16px 줄임 */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: visible; /* 내부 콘텐츠가 잘리지 않도록 */
+  box-sizing: border-box;
+}
+
+/* 헤더: 타이틀 + 진행률 */
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.home-title {
+  font-family: Pretendard, sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #22262B;
+  margin: 0;
+}
+
+.home-progress {
+  flex: 1;
+  min-width: 220px; /* 더 길어진 바를 위해 최소 너비 확대 */
+  max-width: 440px; /* 이전 336px에서 440px로 다시 확대 */
+}
+
+/* 필터 행 */
+.home-filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background-color: rgba(99, 102, 241, 0.05);
+  border: 1px dashed #6366F1;
+  border-radius: 12px;
+  padding: 12px 24px;
+}
+
+.placeholder-filter-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #6366F1;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 페이지네이션 플레이스홀더 */
+.placeholder-pagination {
+  height: 52px;
+  background-color: rgba(99, 102, 241, 0.1);
+  border: 2px dashed #6366F1;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #6366F1;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 24px 0 0 0;
+}
+
+/* 플로팅 채팅 버튼 */
+.placeholder-floating-chat {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: rgba(99, 102, 241, 0.1);
+  border: 2px dashed #6366F1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #6366F1;
+  font-family: Pretendard, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  z-index: 1000;
+}
+
+/* 푸터 */
+.home-footer {
+  text-align: center;
+  font-family: Pretendard, sans-serif;
+  font-size: 12px;
+  color: #8B95A1;
+  padding: 16px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* ============================
+   2. 반응형 미디어 쿼리
+   ============================ */
+
+/* 헤더: 900px 이하 → 세로 스택 */
+@media (max-width: 900px) {
+  .home-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* 태블릿/모바일: 1024px 이하 → 창 스타일 해제, 풀스크린 */
+@media screen and (max-width: 1024px) {
+  .dev-home-wrapper {
+    max-width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  /* ↓ 기본 스타일 이후에 선언되어야 올바르게 덮어씀 */
+  .dev-home-content {
+    overflow: visible;
+    padding: 16px 24px; /* 모바일 GNB padding(0 24px)과 맞춤 */
+    width: 100%;
+    max-width: 100%;
+  }
+}
