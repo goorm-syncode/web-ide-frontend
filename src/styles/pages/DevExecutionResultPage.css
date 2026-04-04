@@ -1,0 +1,25 @@
+.dev-execution-result-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 48px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.dev-page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #22262b;
+  margin-bottom: 32px;
+}
+
+.dev-section {
+  margin-bottom: 48px;
+}
+
+.dev-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 12px;
+}
