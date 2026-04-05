@@ -1,3 +1,4 @@
+import DevDifficultyFilterPage from '../pages/dev/DevDifficultyFilterPage';
 import DevHomePage from '../pages/dev/DevHomePage';
 import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
 import { createBrowserRouter } from 'react-router-dom';
@@ -14,6 +15,10 @@ import DevProblemListPage from '../pages/dev/DevProblemListPage';
 import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
 
 const router = createBrowserRouter([
+  {
+    path: '/dev/difficulty-filter',
+    element: <DevDifficultyFilterPage />,
+  },
   {
     path: '/dev/home',
     element: <DevHomePage />,
