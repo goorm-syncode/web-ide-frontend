@@ -1,3 +1,4 @@
+import DevSearchFilterPage from '../pages/dev/DevSearchFilterPage';
 import DevDifficultyFilterPage from '../pages/dev/DevDifficultyFilterPage';
 import DevStatusFilterPage from '../pages/dev/DevStatusFilterPage';
 import DevHomePage from '../pages/dev/DevHomePage';
@@ -16,6 +17,10 @@ import DevProblemListPage from '../pages/dev/DevProblemListPage';
 import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
 
 const router = createBrowserRouter([
+  {
+    path: '/dev/search-filter',
+    element: <DevSearchFilterPage />,
+  },
   {
     path: '/dev/difficulty-filter',
     element: <DevDifficultyFilterPage />,
