@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import AuthLayout from '../components/layout/AuthLayout';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import MessageBox from '../components/common/MessageBox';
+import authService from '../services/auth';
+import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
@@ -20,9 +26,6 @@ const LoginPage = () => {
   // Validation Functions
   const validateEmail = (value) => {
     if (!value) return '이메일을 입력해주세요.';
-    if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
-    if (value.length < 5 || value.length > 50) return '이메일은 5자 이상 50자 이하로 입력해주세요.';
-    // Basic email regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) return '올바른 이메일 형식을 입력해주세요.';
     return '';
@@ -30,8 +33,7 @@ const LoginPage = () => {
 
   const validatePassword = (value) => {
     if (!value) return '비밀번호를 입력해주세요.';
-    if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
-    if (value.length < 8 || value.length > 20) return '비밀번호는 8자 이상 20자 이하로 입력해주세요.';
+    if (value.length < 8) return '비밀번호는 최소 8자 이상이어야 합니다.';
     return '';
   };
 
@@ -47,7 +49,7 @@ const LoginPage = () => {
     setErrors(prev => ({ ...prev, password: validatePassword(value) }));
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     
     const emailError = validateEmail(email);
@@ -58,21 +60,34 @@ const LoginPage = () => {
       return;
     }
     
-    setIsLoading(true);
-    
-    // 모의 로그인 처리 (추후 src/services/authService 연동으로 교체)
-    setTimeout(() => {
+    try {
+      setIsLoading(true);
+      setServerError('');
+      dispatch(loginStart());
+      
+      const response = await authService.login(email, password);
+      const { accessToken, refreshToken } = response;
+      
+      // 토큰을 localStorage에 저장 (api.js 인터셉터에서 사용됨)
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      
+      // 내 정보(프로필) 상세 조회
+      const userData = await authService.getMe();
+      
+      dispatch(loginSuccess({
+        accessToken,
+        user: userData
+      }));
+      
+      navigate('/');
+    } catch (error) {
+      const message = error.message || '로그인 중 오류가 발생했습니다.';
+      setServerError(message);
+      dispatch(loginFailure(message));
+    } finally {
       setIsLoading(false);
-      // 데모를 위한 임시 에러 발생 로직
-      if (email === 'error@test.com') {
-        setServerError('로그인 처리 중 문제가 발생했습니다.');
-      } else if (password === 'wrongpassword') {
-        setErrors(prev => ({ ...prev, password: '이메일 또는 비밀번호가 올바르지 않습니다.' }));
-      } else {
-        // 성공 처리 로직. 현 단계에서는 데모 Alert
-        alert('로그인 성공!');
-      }
-    }, 1000);
+    }
   };
 
   // 버튼 비활성화 조건: 두 필드 모두 에러가 없어야 하며, 값이 하나라도 입력되어 있어야 함. 
