@@ -1,4 +1,5 @@
 import DevDifficultyFilterPage from '../pages/dev/DevDifficultyFilterPage';
+import DevStatusFilterPage from '../pages/dev/DevStatusFilterPage';
 import DevHomePage from '../pages/dev/DevHomePage';
 import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
 import { createBrowserRouter } from 'react-router-dom';
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: '/dev/difficulty-filter',
     element: <DevDifficultyFilterPage />,
+  },
+  {
+    path: '/dev/status-filter',
+    element: <DevStatusFilterPage />,
   },
   {
     path: '/dev/home',
