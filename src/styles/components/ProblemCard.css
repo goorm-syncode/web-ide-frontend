@@ -1,11 +1,14 @@
 /* ProblemCard.css */
 
 .problem-card-container {
-  width: 100%;   /* 그리드 셀 너비를 그대로 사용 */
-  height: 100%;  /* 그리드 셀 높이를 그대로 사용 */
+  width: 100%;   
+  height: 100%; 
+  max-width: 420px; /* 카드가 너무 무한정 커지지 않도록 제한 */
+  margin: 0 auto;   /* 중앙 정렬 */
   min-height: 200px;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 /* 공통 Card 컴포넌트의 내부 content 영역이 전체 높이를 차지하도록 강제 및 패딩 적용 */
@@ -46,7 +49,7 @@
 }
 
 .problem-category {
-  font-size: 10px;
+  font-size: 11px; /* Caption 12px but slightly reduced for label */
   color: #8b95a1;
   font-weight: 700;
   text-transform: uppercase;
@@ -81,6 +84,9 @@
 .status-dot.in_progress {
   background-color: #e7c85c;
 }
+.status-dot.unattempted {
+  background-color: #8b95a1;
+}
 
 .problem-body {
   margin-bottom: 16px; /* 24px -> 16px */
@@ -98,7 +104,7 @@
 
 .problem-description {
   margin: 0;
-  font-size: 12px;
+  font-size: 14px; /* Body 14px 규정 준수 */
   color: #4b5563;
   line-height: 1.4; /* 1.5 -> 1.4 */
   display: -webkit-box;

@@ -3,7 +3,7 @@
    ============================ */
 
 html, body {
-  background-color: #E2E8F0;
+  background-color: #F5F5F5;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -11,17 +11,9 @@ html, body {
 
 /* GNB 포함 전체 창 컨테이너 */
 .dev-home-wrapper {
-  max-width: 1720px;
-  min-width: 900px;
-  height: auto;
-  min-height: 800px;
-  margin: 60px auto; /* 20px -> 60px로 늘려 아래로 좀 더 배치 */
+  width: 100%;
+  min-height: 100vh;
   background-color: #F5F5F5;
-  position: relative;
-  border: 1px solid #D1D5DB;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
 }
@@ -31,7 +23,7 @@ html, body {
   max-width: 1660px;
   width: 100%;
   margin: 0 auto;
-  padding: 16px 32px; /* 상하 패딩 24px -> 16px 줄임 */
+  padding: 24px 32px; /* 상단 여백 24px로 조정 */
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -44,14 +36,14 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px; /* 20px -> 24px 상향 */
   flex-wrap: wrap;
   gap: 20px;
 }
 
 .home-title {
   font-family: Pretendard, sans-serif;
-  font-size: 32px;
+  font-size: 28px; /* UI Rules 8: Page Title 28px */
   font-weight: 800;
   color: #22262B;
   margin: 0;
@@ -68,37 +60,42 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-  background-color: rgba(99, 102, 241, 0.05);
-  border: 1px dashed #6366F1;
-  border-radius: 12px;
-  padding: 12px 24px;
-}
-
-.placeholder-filter-left {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #6366F1;
-  font-family: Pretendard, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-/* 페이지네이션 플레이스홀더 */
-.placeholder-pagination {
-  height: 52px;
-  background-color: rgba(99, 102, 241, 0.1);
-  border: 2px dashed #6366F1;
+  margin-bottom: 24px; /* 32px -> 24px 줄임 */
+  gap: 20px;
+  width: 100%;
+  background-color: #E2E8F0; /* 배경보다 좀 더 진한 색 */
+  padding: 8px 16px; /* 패딩 축소 */
   border-radius: 8px;
+  box-sizing: border-box; /* 추가 */
+}
+
+.home-filters-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.filter-divider {
+  width: 1px;
+  height: 24px;
+  background-color: #CBD5E1;
+  margin: 0 4px;
+}
+
+.home-filters-right {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 페이지네이션 */
+.home-pagination-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #6366F1;
-  font-family: Pretendard, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  margin: 24px 0 0 0;
+  margin-top: auto; /* 여유 공간을 모두 차지해 바닥으로 밀어냄 */
+  padding: 32px 0 16px 0; /* 상단 간격 확보 */
 }
 
 /* 플로팅 채팅 버튼 */
@@ -120,6 +117,7 @@ html, body {
   font-size: 11px;
   font-weight: 600;
   z-index: 1000;
+  cursor: pointer; /* 인라인 스타일을 CSS로 이동 */
 }
 
 /* 푸터 */
@@ -141,6 +139,22 @@ html, body {
   .home-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .home-filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .home-filters-left {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .home-filters-right {
+    max-width: 100%;
+    width: 100%;
   }
 }
 
@@ -164,5 +178,13 @@ html, body {
     padding: 16px 24px; /* 모바일 GNB padding(0 24px)과 맞춤 */
     width: 100%;
     max-width: 100%;
+  }
+}
+
+/* 모바일 초소형 기기: 480px 이하 */
+@media screen and (max-width: 480px) {
+  .home-filters-left {
+    gap: 8px; /* 16px -> 8px 축소 */
+    flex-wrap: wrap; /* 난이도와 상태 필터가 한 줄에 안 들어가면 줄바꿈 허용 */
   }
 }
