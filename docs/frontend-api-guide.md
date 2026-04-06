@@ -9,7 +9,7 @@
 
 ## API Rules
 
-- 모든 API 호출은 src/api 하위에서만 처리
+- 모든 API 호출은 src/services 하위에서만 처리
 - 컴포넌트 내부에서 직접 axios 호출 금지
 - 공통 axios 인스턴스 사용
 - baseURL은 import.meta.env.VITE_API_BASE_URL 사용
