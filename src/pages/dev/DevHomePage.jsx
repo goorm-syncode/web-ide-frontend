@@ -4,6 +4,10 @@ import ProgressBanner from '../../components/common/ProgressBanner';
 import ProblemList from '../../components/domain/ProblemList';
 import Footer from '../../components/common/Footer';
 import MessageBox from '../../components/common/MessageBox';
+import SearchFilter from '../../components/features/SearchFilter';
+import DifficultyFilter from '../../components/features/DifficultyFilter';
+import StatusFilter from '../../components/features/StatusFilter';
+import Pagination from '../../components/common/Pagination';
 
 import '../../styles/pages/DevHomePage.css';
 
@@ -131,11 +135,38 @@ const DevHomePage = () => {
     type: 'info',
   });
 
-  // 추후 Redux나 Context API로 변경될 전역 인증 상태 시뮬레이션
   const [authState, setAuthState] = useState({
     isLoggedIn: true,
     userName: 'Alex Coder',
   });
+
+  // 필터 및 페이지네이션 상태
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 6;
+
+  // 필터 변경 시 페이지 초기화
+  const handleFilterChange = (setter) => (value) => {
+    setter(value);
+    setCurrentPage(1);
+  };
+
+  // 필터링 및 페이지네이션 로직
+  const filteredProblems = mockProblems.filter((problem) => {
+    const matchesSearch = problem.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesDifficulty =
+      selectedDifficulty === 'all' || problem.difficulty.toLowerCase() === selectedDifficulty.toLowerCase();
+    const matchesStatus = selectedStatus === 'all' || problem.status === selectedStatus;
+    return matchesSearch && matchesDifficulty && matchesStatus;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredProblems.length / ITEMS_PER_PAGE));
+  const paginatedProblems = filteredProblems.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const showModal = (title, message, type = 'info') => {
     setModalState({ isOpen: true, title, message, type });
@@ -180,20 +211,40 @@ const DevHomePage = () => {
         </div>
 
         <div className="home-filter-row">
-          {/* 필터버튼 및 상태선택 자리 (추후 삽입 예정) */}
-          <div className="placeholder-filter-left">필터 영역 컴포넌트 자리</div>
+          <div className="home-filters-left">
+            <DifficultyFilter
+              value={selectedDifficulty}
+              onChange={handleFilterChange(setSelectedDifficulty)}
+            />
+            <div className="filter-divider"></div>
+            <StatusFilter
+              value={selectedStatus}
+              onChange={handleFilterChange(setSelectedStatus)}
+            />
+          </div>
+          <div className="home-filters-right">
+            <SearchFilter
+              value={searchQuery}
+              onChange={handleFilterChange(setSearchQuery)}
+              placeholder="문제 제목을 검색하세요..."
+            />
+          </div>
         </div>
 
         <ProblemList
-          problems={mockProblems}
+          problems={paginatedProblems}
           onProblemClick={(id) => {
-            // TODO: GNB + 문제설명패널 + IDE가 통합된 화면으로 이동 (추후 개발 시 경로 추가)
             console.log(`Navigate to integrated view for problem ID: ${id}`);
           }}
         />
 
-        {/* 페이지네이션 컴포넌트 자리 (추후 삽입 예정) */}
-        <div className="placeholder-pagination">페이지네이션 컴포넌트 자리</div>
+        <div className="home-pagination-wrapper">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
       </div>
 
       <Footer />
@@ -202,7 +253,6 @@ const DevHomePage = () => {
       <div
         className="placeholder-floating-chat"
         onClick={() => showModal('채팅', '채팅 패널을 엽니다.', 'info')}
-        style={{ cursor: 'pointer' }}
       >
         채팅 버튼
         <br />
