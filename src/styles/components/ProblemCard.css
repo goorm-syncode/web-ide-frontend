@@ -49,7 +49,7 @@
 }
 
 .problem-category {
-  font-size: 11px; /* Caption 12px but slightly reduced for label */
+  font-size: 12px; /* UI_RULES: 11px -> 12px(Caption) 보정 */
   color: #8b95a1;
   font-weight: 700;
   text-transform: uppercase;
@@ -94,22 +94,22 @@
 }
 
 h3.problem-title {
-  margin: 0 0 12px 0; /* 설명과의 가독성 확보를 위한 충분한 여백 */
-  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
-  font-size: 17px; /* 설명(14px)보다 크고 기존(16px)보다 존재감 있는 사이즈 */
-  font-weight: 800; /* Extra-bold 두께 적용 */
+  margin: 0 0 12px 0;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 16px; /* UI_RULES: 17px -> 16px(Card Title) 보정 */
+  font-weight: 800;
   color: #22262b;
   line-height: 1.25;
-  letter-spacing: -0.03em; /* 타이틀은 자간을 조금 더 붇여야 고급스러움 */
+  letter-spacing: -0.03em;
 }
 
 .problem-description {
   margin: 0;
-  font-size: 13px; /* Body 14px -> 13px 한 단계 축소하여 가독성 위계 최적화 */
+  font-size: 14px; /* UI_RULES: 13px -> 14px(Body) 보정 */
   color: #4b5563;
-  line-height: 1.45; /* 텍스트가 작아진 만큼 행간을 살짝 넓혀 가독성 확보 */
+  line-height: 1.45;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* 4줄 -> 2줄 (공간 절약) */
+  -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -140,7 +140,7 @@ h3.problem-title {
   border-radius: 8px;
   height: 38px;
   border: none;
-  font-size: 13px;
+  font-size: 14px; /* UI_RULES: 13px -> 14px(Body) 보정 */
 }
 
 /* 완료 / 미완료 상태일 때의 연회색 + 인디고 텍스트 버튼 */

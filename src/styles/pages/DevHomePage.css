@@ -65,7 +65,7 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px; /* 기능과 카드 리스트를 시원하게 구분하기 위해 24px -> 40px로 확대 */
+  margin-bottom: 48px; /* UI_RULES: 40px -> 48px 보정 */
   gap: 20px;
   width: 100%;
   background-color: #E2E8F0; /* 배경보다 좀 더 진한 색 */
@@ -99,7 +99,7 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50px; /* 요청에 따라 32px -> 50px로 여백 확대 */
+  margin-top: 48px; /* UI_RULES: 50px -> 48px 보정 */
   padding: 0 0 32px 0;
 }
 
