@@ -140,6 +140,23 @@ html, body {
   border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+/* 문제 리스트 래퍼 (페이지네이션 하단 고정용) */
+.problem-list-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 600px;
+}
+
+/* 검색 결과 없음 스타일 */
+.no-problem-result {
+  text-align: center;
+  padding: 100px 0;
+  color: #94a3b8;
+  flex: 1;
+}
+
 /* ============================
    2. 반응형 중단점 (점진적 확장 - Desktop First 삭제, Mobile First 달성)
    ============================ */

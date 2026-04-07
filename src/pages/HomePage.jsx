@@ -140,7 +140,7 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="problem-list-wrap" style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', minHeight: '600px' }}>
+        <div className="problem-list-wrap">
           {/* 로딩 중일 때 기존 리스트를 유지한 채 반투명 오버레이 띄움 (꿀렁거림 원천 차단) */}
           {loading && (
             <div
@@ -173,7 +173,7 @@ const HomePage = () => {
           />
 
           {!loading && problems.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '100px 0', color: '#94a3b8', flex: 1 }}>
+            <div className="no-problem-result">
               검색 결과와 일치하는 문제가 없습니다.
             </div>
           )}
