@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+
 import AuthLayout from '../components/layout/AuthLayout';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
@@ -82,9 +83,9 @@ const SignupPage = () => {
         title: '회원가입 완료',
         message: '회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동합니다.',
         onConfirm: () => {
-          // login.html로 이동하는 방식이 프로젝트 설정에 따라 다를 수 있으나,
-          // 현재 a태그와 일관성을 위해 window.location.href 또는 navigate 사용
-          window.location.href = '/login.html';
+          // SPA routing using navigate
+          navigate('/login');
+
         },
       });
     } catch (error) {
@@ -157,9 +158,10 @@ const SignupPage = () => {
       </form>
 
       <div className="auth-links">
-        <a href="/login.html" className="auth-link-text">
+        <Link to="/login" className="auth-link-text">
           이미 계정이 있으신가요? 로그인
-        </a>
+        </Link>
+
       </div>
 
       <MessageBox
