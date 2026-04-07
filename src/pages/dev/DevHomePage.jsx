@@ -231,20 +231,28 @@ const DevHomePage = () => {
           </div>
         </div>
 
-        <ProblemList
-          problems={paginatedProblems}
-          onProblemClick={(id) => {
-            console.log(`Navigate to integrated view for problem ID: ${id}`);
-          }}
-        />
-
-        <div className="home-pagination-wrapper">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
+        <div className="problem-list-wrap" style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <ProblemList
+            problems={paginatedProblems}
+            onProblemClick={(id) => {
+              console.log(`Navigate to integrated view for problem ID: ${id}`);
+            }}
           />
+
+          {paginatedProblems.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '100px 0', color: '#94a3b8', flex: 1 }}>
+              검색 결과와 일치하는 문제가 없습니다.
+            </div>
+          )}
         </div>
+      </div>
+
+      <div className="home-pagination-wrapper">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
 
       <Footer />

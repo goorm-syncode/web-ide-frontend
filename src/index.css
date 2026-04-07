@@ -54,7 +54,7 @@
 
 #root {
   width: 100%;
-  max-width: 100vw;
+  max-width: 100%; /* 100vw 사용 시 스크롤바 영역을 무시하여 좌우 꿀렁임과 밀림 현상이 발생하므로 100%로 수정 */
   margin: 0;
   text-align: center;
   min-height: 100vh;

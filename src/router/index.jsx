@@ -1,3 +1,4 @@
+import HomePage from '../pages/HomePage';
 import DevSearchFilterPage from '../pages/dev/DevSearchFilterPage';
 import DevDifficultyFilterPage from '../pages/dev/DevDifficultyFilterPage';
 import DevStatusFilterPage from '../pages/dev/DevStatusFilterPage';
@@ -5,6 +6,8 @@ import DevHomePage from '../pages/dev/DevHomePage';
 import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
+import SignupPage from '../pages/SignupPage';
+import LoginPage from '../pages/LoginPage';
 import DevSignupPage from '../pages/dev/DevSignupPage';
 import DevMessageBoxPage from '../pages/dev/DevMessageBoxPage';
 import DevGnbPage from '../pages/dev/DevGnbPage';
@@ -12,12 +15,35 @@ import DevInputPage from '../pages/dev/DevInputPage';
 import DevProgressBannerPage from '../pages/dev/DevProgressBannerPage';
 import DevFooterPage from '../pages/dev/DevFooterPage';
 import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
-import DevLoginPage from '../pages/dev/LoginPage';
 import DevProblemListPage from '../pages/dev/DevProblemListPage';
 import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
 import DevPaginationPage from '../pages/dev/DevPaginationPage';
 
 const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <HomePage />,
+  },
+  {
+    path: '/home',
+    element: <HomePage />,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/signup',
+    element: <SignupPage />,
+  },
+  {
+    path: '/dev/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/dev/signup',
+    element: <DevSignupPage />,
+  },
   {
     path: '/dev/search-filter',
     element: <DevSearchFilterPage />,
@@ -31,24 +57,12 @@ const router = createBrowserRouter([
     element: <DevStatusFilterPage />,
   },
   {
-    path: '/dev/home',
-    element: <DevHomePage />,
-  },
-  {
     path: '/dev/problem-description',
     element: <DevProblemDescriptionPage />,
   },
   {
-    path: '/',
+    path: '/app-test',
     element: <App />,
-  },
-  {
-    path: '/dev/login',
-    element: <DevLoginPage />,
-  },
-  {
-    path: '/dev/signup',
-    element: <DevSignupPage />,
   },
   {
     path: '/dev/message-box',
