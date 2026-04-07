@@ -18,16 +18,21 @@ html, body {
   flex-direction: column;
 }
 
+.home-top-spacer {
+  height: 12px; /* 24px -> 12px 상단 공간 최적화 */
+  width: 100%;
+}
+
 /* GNB 아래 본문 영역 */
 .dev-home-content {
   max-width: 1660px;
   width: 100%;
   margin: 0 auto;
-  padding: 24px 32px; /* 상단 여백 24px로 조정 */
-  flex: 1;
+  padding: 32px 32px 0 32px; /* 하단 패딩을 0으로 제거 */
+  flex: initial; /* flex: 1 대신 initial로 설정하여 콘텐츠만큼만 늘어나도록 수정 */
   display: flex;
   flex-direction: column;
-  overflow: visible; /* 내부 콘텐츠가 잘리지 않도록 */
+  overflow: visible;
   box-sizing: border-box;
 }
 
@@ -60,7 +65,7 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px; /* 32px -> 24px 줄임 */
+  margin-bottom: 40px; /* 기능과 카드 리스트를 시원하게 구분하기 위해 24px -> 40px로 확대 */
   gap: 20px;
   width: 100%;
   background-color: #E2E8F0; /* 배경보다 좀 더 진한 색 */
@@ -94,8 +99,8 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: auto; /* 여유 공간을 모두 차지해 바닥으로 밀어냄 */
-  padding: 32px 0 16px 0; /* 상단 간격 확보 */
+  margin-top: 50px; /* 요청에 따라 32px -> 50px로 여백 확대 */
+  padding: 0 0 32px 0;
 }
 
 /* 플로팅 채팅 버튼 */

@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin: 32px 0;
+  margin: 0; /* 기존 32px 0 제거하여 중복 여백 문제 해결 */
   user-select: none;
 }
 

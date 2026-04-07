@@ -145,7 +145,7 @@ const DevHomePage = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 6;
+  const ITEMS_PER_PAGE = 12;
 
   // 필터 변경 시 페이지 초기화
   const handleFilterChange = (setter) => (value) => {
@@ -190,13 +190,13 @@ const DevHomePage = () => {
   return (
     <div className="dev-home-wrapper">
       <Gnb
-        title="Coding Test"
+        title="CODING TEST"
         isLoggedIn={authState.isLoggedIn}
         userName={authState.userName}
         onLogoutClick={handleLogout}
         onLoginClick={handleLogin}
       />
-
+      <div className="home-top-spacer" />
       <div className="dev-home-content">
         <div className="home-header">
           <h1 className="home-title">문제 목록</h1>

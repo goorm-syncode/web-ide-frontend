@@ -36,11 +36,17 @@
 }
 
 .gnb-title {
-  font-size: 24px; /* 20px -> 24px로 확대 */
-  font-weight: 700;
-  color: #6366F1; /* Primary Indigo */
+  font-size: 20px;
+  font-weight: 800;
+  color: #6366F1;
   margin: 0;
   cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease; /* 부드러운 색상 전환 */
+}
+
+.gnb-title:hover {
+  color: #4F46E5; /* 호버 시 더 진한 인디고 컬러로 강조 */
 }
 
 .gnb-right {
