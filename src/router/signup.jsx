@@ -67,7 +67,7 @@ const SignupPage = () => {
         type: 'warning',
         title: '입력 확인',
         message: validationError,
-        onConfirm: null
+        onConfirm: null,
       });
       return;
     }
@@ -76,16 +76,14 @@ const SignupPage = () => {
     try {
       const { email, nickname, password } = formData;
       await authService.signup({ email, nickname, password });
-      
+
       setMessageBox({
         isOpen: true,
         type: 'success',
         title: '회원가입 완료',
         message: '회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동합니다.',
         onConfirm: () => {
-          // SPA routing using navigate
           navigate('/login');
-
         },
       });
     } catch (error) {
@@ -94,7 +92,7 @@ const SignupPage = () => {
         type: 'error',
         title: '회원가입 실패',
         message: error.message || '회원가입 처리 중 오류가 발생했습니다.',
-        onConfirm: null
+        onConfirm: null,
       });
     } finally {
       setLoading(false);
@@ -161,7 +159,6 @@ const SignupPage = () => {
         <Link to="/login" className="auth-link-text">
           이미 계정이 있으신가요? 로그인
         </Link>
-
       </div>
 
       <MessageBox
