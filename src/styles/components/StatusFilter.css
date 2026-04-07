@@ -143,3 +143,14 @@
   color: #6366f1;
   flex-shrink: 0;
 }
+
+@media screen and (max-width: 480px) {
+  .status-filter__trigger {
+    min-width: 85px; /* 100px -> 85px 축소 */
+    padding: 0 8px;
+    font-size: 13px;
+  }
+  .status-filter__label {
+    font-size: 13px;
+  }
+}
