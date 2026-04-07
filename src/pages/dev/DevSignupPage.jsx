@@ -1,5 +1,5 @@
 import React from 'react';
-import SignupPage from '../SignupPage';
+import SignupPage from '../../router/signup';
 
 const DevSignupPage = () => {
   return (
