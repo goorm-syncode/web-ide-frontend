@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-import AuthLayout from '../components/layout/AuthLayout';
-import Input from '../components/common/Input';
-import Button from '../components/common/Button';
-import MessageBox from '../components/common/MessageBox';
+import AuthLayout from '../components/layout/AuthLayout.jsx';
+import Input from '../components/common/Input.jsx';
+import Button from '../components/common/Button.jsx';
+import MessageBox from '../components/common/MessageBox.jsx';
 import authService from '../services/auth.js';
-import { mapErrorMessage } from '../services/errorMapper';
+import { mapErrorMessage } from '../services/errorMapper.js';
 
 const SignupPage = () => {
   const navigate = useNavigate();
