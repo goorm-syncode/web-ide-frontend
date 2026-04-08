@@ -48,6 +48,10 @@ const router = createBrowserRouter([
     path: '/signup',
     element: <SignupPage />,
   },
+  {
+    path: '/missions/:missionId',
+    element: <div>임시 연결 페이지 (준비 중)</div>,
+  },
 
   {
     path: '/dev/login',
