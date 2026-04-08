@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout as logoutAction } from '../store/slices/authSlice';
 import * as monaco from 'monaco-editor';
 import Gnb from '../components/layout/Gnb';
-import Footer from '../components/common/Footer';
+import Footer from '../components/layout/Footer';
 import ProblemDescriptionPanel from '../components/mission/ProblemDescriptionPanel';
 import ExecutionResultPanel from '../components/mission/ExecutionResultPanel';
 import '../styles/pages/MissionPage.css';

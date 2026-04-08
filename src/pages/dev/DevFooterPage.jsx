@@ -1,4 +1,4 @@
-import Footer from '../../components/common/Footer';
+import Footer from '../../components/layout/Footer';
 import '../../styles/pages/DevFooterPage.css';
 
 const DevFooterPage = () => {
@@ -9,7 +9,7 @@ const DevFooterPage = () => {
         <p>This page is for testing the Footer component.</p>
         <p>The Footer should always stick to the bottom of the flex container.</p>
       </div>
-      
+
       {/* 실제 테스트할 컴포넌트 */}
       <Footer />
     </div>

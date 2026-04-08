@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Gnb from '../../components/layout/Gnb';
 import ProgressBanner from '../../components/home/ProgressBanner';
 import ProblemList from '../../components/home/ProblemList';
-import Footer from '../../components/common/Footer';
+import Footer from '../../components/layout/Footer';
 import MessageBox from '../../components/common/MessageBox';
 import SearchFilter from '../../components/home/SearchFilter';
 import DifficultyFilter from '../../components/home/DifficultyFilter';

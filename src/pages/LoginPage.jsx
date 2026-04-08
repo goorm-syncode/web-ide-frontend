@@ -5,7 +5,7 @@ import AuthLayout from '../components/layout/AuthLayout';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import MessageBox from '../components/common/MessageBox';
-import Footer from '../components/common/Footer';
+import Footer from '../components/layout/Footer';
 import authService from '../services/auth';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 
@@ -97,7 +97,10 @@ const LoginPage = () => {
   const isSubmitDisabled = isLoading || !email || !password || !!errors.email || !!errors.password;
 
   return (
-    <div className="login-page-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}>
+    <div
+      className="login-page-container"
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}
+    >
       <AuthLayout>
         <div className="auth-header">
           <h1 className="auth-page-title">로그인</h1>
@@ -156,6 +159,5 @@ const LoginPage = () => {
     </div>
   );
 };
-
 
 export default LoginPage;
