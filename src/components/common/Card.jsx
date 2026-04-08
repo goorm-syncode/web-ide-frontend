@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/components/Card.css';
+import '../../styles/components/common/Card.css';
 
 /**
  * 공통 카드 컴포넌트

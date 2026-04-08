@@ -1,5 +1,5 @@
 import React from 'react';
-import ProblemDescriptionPanel from '../../components/domain/ProblemDescriptionPanel';
+import ProblemDescriptionPanel from '../../components/mission/ProblemDescriptionPanel';
 import '../../styles/pages/DevProblemDescriptionPage.css';
 
 const PROBLEM_DATA = {

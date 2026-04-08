@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import './Gnb.css';
+import '../../styles/components/layout/Gnb.css';
 
 const BackArrowIcon = () => (
   <svg
@@ -54,7 +54,7 @@ const Gnb = ({
             <BackArrowIcon />
           </button>
         )}
-        <h1 className="gnb-title" onClick={() => navigate('/dev/home')}>
+        <h1 className="gnb-title" onClick={() => navigate('/home')}>
           {title}
         </h1>
       </div>

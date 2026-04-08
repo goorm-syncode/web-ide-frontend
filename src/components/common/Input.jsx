@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import '../../styles/components/Input.css';
+import '../../styles/components/common/Input.css';
 import searchIconImg from '../../assets/search-icon.png';
 
 const Input = forwardRef(

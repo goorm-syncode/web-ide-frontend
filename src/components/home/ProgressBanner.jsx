@@ -1,4 +1,4 @@
-import '../../styles/components/ProgressBanner.css';
+import '../../styles/components/home/ProgressBanner.css';
 
 /**
  * 진행률 및 이어하기 배너 컴포넌트
@@ -18,16 +18,16 @@ const ProgressBanner = ({ progress = 0, onContinue, className = '' }) => {
       </div>
       <button className="progress-continue-btn" onClick={onContinue}>
         이어하기
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          width="20" 
-          height="20" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           className="progress-continue-icon"
         >
           <path d="M5 12h14" />

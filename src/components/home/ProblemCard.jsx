@@ -1,8 +1,8 @@
 import React from 'react';
 import Card from '../common/Card';
 import Button from '../common/Button';
-import TagBadge from './TagBadge';
-import '../../styles/components/ProblemCard.css';
+import TagBadge from '../common/TagBadge';
+import '../../styles/components/home/ProblemCard.css';
 
 /**
  * 코딩테스트 문제 카드 컴포넌트

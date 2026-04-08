@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import TagBadge from './TagBadge';
-import '../../styles/components/ProblemDescriptionPanel.css';
+import TagBadge from '../common/TagBadge';
+import '../../styles/components/mission/ProblemDescriptionPanel.css';
 
 const RenderFormattedCode = ({ text, isInline }) => {
   if (isInline) {

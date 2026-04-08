@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../../styles/components/DifficultyFilter.css';
+import '../../styles/components/home/DifficultyFilter.css';
 
 const DIFFICULTY_OPTIONS = [
   { label: '전체', value: 'all' },

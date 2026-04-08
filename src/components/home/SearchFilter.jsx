@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from '../common/Input';
-import '../../styles/components/SearchFilter.css';
+import '../../styles/components/home/SearchFilter.css';
 
 /**
  * SearchFilter 컴포넌트

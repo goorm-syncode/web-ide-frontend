@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Gnb from '../../components/layout/Gnb';
-import ProgressBanner from '../../components/common/ProgressBanner';
-import ProblemList from '../../components/domain/ProblemList';
+import ProgressBanner from '../../components/home/ProgressBanner';
+import ProblemList from '../../components/home/ProblemList';
 import Footer from '../../components/common/Footer';
 import MessageBox from '../../components/common/MessageBox';
-import SearchFilter from '../../components/features/SearchFilter';
-import DifficultyFilter from '../../components/features/DifficultyFilter';
-import StatusFilter from '../../components/features/StatusFilter';
+import SearchFilter from '../../components/home/SearchFilter';
+import DifficultyFilter from '../../components/home/DifficultyFilter';
+import StatusFilter from '../../components/home/StatusFilter';
 import Pagination from '../../components/common/Pagination';
 import authService from '../../services/auth';
 import { getContinueLearning } from '../../services/problem';
@@ -79,7 +79,8 @@ const mockProblems = [
     status: 'solved',
     category: 'GRAPHS',
     title: '네트워크 연결 최적화',
-    description: '최소 신장 트리 알고리즘을 사용하여 모든 노드를 최소 비용으로 연결하는 방법을 학습합니다.',
+    description:
+      '최소 신장 트리 알고리즘을 사용하여 모든 노드를 최소 비용으로 연결하는 방법을 학습합니다.',
     difficulty: 'MEDIUM',
     tags: ['Kruskal', 'Union-Find'],
   },
@@ -88,7 +89,8 @@ const mockProblems = [
     status: 'in_progress',
     category: 'STRING',
     title: '가장 긴 공통 부분 문자열',
-    description: '두 문자열 사이의 가장 긴 공통 시퀀스를 찾는 효율적인 동적 계획법 알고리즘을 구현하세요.',
+    description:
+      '두 문자열 사이의 가장 긴 공통 시퀀스를 찾는 효율적인 동적 계획법 알고리즘을 구현하세요.',
     difficulty: 'MEDIUM',
     tags: ['DP', 'LCS'],
   },
@@ -97,7 +99,8 @@ const mockProblems = [
     status: 'unattempted',
     category: 'BIT MANIPULATION',
     title: '싱글 넘버 찾기',
-    description: '배열에서 단 한 번만 등장하는 숫자를 비트 연산(XOR)을 사용하여 선형 시간 내에 찾아내세요.',
+    description:
+      '배열에서 단 한 번만 등장하는 숫자를 비트 연산(XOR)을 사용하여 선형 시간 내에 찾아내세요.',
     difficulty: 'EASY',
     tags: ['Bitwise'],
   },
@@ -115,7 +118,8 @@ const mockProblems = [
     status: 'in_progress',
     category: 'BINARY SEARCH',
     title: '회전된 정렬 배열 탐색',
-    description: '회전된 정렬 배열에서 이진 탐색을 응용하여 특정 타겟 노드를 O(log N) 시간에 찾으세요.',
+    description:
+      '회전된 정렬 배열에서 이진 탐색을 응용하여 특정 타겟 노드를 O(log N) 시간에 찾으세요.',
     difficulty: 'MEDIUM',
     tags: ['Search', 'Algorithm'],
   },
@@ -186,7 +190,8 @@ const DevHomePage = () => {
   const filteredProblems = mockProblems.filter((problem) => {
     const matchesSearch = problem.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesDifficulty =
-      selectedDifficulty === 'all' || problem.difficulty.toLowerCase() === selectedDifficulty.toLowerCase();
+      selectedDifficulty === 'all' ||
+      problem.difficulty.toLowerCase() === selectedDifficulty.toLowerCase();
     const matchesStatus = selectedStatus === 'all' || problem.status === selectedStatus;
     return matchesSearch && matchesDifficulty && matchesStatus;
   });
@@ -194,7 +199,7 @@ const DevHomePage = () => {
   const totalPages = Math.max(1, Math.ceil(filteredProblems.length / ITEMS_PER_PAGE));
   const paginatedProblems = filteredProblems.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    currentPage * ITEMS_PER_PAGE,
   );
 
   const showModal = (title, message, type = 'info') => {
@@ -239,10 +244,7 @@ const DevHomePage = () => {
         <div className="home-header">
           <h1 className="home-title">문제 목록</h1>
           <div className="home-progress">
-            <ProgressBanner
-              progress={Math.round(progress)}
-              onContinue={handleContinue}
-            />
+            <ProgressBanner progress={Math.round(progress)} onContinue={handleContinue} />
           </div>
         </div>
 
@@ -253,10 +255,7 @@ const DevHomePage = () => {
               onChange={handleFilterChange(setSelectedDifficulty)}
             />
             <div className="filter-divider"></div>
-            <StatusFilter
-              value={selectedStatus}
-              onChange={handleFilterChange(setSelectedStatus)}
-            />
+            <StatusFilter value={selectedStatus} onChange={handleFilterChange(setSelectedStatus)} />
           </div>
           <div className="home-filters-right">
             <SearchFilter

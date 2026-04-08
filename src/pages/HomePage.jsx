@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout as logoutAction } from '../store/slices/authSlice';
 import Gnb from '../components/layout/Gnb';
-import ProgressBanner from '../components/common/ProgressBanner';
-import ProblemList from '../components/domain/ProblemList';
+import ProgressBanner from '../components/home/ProgressBanner';
+import ProblemList from '../components/home/ProblemList';
 import Footer from '../components/common/Footer';
 import MessageBox from '../components/common/MessageBox';
-import SearchFilter from '../components/features/SearchFilter';
-import DifficultyFilter from '../components/features/DifficultyFilter';
-import StatusFilter from '../components/features/StatusFilter';
+import SearchFilter from '../components/home/SearchFilter';
+import DifficultyFilter from '../components/home/DifficultyFilter';
+import StatusFilter from '../components/home/StatusFilter';
 import Pagination from '../components/common/Pagination';
 
 import { getMissions } from '../services/missions';
@@ -17,17 +19,14 @@ import '../styles/pages/DevHomePage.css'; // 기존 스타일 재사용
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
   const [modalState, setModalState] = useState({
     isOpen: false,
     title: '',
     message: '',
     type: 'info',
-  });
-
-  const [authState, setAuthState] = useState({
-    isLoggedIn: true,
-    userName: 'Alex Coder',
   });
 
   // 필터 및 페이지네이션 상태
@@ -53,10 +52,10 @@ const HomePage = () => {
           // 다른 필터(status, keyword)는 각자 브랜치에서 구현될 예정이지만 함께 넘길 수도 있습니다.
           status: selectedStatus,
           keyword: searchQuery,
-          page: currentPage - 1, 
-          size: ITEMS_PER_PAGE
+          page: currentPage - 1,
+          size: ITEMS_PER_PAGE,
         });
-        
+
         if (data && data.content) {
           setMissions(data.content);
           setTotalPages(data.totalPages || 1);
@@ -89,13 +88,11 @@ const HomePage = () => {
   };
 
   const handleLogout = () => {
-    setAuthState({ isLoggedIn: false, userName: '' });
-    showModal('로그아웃', '정상적으로 로그아웃 되었습니다.', 'success');
+    dispatch(logoutAction());
   };
 
   const handleLogin = () => {
-    setAuthState({ isLoggedIn: true, userName: 'Alex Coder' });
-    showModal('로그인', '환영합니다, Alex Coder님!', 'success');
+    navigate('/login');
   };
 
   const handleProblemClick = (id) => {
@@ -106,8 +103,8 @@ const HomePage = () => {
     <div className="dev-home-wrapper">
       <Gnb
         title="LearnCode"
-        isLoggedIn={authState.isLoggedIn}
-        userName={authState.userName}
+        isLoggedIn={isAuthenticated}
+        userName={user?.userName || '사용자'}
         onLogoutClick={handleLogout}
         onLoginClick={handleLogin}
       />
@@ -132,10 +129,7 @@ const HomePage = () => {
               onChange={handleFilterChange(setSelectedDifficulty)}
             />
             <div className="filter-divider"></div>
-            <StatusFilter
-              value={selectedStatus}
-              onChange={handleFilterChange(setSelectedStatus)}
-            />
+            <StatusFilter value={selectedStatus} onChange={handleFilterChange(setSelectedStatus)} />
           </div>
           <div className="home-filters-right">
             <SearchFilter
@@ -149,10 +143,7 @@ const HomePage = () => {
         {loading ? (
           <div style={{ textAlign: 'center', padding: '50px' }}>데이터를 불러오는 중입니다...</div>
         ) : (
-          <ProblemList
-            problems={missions}
-            onProblemClick={handleProblemClick}
-          />
+          <ProblemList problems={missions} onProblemClick={handleProblemClick} />
         )}
 
         {/* 데이터가 있을 때만 페이지네이션 표시 */}

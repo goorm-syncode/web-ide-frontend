@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MessageBox from '../../components/common/MessageBox';
 import Button from '../../components/common/Button';
-import './DevMessageBoxPage.css';
+import '../../styles/pages/DevMessageBoxPage.css';
 
 const DevMessageBoxPage = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/components/Button.css';
+import '../../styles/components/common/Button.css';
 
 /**
  * 공통 버튼 컴포넌트

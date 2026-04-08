@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from '../common/Button';
-import '../../styles/features/ExecutionResultPanel.css';
+import '../../styles/components/mission/ExecutionResultPanel.css';
 
 const RunIcon = () => (
   <svg

@@ -1,5 +1,5 @@
 import Footer from '../../components/common/Footer';
-import '../../styles/DevFooterPage.css';
+import '../../styles/pages/DevFooterPage.css';
 
 const DevFooterPage = () => {
   return (

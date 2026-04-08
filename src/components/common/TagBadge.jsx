@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/components/TagBadge.css';
+import '../../styles/components/common/TagBadge.css';
 
 /**
  * 문제 난이도 및 분류를 나타내는 태그 컴포넌트

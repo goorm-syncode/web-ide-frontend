@@ -1,6 +1,6 @@
 import React from 'react';
 import ProblemCard from './ProblemCard';
-import '../../styles/components/ProblemList.css';
+import '../../styles/components/home/ProblemList.css';
 
 /**
  * 문제 리스트 반응형 컴포넌트

@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout as logoutAction } from '../store/slices/authSlice';
 import * as monaco from 'monaco-editor';
 import Gnb from '../components/layout/Gnb';
 import Footer from '../components/common/Footer';
-import ProblemDescriptionPanel from '../components/domain/ProblemDescriptionPanel';
-import ExecutionResultPanel from '../components/features/ExecutionResultPanel';
+import ProblemDescriptionPanel from '../components/mission/ProblemDescriptionPanel';
+import ExecutionResultPanel from '../components/mission/ExecutionResultPanel';
 import '../styles/pages/MissionPage.css';
 
 // Mock Problem Data
@@ -52,6 +55,9 @@ const INITIAL_CODE = `class Solution:
 `;
 
 const MissionPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   // Panel state with localStorage persistence
   const [leftWidth, setLeftWidth] = useState(() => {
     const saved = localStorage.getItem('mission-panel-left-width');
@@ -207,7 +213,14 @@ const MissionPage = () => {
 
   return (
     <div className="mission-page-container">
-      <Gnb title="LearnCode" userName="홍길동" showBackButton />
+      <Gnb
+        title="LearnCode"
+        isLoggedIn={isAuthenticated}
+        userName={user?.userName || '사용자'}
+        showBackButton
+        onBackClick={() => navigate('/home')}
+        onLogoutClick={() => dispatch(logoutAction())}
+      />
 
       <main className="mission-main-content">
         {/* Left: Problem Description */}

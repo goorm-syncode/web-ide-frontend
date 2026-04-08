@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from './Button';
-import '../../styles/components/MessageBox.css';
+import '../../styles/components/common/MessageBox.css';
 
 /**
  * 상태별 아이콘 렌더링

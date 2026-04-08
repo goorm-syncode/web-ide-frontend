@@ -2,6 +2,7 @@ import DevSearchFilterPage from '../pages/dev/DevSearchFilterPage';
 import DevDifficultyFilterPage from '../pages/dev/DevDifficultyFilterPage';
 import DevStatusFilterPage from '../pages/dev/DevStatusFilterPage';
 import DevHomePage from '../pages/dev/DevHomePage';
+import DevTestPage from '../pages/dev/DevTestPage';
 import HomePage from '../pages/HomePage';
 import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
 import { createBrowserRouter } from 'react-router-dom';
@@ -20,6 +21,8 @@ import DevPaginationPage from '../pages/dev/DevPaginationPage';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from './signup';
 import MissionPage from '../pages/MissionPage';
+import ResetPasswordPage from '../pages/ResetPasswordPage';
+import AuthGuard from '../components/common/AuthGuard';
 
 const router = createBrowserRouter([
   {
@@ -43,8 +46,20 @@ const router = createBrowserRouter([
     element: <DevProblemDescriptionPage />,
   },
   {
+    path: '/dev/test',
+    element: <DevTestPage />,
+  },
+  {
     path: '/',
-    element: <App />,
+    element: <App />, /* App.jsx 내에서 Navigate가 처리할 예정 */
+  },
+  {
+    path: '/home',
+    element: (
+      <AuthGuard>
+        <HomePage />
+      </AuthGuard>
+    ),
   },
   {
     path: '/login',
@@ -55,8 +70,16 @@ const router = createBrowserRouter([
     element: <SignupPage />,
   },
   {
+    path: '/reset-password',
+    element: <ResetPasswordPage />,
+  },
+  {
     path: '/missions/:missionId',
-    element: <MissionPage />,
+    element: (
+      <AuthGuard>
+        <MissionPage />
+      </AuthGuard>
+    ),
   },
   {
     path: '/dev/signup',

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/AuthLayout.css';
+import '../../styles/components/layout/AuthLayout.css';
 import Card from '../common/Card';
 
 const AuthLayout = ({ children }) => {

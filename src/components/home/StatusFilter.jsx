@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import '../../styles/components/StatusFilter.css';
+import '../../styles/components/home/StatusFilter.css';
 
 /**
  * 상태 필터 옵션 목록
