@@ -2,6 +2,7 @@ import DevSearchFilterPage from '../pages/dev/DevSearchFilterPage';
 import DevDifficultyFilterPage from '../pages/dev/DevDifficultyFilterPage';
 import DevStatusFilterPage from '../pages/dev/DevStatusFilterPage';
 import DevHomePage from '../pages/dev/DevHomePage';
+import HomePage from '../pages/HomePage';
 import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
@@ -19,6 +20,7 @@ import DevPaginationPage from '../pages/dev/DevPaginationPage';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from '../pages/SignupPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
+import MissionPage from '../pages/MissionPage';
 
 const router = createBrowserRouter([
   {
@@ -57,10 +59,9 @@ const router = createBrowserRouter([
     path: '/reset-password',
     element: <ResetPasswordPage />,
   },
-
   {
-    path: '/dev/login',
-    element: <DevLoginPage />,
+    path: '/missions/:missionId',
+    element: <MissionPage />,
   },
   {
     path: '/dev/signup',

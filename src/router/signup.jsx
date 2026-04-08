@@ -39,19 +39,24 @@ const SignupPage = () => {
         if (!value) return '이메일을 입력해주세요.';
         if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return '올바른 이메일 형식을 입력해주세요.';
-        if (value.length < 5 || value.length > 50) return '이메일은 5자 이상 50자 이하로 입력해주세요.';
+        if (value.length < 5 || value.length > 50)
+          return '이메일은 5자 이상 50자 이하로 입력해주세요.';
         return '';
       case 'nickname':
         if (!value) return '닉네임을 입력해주세요.';
         if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
-        if (value.length < 2 || value.length > 12) return '닉네임은 2자 이상 12자 이하로 입력해주세요.';
-        if (!/^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$/.test(value)) return '닉네임은 한글, 영문, 숫자만 사용할 수 있습니다.';
+        if (value.length < 2 || value.length > 12)
+          return '닉네임은 2자 이상 12자 이하로 입력해주세요.';
+        if (!/^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$/.test(value))
+          return '닉네임은 한글, 영문, 숫자만 사용할 수 있습니다.';
         return '';
       case 'password':
         if (!value) return '비밀번호를 입력해주세요.';
         if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
-        if (value.length < 8 || value.length > 20) return '비밀번호는 8자 이상 20자 이하로 입력해주세요.';
-        if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$/.test(value)) return '비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.';
+        if (value.length < 8 || value.length > 20)
+          return '비밀번호는 8자 이상 20자 이하로 입력해주세요.';
+        if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$/.test(value))
+          return '비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.';
         return '';
       case 'passwordConfirm':
         if (!value) return '비밀번호를 다시 확인합니다.';
@@ -94,7 +99,7 @@ const SignupPage = () => {
     try {
       const { email, nickname, password } = formData;
       await authService.signup({ email, nickname, password });
-      
+
       setMessageBox({
         isOpen: true,
         type: 'success',
@@ -111,7 +116,7 @@ const SignupPage = () => {
         type: 'error',
         title: '회원가입 실패',
         message: message,
-        onConfirm: null
+        onConfirm: null,
       });
     } finally {
       setLoading(false);
@@ -175,12 +180,16 @@ const SignupPage = () => {
           required
         />
         <div className="auth-submit-btn-wrapper">
-          <Button 
-            primary 
-            fullWidth 
-            type="submit" 
+          <Button
+            primary
+            fullWidth
+            type="submit"
             loading={loading}
-            disabled={loading || Object.values(errors).some(e => e !== '') || Object.values(formData).some(v => v === '')}
+            disabled={
+              loading ||
+              Object.values(errors).some((e) => e !== '') ||
+              Object.values(formData).some((v) => v === '')
+            }
           >
             가입하기
           </Button>
@@ -191,7 +200,6 @@ const SignupPage = () => {
         <Link to="/login" className="auth-link-text">
           이미 계정이 있으신가요? 로그인
         </Link>
-
       </div>
 
       <MessageBox

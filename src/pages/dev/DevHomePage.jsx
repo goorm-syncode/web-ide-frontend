@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Gnb from '../../components/layout/Gnb';
 import ProgressBanner from '../../components/common/ProgressBanner';
 import ProblemList from '../../components/domain/ProblemList';
@@ -8,6 +9,8 @@ import SearchFilter from '../../components/features/SearchFilter';
 import DifficultyFilter from '../../components/features/DifficultyFilter';
 import StatusFilter from '../../components/features/StatusFilter';
 import Pagination from '../../components/common/Pagination';
+import authService from '../../services/auth';
+import { getContinueLearning } from '../../services/problem';
 
 import '../../styles/pages/DevHomePage.css';
 
@@ -128,6 +131,7 @@ const mockProblems = [
 ];
 
 const DevHomePage = () => {
+  const navigate = useNavigate();
   const [modalState, setModalState] = useState({
     isOpen: false,
     title: '',
@@ -140,12 +144,37 @@ const DevHomePage = () => {
     userName: 'Alex Coder',
   });
 
+  // 진행률 관련 상태
+  const [progress, setProgress] = useState(0);
+  const [continueMission, setContinueMission] = useState(null);
+
   // 필터 및 페이지네이션 상태
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
+
+  // 데이터 페칭
+  useEffect(() => {
+    const fetchProgressData = async () => {
+      try {
+        const progressData = await authService.getMyProgress();
+        if (progressData) {
+          setProgress(progressData.progressPercent);
+        }
+
+        const continueData = await getContinueLearning();
+        if (continueData && continueData.mission) {
+          setContinueMission(continueData.mission);
+        }
+      } catch (error) {
+        console.error('Failed to fetch progress data:', error);
+      }
+    };
+
+    fetchProgressData();
+  }, []);
 
   // 필터 변경 시 페이지 초기화
   const handleFilterChange = (setter) => (value) => {
@@ -187,6 +216,15 @@ const DevHomePage = () => {
     showModal('로그인', '환영합니다, Alex Coder님!', 'success');
   };
 
+  const handleContinue = () => {
+    if (continueMission) {
+      // 문제 상세 페이지로 이동 (라우터 설정에 따라 경로 조정 가능)
+      navigate(`/dev/problem-description?id=${continueMission.missionId}`);
+    } else {
+      showModal('안내', '현재 이어서 진행할 문제가 없습니다. 새로운 문제를 시작해보세요!', 'info');
+    }
+  };
+
   return (
     <div className="dev-home-wrapper">
       <Gnb
@@ -202,10 +240,8 @@ const DevHomePage = () => {
           <h1 className="home-title">문제 목록</h1>
           <div className="home-progress">
             <ProgressBanner
-              progress={65}
-              onContinue={() =>
-                showModal('안내', '이전 학습 이어하기 기능을 준비 중입니다.', 'info')
-              }
+              progress={Math.round(progress)}
+              onContinue={handleContinue}
             />
           </div>
         </div>

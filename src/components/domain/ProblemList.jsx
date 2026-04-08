@@ -15,6 +15,7 @@ const ProblemList = ({ problems = [], onProblemClick }) => {
         <ProblemCard
           key={problem.id}
           {...problem}
+          description={problem.summary}
           onClickAction={() => onProblemClick && onProblemClick(problem.id)}
         />
       ))}
