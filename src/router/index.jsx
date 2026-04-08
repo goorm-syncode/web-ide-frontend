@@ -14,6 +14,7 @@ import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
 import DevLoginPage from '../pages/dev/LoginPage';
 import DevProblemListPage from '../pages/dev/DevProblemListPage';
 import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
+import LoginPage from '../pages/LoginPage';
 
 const router = createBrowserRouter([
   {
@@ -37,8 +38,8 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: '/dev/login',
-    element: <DevLoginPage />,
+    path: '/login',
+    element: <LoginPage />,
   },
   {
     path: '/dev/signup',
