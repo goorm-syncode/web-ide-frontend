@@ -18,6 +18,7 @@ import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
 import DevPaginationPage from '../pages/dev/DevPaginationPage';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from './signup';
+import MissionPage from '../pages/MissionPage';
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <SignupPage />,
+  },
+  {
+    path: '/mission',
+    element: <MissionPage />,
   },
 
   {

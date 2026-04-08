@@ -2,27 +2,47 @@ import { useNavigate } from 'react-router-dom';
 import './Gnb.css';
 
 const BackArrowIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <path d="M15 18l-6-6 6-6" />
   </svg>
 );
 
 const LogoutIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
     <polyline points="16 17 21 12 16 7"></polyline>
     <line x1="21" y1="12" x2="9" y2="12"></line>
   </svg>
 );
 
-const Gnb = ({ 
-  title = "Coding Test", 
-  showBackButton = false, 
-  onBackClick, 
-  isLoggedIn = true, 
-  userName = "닉네임",
+const Gnb = ({
+  title = 'Coding Test',
+  showBackButton = false,
+  onBackClick,
+  isLoggedIn = true,
+  userName = '닉네임',
   onLogoutClick,
-  onLoginClick
+  onLoginClick,
 }) => {
   const navigate = useNavigate();
 
@@ -34,20 +54,30 @@ const Gnb = ({
             <BackArrowIcon />
           </button>
         )}
-        <h1 className="gnb-title" onClick={() => navigate('/dev/home')}>{title}</h1>
+        <h1 className="gnb-title" onClick={() => navigate('/dev/home')}>
+          {title}
+        </h1>
       </div>
-      
+
       <div className="gnb-right">
         {isLoggedIn ? (
           <>
             <span className="gnb-username">{userName}</span>
-            <button className="gnb-action-button gnb-auth-button" onClick={onLogoutClick} aria-label="로그아웃">
+            <button
+              className="gnb-action-button gnb-auth-button"
+              onClick={onLogoutClick}
+              aria-label="로그아웃"
+            >
               <span>Logout</span>
               <LogoutIcon />
             </button>
           </>
         ) : (
-          <button className="gnb-action-button gnb-auth-button" onClick={onLoginClick} aria-label="로그인">
+          <button
+            className="gnb-action-button gnb-auth-button"
+            onClick={onLoginClick}
+            aria-label="로그인"
+          >
             Login
           </button>
         )}

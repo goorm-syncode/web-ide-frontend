@@ -1,11 +1,12 @@
 .problem-description-wrapper {
-  padding: 24px;
+  padding: 16px;
   height: 100%;
   overflow-y: auto;
   box-sizing: border-box;
   background-color: #FFFFFF;
   color: #22262B;
   font-family: Pretendard, system-ui, -apple-system, sans-serif;
+  text-align: left;
 }
 
 .panel-header {
