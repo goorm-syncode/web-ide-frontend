@@ -50,7 +50,7 @@ const router = createBrowserRouter([
     element: <SignupPage />,
   },
   {
-    path: '/mission',
+    path: '/missions/:missionId',
     element: <MissionPage />,
   },
 
