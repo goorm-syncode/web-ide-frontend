@@ -1,3 +1,4 @@
+import DevSearchFilterPage from '../pages/dev/DevSearchFilterPage';
 import DevDifficultyFilterPage from '../pages/dev/DevDifficultyFilterPage';
 import DevStatusFilterPage from '../pages/dev/DevStatusFilterPage';
 import DevHomePage from '../pages/dev/DevHomePage';
@@ -14,9 +15,16 @@ import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
 import DevLoginPage from '../pages/dev/LoginPage';
 import DevProblemListPage from '../pages/dev/DevProblemListPage';
 import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
+import DevPaginationPage from '../pages/dev/DevPaginationPage';
 import LoginPage from '../pages/LoginPage';
+import SignupPage from './signup';
+import MissionPage from '../pages/MissionPage';
 
 const router = createBrowserRouter([
+  {
+    path: '/dev/search-filter',
+    element: <DevSearchFilterPage />,
+  },
   {
     path: '/dev/difficulty-filter',
     element: <DevDifficultyFilterPage />,
@@ -40,6 +48,14 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/signup',
+    element: <SignupPage />,
+  },
+  {
+    path: '/missions/:missionId',
+    element: <MissionPage />,
   },
   {
     path: '/dev/signup',
@@ -76,6 +92,10 @@ const router = createBrowserRouter([
   {
     path: '/dev/execution-result',
     element: <DevExecutionResultPage />,
+  },
+  {
+    path: '/dev/pagination',
+    element: <DevPaginationPage />,
   },
 ]);
 

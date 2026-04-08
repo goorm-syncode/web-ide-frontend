@@ -1,0 +1,253 @@
+/* premium design tokens */
+:root {
+  --resizer-size: 4px;
+  --resizer-hover-color: #6366f1;
+  --panel-bg: #ffffff;
+  --panel-border: #e5e7eb;
+}
+
+.mission-page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #ffffff;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.mission-page-container footer {
+  border-top: 1px solid var(--panel-border);
+  background-color: #ffffff;
+  z-index: 10;
+}
+
+.mission-main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background-color: #ffffff;
+  border-top: 1px solid var(--panel-border);
+}
+
+/* Panels */
+.panel-left {
+  background-color: var(--panel-bg);
+  height: 100%;
+  overflow: hidden; /* Fix nested scrolling */
+  border-right: 1px solid var(--panel-border);
+  min-width: 200px;
+  padding-bottom: 0; /* Removing padding as it might interfere with hidden overflow */
+}
+
+.panel-right {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.panel-editor-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.panel-results {
+  background-color: var(--panel-bg);
+  border-top: 1px solid var(--panel-border);
+  min-height: 100px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-results > :first-child {
+  flex: 1;
+  height: 100%;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Resizers */
+.resizer-horizontal {
+  width: var(--resizer-size);
+  cursor: col-resize;
+  background-color: transparent;
+  transition: background-color 0.2s;
+  z-index: 10;
+  position: relative;
+}
+
+.resizer-horizontal:hover,
+.resizer-horizontal.dragging {
+  background-color: var(--resizer-hover-color);
+}
+
+.resizer-vertical {
+  height: var(--resizer-size);
+  cursor: row-resize;
+  background-color: transparent;
+  transition: background-color 0.2s;
+  z-index: 10;
+  position: relative;
+}
+
+.resizer-vertical:hover,
+.resizer-vertical.dragging {
+  background-color: var(--resizer-hover-color);
+}
+
+/* Editor Header */
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--panel-border);
+  height: 48px;
+}
+
+.editor-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.lang-select {
+  padding: 6px 32px 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  background-color: #1e293b;
+  color: #f8fafc;
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lang-select:hover {
+  background-color: #334155;
+  border-color: #475569;
+}
+
+.lang-select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.select-arrow {
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+  color: #94a3b8;
+}
+
+.file-name {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+.monaco-container {
+  flex: 1;
+  width: 100%;
+  text-align: left;
+  background-color: #1e1e1e;
+}
+
+/* Ensure monaco internal elements use monospace font and follow left alignment */
+.monaco-container * {
+  text-align: left;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+/* Final Scrollbar Fix for Panel Left and all nested elements */
+.panel-left ::-webkit-scrollbar,
+.panel-left::-webkit-scrollbar {
+  width: 5px !important;
+  height: 5px !important;
+}
+
+.panel-left ::-webkit-scrollbar-track,
+.panel-left::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.panel-left ::-webkit-scrollbar-thumb,
+.panel-left::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1 !important; /* 중간 명도의 확실한 회색 */
+  border-radius: 10px !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box !important;
+}
+
+.panel-left ::-webkit-scrollbar-thumb:hover,
+.panel-left::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8 !important; /* 호버 시 더욱 인위적인 명도 확보 */
+}
+
+/* Dark mode scrollbar support */
+@media (prefers-color-scheme: dark) {
+  .panel-left::-webkit-scrollbar-thumb,
+  .panel-left *::-webkit-scrollbar-thumb {
+    background-color: #374151;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mission-main-content {
+    flex-direction: column;
+  }
+
+  .panel-left {
+    width: 100% !important;
+    height: 40% !important;
+    border-right: none;
+    border-bottom: 1px solid var(--panel-border);
+  }
+
+  .resizer-horizontal {
+    display: none;
+  }
+}

@@ -56,7 +56,7 @@ const ProblemCard = ({
     const statusMap = {
       solved: { text: '완료', colorClass: 'solved', showDot: true },
       in_progress: { text: '진행중', colorClass: 'in_progress', showDot: true },
-      unattempted: { text: '미해결', colorClass: 'unattempted', showDot: false },
+      unattempted: { text: '미해결', colorClass: 'unattempted', showDot: true },
     };
 
     const currentStatus = statusMap[status] || statusMap.unattempted;

@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Gnb from '../../components/layout/Gnb';
 import ProgressBanner from '../../components/common/ProgressBanner';
 import ProblemList from '../../components/domain/ProblemList';
 import Footer from '../../components/common/Footer';
 import MessageBox from '../../components/common/MessageBox';
+import SearchFilter from '../../components/features/SearchFilter';
+import DifficultyFilter from '../../components/features/DifficultyFilter';
+import StatusFilter from '../../components/features/StatusFilter';
+import Pagination from '../../components/common/Pagination';
+import authService from '../../services/auth';
+import { getContinueLearning } from '../../services/problem';
 
 import '../../styles/pages/DevHomePage.css';
 
@@ -124,6 +131,7 @@ const mockProblems = [
 ];
 
 const DevHomePage = () => {
+  const navigate = useNavigate();
   const [modalState, setModalState] = useState({
     isOpen: false,
     title: '',
@@ -131,11 +139,63 @@ const DevHomePage = () => {
     type: 'info',
   });
 
-  // 추후 Redux나 Context API로 변경될 전역 인증 상태 시뮬레이션
   const [authState, setAuthState] = useState({
     isLoggedIn: true,
     userName: 'Alex Coder',
   });
+
+  // 진행률 관련 상태
+  const [progress, setProgress] = useState(0);
+  const [continueMission, setContinueMission] = useState(null);
+
+  // 필터 및 페이지네이션 상태
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 12;
+
+  // 데이터 페칭
+  useEffect(() => {
+    const fetchProgressData = async () => {
+      try {
+        const progressData = await authService.getMyProgress();
+        if (progressData) {
+          setProgress(progressData.progressPercent);
+        }
+
+        const continueData = await getContinueLearning();
+        if (continueData && continueData.mission) {
+          setContinueMission(continueData.mission);
+        }
+      } catch (error) {
+        console.error('Failed to fetch progress data:', error);
+      }
+    };
+
+    fetchProgressData();
+  }, []);
+
+  // 필터 변경 시 페이지 초기화
+  const handleFilterChange = (setter) => (value) => {
+    setter(value);
+    setCurrentPage(1);
+  };
+
+  // 필터링 및 페이지네이션 로직
+  const filteredProblems = mockProblems.filter((problem) => {
+    const matchesSearch = problem.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesDifficulty =
+      selectedDifficulty === 'all' || problem.difficulty.toLowerCase() === selectedDifficulty.toLowerCase();
+    const matchesStatus = selectedStatus === 'all' || problem.status === selectedStatus;
+    return matchesSearch && matchesDifficulty && matchesStatus;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredProblems.length / ITEMS_PER_PAGE));
+  const paginatedProblems = filteredProblems.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const showModal = (title, message, type = 'info') => {
     setModalState({ isOpen: true, title, message, type });
@@ -156,44 +216,71 @@ const DevHomePage = () => {
     showModal('로그인', '환영합니다, Alex Coder님!', 'success');
   };
 
+  const handleContinue = () => {
+    if (continueMission) {
+      // 문제 상세 페이지로 이동 (라우터 설정에 따라 경로 조정 가능)
+      navigate(`/dev/problem-description?id=${continueMission.missionId}`);
+    } else {
+      showModal('안내', '현재 이어서 진행할 문제가 없습니다. 새로운 문제를 시작해보세요!', 'info');
+    }
+  };
+
   return (
     <div className="dev-home-wrapper">
       <Gnb
-        title="Coding Test"
+        title="CODING TEST"
         isLoggedIn={authState.isLoggedIn}
         userName={authState.userName}
         onLogoutClick={handleLogout}
         onLoginClick={handleLogin}
       />
-
+      <div className="home-top-spacer" />
       <div className="dev-home-content">
         <div className="home-header">
           <h1 className="home-title">문제 목록</h1>
           <div className="home-progress">
             <ProgressBanner
-              progress={65}
-              onContinue={() =>
-                showModal('안내', '이전 학습 이어하기 기능을 준비 중입니다.', 'info')
-              }
+              progress={Math.round(progress)}
+              onContinue={handleContinue}
             />
           </div>
         </div>
 
         <div className="home-filter-row">
-          {/* 필터버튼 및 상태선택 자리 (추후 삽입 예정) */}
-          <div className="placeholder-filter-left">필터 영역 컴포넌트 자리</div>
+          <div className="home-filters-left">
+            <DifficultyFilter
+              value={selectedDifficulty}
+              onChange={handleFilterChange(setSelectedDifficulty)}
+            />
+            <div className="filter-divider"></div>
+            <StatusFilter
+              value={selectedStatus}
+              onChange={handleFilterChange(setSelectedStatus)}
+            />
+          </div>
+          <div className="home-filters-right">
+            <SearchFilter
+              value={searchQuery}
+              onChange={handleFilterChange(setSearchQuery)}
+              placeholder="문제 제목을 검색하세요..."
+            />
+          </div>
         </div>
 
         <ProblemList
-          problems={mockProblems}
+          problems={paginatedProblems}
           onProblemClick={(id) => {
-            // TODO: GNB + 문제설명패널 + IDE가 통합된 화면으로 이동 (추후 개발 시 경로 추가)
             console.log(`Navigate to integrated view for problem ID: ${id}`);
           }}
         />
 
-        {/* 페이지네이션 컴포넌트 자리 (추후 삽입 예정) */}
-        <div className="placeholder-pagination">페이지네이션 컴포넌트 자리</div>
+        <div className="home-pagination-wrapper">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
       </div>
 
       <Footer />
@@ -202,7 +289,6 @@ const DevHomePage = () => {
       <div
         className="placeholder-floating-chat"
         onClick={() => showModal('채팅', '채팅 패널을 엽니다.', 'info')}
-        style={{ cursor: 'pointer' }}
       >
         채팅 버튼
         <br />

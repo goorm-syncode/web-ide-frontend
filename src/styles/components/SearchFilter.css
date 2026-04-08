@@ -1,0 +1,31 @@
+.search-filter {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  align-items: center;
+}
+
+.search-filter__input {
+  width: 100%;
+}
+
+.search-filter__input .input-inner-wrapper {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.search-filter__input .input-field {
+  padding-left: 34px; /* 줄어든 패딩 */
+  font-size: 14px;
+  font-family: 'Pretendard', sans-serif;
+  color: #22262B;
+}
+
+/* 필터 라인 끝에 배치될 때의 반응형 스타일 */
+@media (max-width: 1024px) {
+  .search-filter {
+    width: 100%;
+    max-width: 100%;
+  }
+}

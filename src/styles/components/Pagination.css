@@ -1,0 +1,59 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0; /* 기존 32px 0 제거하여 중복 여백 문제 해결 */
+  user-select: none;
+}
+
+.pagination-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  background-color: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination-item:hover:not(.active):not(:disabled) {
+  background-color: #EEF2FF;
+  color: #6366F1;
+  border-color: #C7D2FE;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+.pagination-item.active {
+  background-color: #6366f1;
+  color: #ffffff;
+}
+
+.pagination-item:disabled {
+  color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.pagination-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: #8b95a1;
+  font-size: 14px;
+}
+
+/* Arrow handles */
+.pagination-arrow {
+  font-size: 18px;
+  line-height: 1;
+}

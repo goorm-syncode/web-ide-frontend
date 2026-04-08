@@ -32,3 +32,9 @@
   color: #ffffff;
   box-shadow: 0 2px 4px rgba(79, 70, 229, 0.15);
 }
+@media screen and (max-width: 480px) {
+  .difficulty-filter__btn {
+    padding: 0 8px; /* 16px -> 8px 축소 */
+    font-size: 13px;
+  }
+}
