@@ -4,12 +4,12 @@ import App from '../App';
 import AuthGuard from '../components/common/AuthGuard';
 import PageLoader from '../components/common/PageLoader';
 
-// Lazy 로딩 페이지들
+// Lazy 로딩 페이지들 (메인)
 const HomePage = lazy(() => import('../pages/HomePage'));
 const LoginPage = lazy(() => import('../pages/LoginPage'));
-const SignupPage = lazy(() => import('./signup'));
-const MissionPage = lazy(() => import('../pages/MissionPage'));
+const SignupPage = lazy(() => import('../pages/SignupPage'));
 const ResetPasswordPage = lazy(() => import('../pages/ResetPasswordPage'));
+const MissionPage = lazy(() => import('../pages/MissionPage'));
 
 // Dev 페이지들
 const DevSearchFilterPage = lazy(() => import('../pages/dev/DevSearchFilterPage'));
@@ -30,6 +30,7 @@ const DevExecutionResultPage = lazy(() => import('../pages/dev/DevExecutionResul
 const DevPaginationPage = lazy(() => import('../pages/dev/DevPaginationPage'));
 
 const router = createBrowserRouter([
+  /* Dev 페이지들 */
   {
     path: '/dev/search-filter',
     element: <Suspense fallback={<PageLoader />}><DevSearchFilterPage /></Suspense>,
@@ -53,42 +54,6 @@ const router = createBrowserRouter([
   {
     path: '/dev/test',
     element: <Suspense fallback={<PageLoader />}><DevTestPage /></Suspense>,
-  },
-  {
-    path: '/',
-    element: <App />, /* App.jsx 내에서 Navigate가 처리할 예정 */
-  },
-  {
-    path: '/home',
-    element: (
-      <AuthGuard>
-        <Suspense fallback={<PageLoader />}>
-          <HomePage />
-        </Suspense>
-      </AuthGuard>
-    ),
-  },
-  {
-    path: '/login',
-    element: <Suspense fallback={<PageLoader />}><LoginPage /></Suspense>,
-  },
-  {
-    path: '/signup',
-    element: <Suspense fallback={<PageLoader />}><SignupPage /></Suspense>,
-  },
-  {
-    path: '/reset-password',
-    element: <Suspense fallback={<PageLoader />}><ResetPasswordPage /></Suspense>,
-  },
-  {
-    path: '/missions/:missionId',
-    element: (
-      <AuthGuard>
-        <Suspense fallback={<PageLoader />}>
-          <MissionPage />
-        </Suspense>
-      </AuthGuard>
-    ),
   },
   {
     path: '/dev/signup',
@@ -129,6 +94,44 @@ const router = createBrowserRouter([
   {
     path: '/dev/pagination',
     element: <Suspense fallback={<PageLoader />}><DevPaginationPage /></Suspense>,
+  },
+
+  /* 메인 서비스 페이지들 */
+  {
+    path: '/',
+    element: <App />, /* App.jsx 내에서 Navigate가 처리할 예정 */
+  },
+  {
+    path: '/home',
+    element: (
+      <AuthGuard>
+        <Suspense fallback={<PageLoader />}>
+          <HomePage />
+        </Suspense>
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/login',
+    element: <Suspense fallback={<PageLoader />}><LoginPage /></Suspense>,
+  },
+  {
+    path: '/signup',
+    element: <Suspense fallback={<PageLoader />}><SignupPage /></Suspense>,
+  },
+  {
+    path: '/reset-password',
+    element: <Suspense fallback={<PageLoader />}><ResetPasswordPage /></Suspense>,
+  },
+  {
+    path: '/missions/:missionId',
+    element: (
+      <AuthGuard>
+        <Suspense fallback={<PageLoader />}>
+          <MissionPage />
+        </Suspense>
+      </AuthGuard>
+    ),
   },
 ]);
 

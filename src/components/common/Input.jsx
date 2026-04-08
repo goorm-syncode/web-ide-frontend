@@ -27,10 +27,13 @@ const Input = forwardRef(
             id={id}
             ref={ref}
             type={type}
-            className={`input-field ${error ? 'input-error' : ''} ${icon ? 'input-with-icon' : ''}`.trim()}
+            className={`input-field ${error ? 'input-error' : ''} ${icon ? 'input-with-icon' : ''} ${error ? 'input-with-error-icon' : ''}`.trim()}
             disabled={disabled}
             {...props}
           />
+          {error && (
+            <div className="input-error-icon">!</div>
+          )}
         </div>
 
         {helperText && (
