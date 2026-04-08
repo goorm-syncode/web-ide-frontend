@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/components/layout/Gnb.css';
 
@@ -84,6 +86,16 @@ const Gnb = ({
       </div>
     </header>
   );
+};
+
+Gnb.propTypes = {
+  title: PropTypes.string,
+  showBackButton: PropTypes.bool,
+  onBackClick: PropTypes.func,
+  isLoggedIn: PropTypes.bool,
+  userName: PropTypes.string,
+  onLogoutClick: PropTypes.func,
+  onLoginClick: PropTypes.func,
 };
 
 export default Gnb;

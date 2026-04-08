@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import '../../styles/components/home/DifficultyFilter.css';
 
 const DIFFICULTY_OPTIONS = [
@@ -44,6 +45,11 @@ const DifficultyFilter = ({ value, onChange }) => {
       ))}
     </div>
   );
+};
+
+DifficultyFilter.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default DifficultyFilter;

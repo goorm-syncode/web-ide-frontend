@@ -43,7 +43,7 @@ const DevProgressBannerPage = () => {
 
       <section>
         <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#475569' }}>
-          2. "Resume Session" Button (Problem Card)
+          2. &quot;Resume Session&quot; Button (Problem Card)
         </h2>
         <Card title="Algorithm Problem #123" style={{ width: '320px', backgroundColor: '#ffffff' }}>
           <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '24px' }}>

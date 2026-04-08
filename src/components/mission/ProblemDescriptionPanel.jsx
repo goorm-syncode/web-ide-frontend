@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
 import TagBadge from '../common/TagBadge';
 import '../../styles/components/mission/ProblemDescriptionPanel.css';
@@ -44,6 +45,11 @@ const RenderFormattedCode = ({ text, isInline }) => {
       {formattedContent}
     </code>
   );
+};
+
+RenderFormattedCode.propTypes = {
+  text: PropTypes.string.isRequired,
+  isInline: PropTypes.bool,
 };
 
 const ProblemDescriptionPanel = ({ title, difficulty, markdownContent, examples = [] }) => {
@@ -165,6 +171,21 @@ const ProblemDescriptionPanel = ({ title, difficulty, markdownContent, examples 
       </div>
     </div>
   );
+};
+
+ProblemDescriptionPanel.propTypes = {
+  title: PropTypes.string.isRequired,
+  difficulty: PropTypes.string,
+  markdownContent: PropTypes.string.isRequired,
+  examples: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      title: PropTypes.string,
+      input: PropTypes.string,
+      output: PropTypes.string,
+      explanation: PropTypes.string,
+    }),
+  ),
 };
 
 export default ProblemDescriptionPanel;

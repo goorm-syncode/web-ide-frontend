@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import '../../styles/components/home/ProgressBanner.css';
 
 /**
@@ -36,6 +38,12 @@ const ProgressBanner = ({ progress = 0, onContinue, className = '' }) => {
       </button>
     </div>
   );
+};
+
+ProgressBanner.propTypes = {
+  progress: PropTypes.number,
+  onContinue: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default ProgressBanner;

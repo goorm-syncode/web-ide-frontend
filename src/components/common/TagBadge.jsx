@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import '../../styles/components/common/TagBadge.css';
 
 /**
@@ -9,6 +10,11 @@ import '../../styles/components/common/TagBadge.css';
  */
 const TagBadge = ({ type = 'default', text }) => {
   return <span className={`tag-badge tag-badge-${type}`}>{text}</span>;
+};
+
+TagBadge.propTypes = {
+  type: PropTypes.oneOf(['success', 'warning', 'error', 'default']),
+  text: PropTypes.string.isRequired,
 };
 
 export default TagBadge;

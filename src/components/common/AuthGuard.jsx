@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 
@@ -25,6 +26,10 @@ const AuthGuard = ({ children }) => {
   }
 
   return children;
+};
+
+AuthGuard.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default AuthGuard;

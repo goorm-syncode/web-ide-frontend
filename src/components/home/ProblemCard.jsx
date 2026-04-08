@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Card from '../common/Card';
 import Button from '../common/Button';
 import TagBadge from '../common/TagBadge';
@@ -140,6 +141,16 @@ const ProblemCard = ({
       </div>
     </Card>
   );
+};
+
+ProblemCard.propTypes = {
+  status: PropTypes.oneOf(['solved', 'in_progress', 'unattempted']),
+  category: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  difficulty: PropTypes.oneOf(['EASY', 'MEDIUM', 'HARD']).isRequired,
+  tags: PropTypes.arrayOf(PropTypes.string),
+  onClickAction: PropTypes.func,
 };
 
 export default ProblemCard;

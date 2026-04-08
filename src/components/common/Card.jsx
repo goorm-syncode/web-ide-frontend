@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import '../../styles/components/common/Card.css';
 
 /**
@@ -38,6 +39,14 @@ const Card = ({
       <div className="card-content">{children}</div>
     </div>
   );
+};
+
+Card.propTypes = {
+  children: PropTypes.node.isRequired,
+  title: PropTypes.string,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
+  hoverable: PropTypes.bool,
 };
 
 export default Card;
