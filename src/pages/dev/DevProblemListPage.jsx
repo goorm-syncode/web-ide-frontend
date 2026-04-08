@@ -1,5 +1,5 @@
-import React from 'react';
 import ProblemList from '../../components/domain/ProblemList';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/pages/DevProblemListPage.css';
 
 const mockProblems = [
@@ -62,8 +62,10 @@ const mockProblems = [
 const difficultyWeight = { EASY: 1, MEDIUM: 2, HARD: 3 };
 
 const DevProblemListPage = () => {
+  const navigate = useNavigate();
+
   const handleProblemClick = (id) => {
-    alert(`문제 풀기로 이동: Problem ID ${id}`);
+    navigate(`/missions/${id}`);
   };
 
   // 샘플 데이터 난이도별 정렬 (EASY -> MEDIUM -> HARD)
