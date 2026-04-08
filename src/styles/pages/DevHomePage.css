@@ -7,6 +7,7 @@ html, body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  overflow-y: scroll; /* 스크롤바 자리를 항상 확보하여 가로 꿀렁임 방지 */
 }
 
 /* GNB 포함 전체 창 컨테이너 */
@@ -34,6 +35,7 @@ html, body {
   flex-direction: column;
   overflow: visible;
   box-sizing: border-box;
+  min-height: 850px; /* 문제 개수가 적어도 페이지네이션 위치가 상단으로 들썩이지 않도록 최소 높이 확보 */
 }
 
 /* 헤더: 타이틀 + 진행률 */
@@ -65,7 +67,7 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 48px; /* UI_RULES: 40px -> 48px 보정 */
+  margin-bottom: 24px; /* 32px -> 24px로 최종 축소하여 카드들과의 간격 최적화 */
   gap: 20px;
   width: 100%;
   background-color: #E2E8F0; /* 배경보다 좀 더 진한 색 */

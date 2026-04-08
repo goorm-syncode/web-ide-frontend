@@ -2,6 +2,7 @@ import DevSearchFilterPage from '../pages/dev/DevSearchFilterPage';
 import DevDifficultyFilterPage from '../pages/dev/DevDifficultyFilterPage';
 import DevStatusFilterPage from '../pages/dev/DevStatusFilterPage';
 import DevHomePage from '../pages/dev/DevHomePage';
+import HomePage from '../pages/HomePage';
 import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';

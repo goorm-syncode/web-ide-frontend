@@ -1,10 +1,28 @@
-/**
- * 미션(Mission) 관련 API 서비스 레이어
- *
- * backend endpoint '/api/missions' 와 통신합니다.
- */
-
 import api from './api';
+
+/**
+ * 미션(문제) 필터링 및 목록 조회
+ * OpenAPI /api/missions 대응
+ */
+export const getMissions = async ({
+  category,
+  difficulty,
+  status,
+  keyword,
+  page = 0,
+  size = 20,
+} = {}) => {
+  const params = { page, size };
+
+  // 각 필터가 존재하는 경우 API 연동에 적합하게 파싱하여 전달합니다.
+  if (category && category !== 'all') params.category = category;
+  if (difficulty && difficulty !== 'all') params.difficulty = difficulty.toUpperCase();
+  if (status && status !== 'all') params.status = status.toUpperCase();
+  if (keyword) params.keyword = keyword;
+
+  const response = await api.get('/api/missions', { params });
+  return response;
+};
 
 /**
  * 미션(문제) 상세 조회
@@ -14,7 +32,5 @@ import api from './api';
  */
 export const getMissionById = async (missionId) => {
   const response = await api.get(`/api/missions/${missionId}`);
-  // api.js response interceptor 에서 response.data?.data 를 리턴하므로
-  // 여기서는 바로 response 를 반환합니다.
   return response;
 };
