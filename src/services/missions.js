@@ -25,7 +25,10 @@ export const getMissions = async ({
 };
 
 /**
- * 특정 미션 상세 조회
+ * 미션(문제) 상세 조회
+ *
+ * @param {number|string} missionId - 미션 ID
+ * @returns {Promise<Object>} - 미션 상세 데이터 (MissionDetailResponse)
  */
 export const getMissionById = async (missionId) => {
   const response = await api.get(`/api/missions/${missionId}`);
