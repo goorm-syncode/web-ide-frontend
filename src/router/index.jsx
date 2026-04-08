@@ -18,6 +18,7 @@ import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
 import DevPaginationPage from '../pages/dev/DevPaginationPage';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from './signup';
+import MissionPage from '../pages/MissionPage';
 
 const router = createBrowserRouter([
   {
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/missions/:missionId',
-    element: <div>임시 연결 페이지 (준비 중)</div>,
+    element: <MissionPage />,
   },
 
   {
