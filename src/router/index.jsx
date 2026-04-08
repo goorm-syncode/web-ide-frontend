@@ -53,6 +53,7 @@ const router = createBrowserRouter([
     path: '/missions/:missionId',
     element: <MissionPage />,
   },
+
   {
     path: '/dev/login',
     element: <DevLoginPage />,
