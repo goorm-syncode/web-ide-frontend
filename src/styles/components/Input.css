@@ -40,6 +40,10 @@
   padding-left: 36px;
 }
 
+.input-field.input-with-error-icon {
+  padding-right: 36px;
+}
+
 .input-field::placeholder {
   color: #8B95A1;
 }
@@ -60,6 +64,23 @@
 
 .input-error:focus {
   border-color: #EF4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+}
+
+.input-error-icon {
+  position: absolute;
+  right: 12px;
+  width: 18px;
+  height: 18px;
+  background-color: #EF4444;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  pointer-events: none;
 }
 
 .input-field:disabled {
@@ -78,4 +99,5 @@
 
 .input-helper-error {
   color: #EF4444;
+  font-weight: 500;
 }

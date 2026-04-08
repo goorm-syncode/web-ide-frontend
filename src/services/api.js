@@ -52,9 +52,11 @@ api.interceptors.response.use(
     if (errorResponse) {
       // 401 Unauthorized: 토큰 만료 또는 인증 실패
       if (errorResponse.status === 401) {
-        // TODO: 토큰 갱신(refresh) 로직 구현 필요 시 여기에 추가
-        // 일단 토큰 삭제 및 로그인 유도 처리를 고려할 것
         console.warn('인증이 만료되었습니다. 로그인이 필요합니다.');
+        alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        window.location.href = '/login';
       }
       
       // 백엔드에서 내려주는 커스텀 메시지 우선 사용
