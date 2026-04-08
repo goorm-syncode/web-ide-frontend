@@ -1,52 +1,58 @@
-import DevSearchFilterPage from '../pages/dev/DevSearchFilterPage';
-import DevDifficultyFilterPage from '../pages/dev/DevDifficultyFilterPage';
-import DevStatusFilterPage from '../pages/dev/DevStatusFilterPage';
-import DevHomePage from '../pages/dev/DevHomePage';
-import DevTestPage from '../pages/dev/DevTestPage';
-import HomePage from '../pages/HomePage';
-import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
+import React, { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
-import DevSignupPage from '../pages/dev/DevSignupPage';
-import DevMessageBoxPage from '../pages/dev/DevMessageBoxPage';
-import DevGnbPage from '../pages/dev/DevGnbPage';
-import DevInputPage from '../pages/dev/DevInputPage';
-import DevProgressBannerPage from '../pages/dev/DevProgressBannerPage';
-import DevFooterPage from '../pages/dev/DevFooterPage';
-import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
-import DevProblemListPage from '../pages/dev/DevProblemListPage';
-import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
-import DevPaginationPage from '../pages/dev/DevPaginationPage';
-import LoginPage from '../pages/LoginPage';
-import SignupPage from './signup';
-import MissionPage from '../pages/MissionPage';
-import ResetPasswordPage from '../pages/ResetPasswordPage';
 import AuthGuard from '../components/common/AuthGuard';
+import PageLoader from '../components/common/PageLoader';
+
+// Lazy 로딩 페이지들
+const HomePage = lazy(() => import('../pages/HomePage'));
+const LoginPage = lazy(() => import('../pages/LoginPage'));
+const SignupPage = lazy(() => import('./signup'));
+const MissionPage = lazy(() => import('../pages/MissionPage'));
+const ResetPasswordPage = lazy(() => import('../pages/ResetPasswordPage'));
+
+// Dev 페이지들
+const DevSearchFilterPage = lazy(() => import('../pages/dev/DevSearchFilterPage'));
+const DevDifficultyFilterPage = lazy(() => import('../pages/dev/DevDifficultyFilterPage'));
+const DevStatusFilterPage = lazy(() => import('../pages/dev/DevStatusFilterPage'));
+const DevHomePage = lazy(() => import('../pages/dev/DevHomePage'));
+const DevTestPage = lazy(() => import('../pages/dev/DevTestPage'));
+const DevProblemDescriptionPage = lazy(() => import('../pages/dev/DevProblemDescriptionPage'));
+const DevSignupPage = lazy(() => import('../pages/dev/DevSignupPage'));
+const DevMessageBoxPage = lazy(() => import('../pages/dev/DevMessageBoxPage'));
+const DevGnbPage = lazy(() => import('../pages/dev/DevGnbPage'));
+const DevInputPage = lazy(() => import('../pages/dev/DevInputPage'));
+const DevProgressBannerPage = lazy(() => import('../pages/dev/DevProgressBannerPage'));
+const DevFooterPage = lazy(() => import('../pages/dev/DevFooterPage'));
+const DevProblemCardPage = lazy(() => import('../pages/dev/DevProblemCardPage'));
+const DevProblemListPage = lazy(() => import('../pages/dev/DevProblemListPage'));
+const DevExecutionResultPage = lazy(() => import('../pages/dev/DevExecutionResultPage'));
+const DevPaginationPage = lazy(() => import('../pages/dev/DevPaginationPage'));
 
 const router = createBrowserRouter([
   {
     path: '/dev/search-filter',
-    element: <DevSearchFilterPage />,
+    element: <Suspense fallback={<PageLoader />}><DevSearchFilterPage /></Suspense>,
   },
   {
     path: '/dev/difficulty-filter',
-    element: <DevDifficultyFilterPage />,
+    element: <Suspense fallback={<PageLoader />}><DevDifficultyFilterPage /></Suspense>,
   },
   {
     path: '/dev/status-filter',
-    element: <DevStatusFilterPage />,
+    element: <Suspense fallback={<PageLoader />}><DevStatusFilterPage /></Suspense>,
   },
   {
     path: '/dev/home',
-    element: <DevHomePage />,
+    element: <Suspense fallback={<PageLoader />}><DevHomePage /></Suspense>,
   },
   {
     path: '/dev/problem-description',
-    element: <DevProblemDescriptionPage />,
+    element: <Suspense fallback={<PageLoader />}><DevProblemDescriptionPage /></Suspense>,
   },
   {
     path: '/dev/test',
-    element: <DevTestPage />,
+    element: <Suspense fallback={<PageLoader />}><DevTestPage /></Suspense>,
   },
   {
     path: '/',
@@ -56,69 +62,73 @@ const router = createBrowserRouter([
     path: '/home',
     element: (
       <AuthGuard>
-        <HomePage />
+        <Suspense fallback={<PageLoader />}>
+          <HomePage />
+        </Suspense>
       </AuthGuard>
     ),
   },
   {
     path: '/login',
-    element: <LoginPage />,
+    element: <Suspense fallback={<PageLoader />}><LoginPage /></Suspense>,
   },
   {
     path: '/signup',
-    element: <SignupPage />,
+    element: <Suspense fallback={<PageLoader />}><SignupPage /></Suspense>,
   },
   {
     path: '/reset-password',
-    element: <ResetPasswordPage />,
+    element: <Suspense fallback={<PageLoader />}><ResetPasswordPage /></Suspense>,
   },
   {
     path: '/missions/:missionId',
     element: (
       <AuthGuard>
-        <MissionPage />
+        <Suspense fallback={<PageLoader />}>
+          <MissionPage />
+        </Suspense>
       </AuthGuard>
     ),
   },
   {
     path: '/dev/signup',
-    element: <DevSignupPage />,
+    element: <Suspense fallback={<PageLoader />}><DevSignupPage /></Suspense>,
   },
   {
     path: '/dev/message-box',
-    element: <DevMessageBoxPage />,
+    element: <Suspense fallback={<PageLoader />}><DevMessageBoxPage /></Suspense>,
   },
   {
     path: '/dev/gnb',
-    element: <DevGnbPage />,
+    element: <Suspense fallback={<PageLoader />}><DevGnbPage /></Suspense>,
   },
   {
     path: '/dev/Input',
-    element: <DevInputPage />,
+    element: <Suspense fallback={<PageLoader />}><DevInputPage /></Suspense>,
   },
   {
     path: '/dev/progress-banner',
-    element: <DevProgressBannerPage />,
+    element: <Suspense fallback={<PageLoader />}><DevProgressBannerPage /></Suspense>,
   },
   {
     path: '/dev/footer',
-    element: <DevFooterPage />,
+    element: <Suspense fallback={<PageLoader />}><DevFooterPage /></Suspense>,
   },
   {
     path: '/dev/problem-card',
-    element: <DevProblemCardPage />,
+    element: <Suspense fallback={<PageLoader />}><DevProblemCardPage /></Suspense>,
   },
   {
     path: '/dev/problem-list',
-    element: <DevProblemListPage />,
+    element: <Suspense fallback={<PageLoader />}><DevProblemListPage /></Suspense>,
   },
   {
     path: '/dev/execution-result',
-    element: <DevExecutionResultPage />,
+    element: <Suspense fallback={<PageLoader />}><DevExecutionResultPage /></Suspense>,
   },
   {
     path: '/dev/pagination',
-    element: <DevPaginationPage />,
+    element: <Suspense fallback={<PageLoader />}><DevPaginationPage /></Suspense>,
   },
 ]);
 
