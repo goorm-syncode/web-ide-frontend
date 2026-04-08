@@ -46,17 +46,16 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
     path: '/signup',
     element: <SignupPage />,
   },
   {
     path: '/missions/:missionId',
     element: <MissionPage />,
-  },
-
-  {
-    path: '/dev/login',
-    element: <DevLoginPage />,
   },
   {
     path: '/dev/signup',
