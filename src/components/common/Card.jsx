@@ -1,5 +1,6 @@
 import React from 'react';
-import '../../styles/components/Card.css';
+import PropTypes from 'prop-types';
+import '../../styles/components/common/Card.css';
 
 /**
  * 공통 카드 컴포넌트
@@ -38,6 +39,14 @@ const Card = ({
       <div className="card-content">{children}</div>
     </div>
   );
+};
+
+Card.propTypes = {
+  children: PropTypes.node.isRequired,
+  title: PropTypes.string,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
+  hoverable: PropTypes.bool,
 };
 
 export default Card;

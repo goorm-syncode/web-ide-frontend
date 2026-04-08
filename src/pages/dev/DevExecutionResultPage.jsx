@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ExecutionResultPanel from '../../components/features/ExecutionResultPanel';
+import ExecutionResultPanel from '../../components/mission/ExecutionResultPanel';
 import '../../styles/pages/DevExecutionResultPage.css';
 
 const MOCK_OUTPUT = `[stdout]\nHello, World!\n\n[Execution time: 32ms]`;

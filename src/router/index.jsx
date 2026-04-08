@@ -1,111 +1,113 @@
-import DevSearchFilterPage from '../pages/dev/DevSearchFilterPage';
-import DevDifficultyFilterPage from '../pages/dev/DevDifficultyFilterPage';
-import DevStatusFilterPage from '../pages/dev/DevStatusFilterPage';
-import DevHomePage from '../pages/dev/DevHomePage';
-import HomePage from '../pages/HomePage';
-import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
+import React, { Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
-import DevSignupPage from '../pages/dev/DevSignupPage';
-import DevMessageBoxPage from '../pages/dev/DevMessageBoxPage';
-import DevGnbPage from '../pages/dev/DevGnbPage';
-import DevInputPage from '../pages/dev/DevInputPage';
-import DevProgressBannerPage from '../pages/dev/DevProgressBannerPage';
-import DevFooterPage from '../pages/dev/DevFooterPage';
-import DevProblemCardPage from '../pages/dev/DevProblemCardPage';
-import DevLoginPage from '../pages/dev/LoginPage';
-import DevProblemListPage from '../pages/dev/DevProblemListPage';
-import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
-import DevPaginationPage from '../pages/dev/DevPaginationPage';
-import LoginPage from '../pages/LoginPage';
-import SignupPage from '../pages/SignupPage';
-import ResetPasswordPage from '../pages/ResetPasswordPage';
-import MissionPage from '../pages/MissionPage';
+import AuthGuard from '../components/common/AuthGuard';
+import PageLoader from '../components/common/PageLoader';
+import * as Pages from './lazyPages';
 
 const router = createBrowserRouter([
+  /* Dev 페이지들 */
   {
     path: '/dev/search-filter',
-    element: <DevSearchFilterPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevSearchFilterPage /></Suspense>,
   },
   {
     path: '/dev/difficulty-filter',
-    element: <DevDifficultyFilterPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevDifficultyFilterPage /></Suspense>,
   },
   {
     path: '/dev/status-filter',
-    element: <DevStatusFilterPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevStatusFilterPage /></Suspense>,
   },
   {
     path: '/dev/home',
-    element: <DevHomePage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevHomePage /></Suspense>,
   },
   {
     path: '/dev/problem-description',
-    element: <DevProblemDescriptionPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevProblemDescriptionPage /></Suspense>,
   },
   {
-    path: '/',
-    element: <App />,
-  },
-  {
-    path: '/signup',
-    element: <SignupPage />,
-  },
-  {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/home',
-    element: <HomePage />,
-  },
-  {
-    path: '/reset-password',
-    element: <ResetPasswordPage />,
-  },
-  {
-    path: '/missions/:missionId',
-    element: <MissionPage />,
+    path: '/dev/test',
+    element: <Suspense fallback={<PageLoader />}><Pages.DevTestPage /></Suspense>,
   },
   {
     path: '/dev/signup',
-    element: <DevSignupPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevSignupPage /></Suspense>,
   },
   {
     path: '/dev/message-box',
-    element: <DevMessageBoxPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevMessageBoxPage /></Suspense>,
   },
   {
     path: '/dev/gnb',
-    element: <DevGnbPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevGnbPage /></Suspense>,
   },
   {
     path: '/dev/Input',
-    element: <DevInputPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevInputPage /></Suspense>,
   },
   {
     path: '/dev/progress-banner',
-    element: <DevProgressBannerPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevProgressBannerPage /></Suspense>,
   },
   {
     path: '/dev/footer',
-    element: <DevFooterPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevFooterPage /></Suspense>,
   },
   {
     path: '/dev/problem-card',
-    element: <DevProblemCardPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevProblemCardPage /></Suspense>,
   },
   {
     path: '/dev/problem-list',
-    element: <DevProblemListPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevProblemListPage /></Suspense>,
   },
   {
     path: '/dev/execution-result',
-    element: <DevExecutionResultPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevExecutionResultPage /></Suspense>,
   },
   {
     path: '/dev/pagination',
-    element: <DevPaginationPage />,
+    element: <Suspense fallback={<PageLoader />}><Pages.DevPaginationPage /></Suspense>,
+  },
+
+  /* 메인 서비스 페이지들 */
+  {
+    path: '/',
+    element: <App />, /* App.jsx 내에서 Navigate가 처리할 예정 */
+  },
+  {
+    path: '/home',
+    element: (
+      <AuthGuard>
+        <Suspense fallback={<PageLoader />}>
+          <Pages.HomePage />
+        </Suspense>
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/login',
+    element: <Suspense fallback={<PageLoader />}><Pages.LoginPage /></Suspense>,
+  },
+  {
+    path: '/signup',
+    element: <Suspense fallback={<PageLoader />}><Pages.SignupPage /></Suspense>,
+  },
+  {
+    path: '/reset-password',
+    element: <Suspense fallback={<PageLoader />}><Pages.ResetPasswordPage /></Suspense>,
+  },
+  {
+    path: '/missions/:missionId',
+    element: (
+      <AuthGuard>
+        <Suspense fallback={<PageLoader />}>
+          <Pages.MissionPage />
+        </Suspense>
+      </AuthGuard>
+    ),
   },
 ]);
 

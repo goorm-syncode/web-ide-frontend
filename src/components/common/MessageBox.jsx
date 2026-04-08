@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Button from './Button';
-import '../../styles/components/MessageBox.css';
+import '../../styles/components/common/MessageBox.css';
 
 /**
  * 상태별 아이콘 렌더링
@@ -105,6 +106,20 @@ const MessageBox = ({
       </div>
     </div>
   );
+};
+
+MessageBox.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  children: PropTypes.node,
+  type: PropTypes.oneOf(['info', 'success', 'warning', 'error']),
+  showIcon: PropTypes.bool,
+  onConfirm: PropTypes.func,
+  confirmText: PropTypes.string,
+  showCancel: PropTypes.bool,
+  onCancel: PropTypes.func,
+  cancelText: PropTypes.string,
 };
 
 export default MessageBox;

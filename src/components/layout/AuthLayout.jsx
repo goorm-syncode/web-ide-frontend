@@ -1,5 +1,6 @@
 import React from 'react';
-import '../../styles/AuthLayout.css';
+import PropTypes from 'prop-types';
+import '../../styles/components/layout/AuthLayout.css';
 import Card from '../common/Card';
 
 const AuthLayout = ({ children }) => {
@@ -12,6 +13,10 @@ const AuthLayout = ({ children }) => {
       </div>
     </div>
   );
+};
+
+AuthLayout.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default AuthLayout;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import StatusFilter from '../../components/features/StatusFilter';
-import DifficultyFilter from '../../components/features/DifficultyFilter';
+import StatusFilter from '../../components/home/StatusFilter';
+import DifficultyFilter from '../../components/home/DifficultyFilter';
 import '../../styles/pages/DevStatusFilterPage.css';
 
 /**

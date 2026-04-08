@@ -1,4 +1,4 @@
-import ProblemCard from '../../components/domain/ProblemCard';
+import ProblemCard from '../../components/home/ProblemCard';
 import '../../styles/pages/DevProblemCardPage.css';
 
 const DevProblemCardPage = () => {

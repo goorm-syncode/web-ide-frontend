@@ -1,4 +1,4 @@
-import ProblemList from '../../components/domain/ProblemList';
+import ProblemList from '../../components/home/ProblemList';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/pages/DevProblemListPage.css';
 

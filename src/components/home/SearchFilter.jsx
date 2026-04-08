@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Input from '../common/Input';
-import '../../styles/components/SearchFilter.css';
+import '../../styles/components/home/SearchFilter.css';
 
 /**
  * SearchFilter 컴포넌트
@@ -31,6 +32,13 @@ const SearchFilter = ({ value, onChange, placeholder = 'Search problems...', cla
       />
     </div>
   );
+};
+
+SearchFilter.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default SearchFilter;

@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
-import '../../styles/components/Input.css';
+import PropTypes from 'prop-types';
+import '../../styles/components/common/Input.css';
 import searchIconImg from '../../assets/search-icon.png';
 
 const Input = forwardRef(
@@ -44,5 +45,15 @@ const Input = forwardRef(
 );
 
 Input.displayName = 'Input';
+
+Input.propTypes = {
+  id: PropTypes.string,
+  type: PropTypes.string,
+  error: PropTypes.bool,
+  helperText: PropTypes.string,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  icon: PropTypes.oneOf(['search']),
+};
 
 export default Input;

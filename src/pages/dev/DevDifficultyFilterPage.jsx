@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import DifficultyFilter from '../../components/features/DifficultyFilter';
+import DifficultyFilter from '../../components/home/DifficultyFilter';
 import '../../styles/pages/DevDifficultyFilterPage.css';
 
 const DevDifficultyFilterPage = () => {

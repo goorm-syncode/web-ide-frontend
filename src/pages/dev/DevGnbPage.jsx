@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Gnb from '../../components/layout/Gnb';
-import './DevGnbPage.css';
+import '../../styles/pages/DevGnbPage.css';
 
 const DevGnbPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);

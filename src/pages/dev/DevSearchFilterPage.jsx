@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import SearchFilter from '../../components/features/SearchFilter';
-import DifficultyFilter from '../../components/features/DifficultyFilter';
-import StatusFilter from '../../components/features/StatusFilter';
+import SearchFilter from '../../components/home/SearchFilter';
+import DifficultyFilter from '../../components/home/DifficultyFilter';
+import StatusFilter from '../../components/home/StatusFilter';
 import '../../styles/pages/DevSearchFilterPage.css';
 
 /**

@@ -5,7 +5,7 @@ import AuthLayout from '../components/layout/AuthLayout';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import MessageBox from '../components/common/MessageBox';
-import Footer from '../components/common/Footer';
+import Footer from '../components/layout/Footer';
 import authService from '../services/auth';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 import { mapErrorMessage } from '../services/errorMapper';

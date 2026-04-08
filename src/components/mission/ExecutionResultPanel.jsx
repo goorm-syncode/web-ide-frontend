@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Button from '../common/Button';
-import '../../styles/features/ExecutionResultPanel.css';
+import '../../styles/components/mission/ExecutionResultPanel.css';
 
 const RunIcon = () => (
   <svg
@@ -133,6 +134,16 @@ const ExecutionResultPanel = ({
       </div>
     </div>
   );
+};
+
+ExecutionResultPanel.propTypes = {
+  output: PropTypes.string,
+  testcase: PropTypes.string,
+  error: PropTypes.string,
+  isLoading: PropTypes.bool,
+  onRun: PropTypes.func,
+  onTest: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 
 export default ExecutionResultPanel;

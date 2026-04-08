@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
-import '../../styles/components/StatusFilter.css';
+import React, { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import '../../styles/components/home/StatusFilter.css';
 
 /**
  * 상태 필터 옵션 목록
@@ -159,6 +160,11 @@ const StatusFilter = ({ value, onChange }) => {
       )}
     </div>
   );
+};
+
+StatusFilter.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default StatusFilter;

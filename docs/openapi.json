@@ -2,14 +2,123 @@
   "openapi": "3.1.0",
   "info": { "title": "SynCode WebIDE API", "description": "Web IDE API", "version": "1.0.0" },
   "servers": [{ "url": "https://d1jum4zzr45u1b.cloudfront.net" }],
-  "security": [{ "Bearer Authentication": [] }],
   "tags": [
     { "name": "Mission Progress", "description": "미션 진행 상태 API" },
+    { "name": "Submission History", "description": "제출 이력 조회 API" },
     { "name": "User", "description": "사용자 API" },
+    { "name": "Draft", "description": "코드 드래프트 API" },
     { "name": "Mission", "description": "문제 관련 API" },
+    { "name": "Runner", "description": "코드 실행 API" },
     { "name": "Auth", "description": "인증 API" }
   ],
   "paths": {
+    "/api/missions/{missionId}/draft": {
+      "get": {
+        "tags": ["Draft"],
+        "summary": "드래프트 불러오기",
+        "description": "저장된 드래프트를 불러옵니다. 없으면 hasSavedCode=false를 반환하며 클라이언트는 starterCode로 대체합니다.",
+        "operationId": "load",
+        "parameters": [
+          {
+            "name": "missionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["C", "CPP", "JAVA", "JAVASCRIPT", "GO", "PYTHON", "KOTLIN"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseDraftResponse" } }
+            }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      },
+      "put": {
+        "tags": ["Draft"],
+        "summary": "드래프트 저장",
+        "description": "현재 작업 중인 코드를 드래프트로 저장합니다. 동일 언어의 드래프트가 있으면 덮어씁니다.",
+        "operationId": "save",
+        "parameters": [
+          {
+            "name": "missionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/SaveDraftRequest" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseVoid" } } }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
+    },
+    "/api/runner/submissions": {
+      "post": {
+        "tags": ["Runner"],
+        "summary": "코드 제출 및 채점",
+        "description": "미션의 모든 테스트케이스(히든 포함)에 코드를 제출하고 채점 결과를 반환합니다. 채점 전 드래프트를 자동 저장합니다.",
+        "operationId": "submit",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/SubmissionRequest" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseSubmissionResponse" } }
+            }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
+    },
+    "/api/runner/executions": {
+      "post": {
+        "tags": ["Runner"],
+        "summary": "코드 실행",
+        "description": "소스 코드를 Judge0에 제출하고 실행 결과를 반환합니다. missionId를 입력하면 실행 전 드래프트를 자동 저장합니다. 미입력 시 드래프트 저장 없이 실행만 수행합니다.",
+        "operationId": "execute",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ExecutionRequest" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseExecutionResponse" } }
+            }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
+    },
     "/api/missions/{missionId}/progress": {
       "get": {
         "tags": ["Mission Progress"],
@@ -254,7 +363,7 @@
       "get": {
         "tags": ["Mission"],
         "summary": "문제 목록 조회",
-        "description": "로그인한 사용자의 미션 목록을 조회합니다.\n- category, difficulty 필터 지원 (미입력 시 전체 조회)\n- 정렬: displayOrder ASC 고정 (클라이언트 sort 파라미터 무시)\n- page 기본값 0, 0 미만은 0으로 보정\n- size 기본값 20, 1 미만은 20 / 100 초과는 100으로 보정\n",
+        "description": "로그인한 사용자의 미션 목록을 조회합니다.\n- category, difficulty, status, keyword 필터 지원 (미입력 시 전체 조회)\n- status: ALL(기본) | NOT_STARTED | IN_PROGRESS | COMPLETED\n  - NOT_STARTED는 DB 저장 상태가 아닌 파생 상태 (progress row 없음)\n- keyword: 제목(title) 기준 부분 일치, 대소문자 무시\n- 정렬: displayOrder ASC 고정 (클라이언트 sort 파라미터 미지원)\n- page 기본값 0, 0 미만은 0으로 보정\n- size 기본값 20, 1 미만은 20 / 100 초과는 100으로 보정\n",
         "operationId": "getMissions",
         "parameters": [
           { "name": "category", "in": "query", "required": false, "schema": { "type": "string" } },
@@ -264,6 +373,16 @@
             "required": false,
             "schema": { "type": "string", "enum": ["EASY", "MEDIUM", "HARD"] }
           },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["ALL", "NOT_STARTED", "IN_PROGRESS", "COMPLETED"]
+            }
+          },
+          { "name": "keyword", "in": "query", "required": false, "schema": { "type": "string" } },
           {
             "name": "page",
             "in": "query",
@@ -315,6 +434,68 @@
         "security": [{ "Bearer Authentication": [] }]
       }
     },
+    "/api/missions/{missionId}/submissions": {
+      "get": {
+        "tags": ["Submission History"],
+        "summary": "제출 이력 목록",
+        "description": "해당 미션에 대한 내 제출 이력을 최신순으로 반환합니다.",
+        "operationId": "listSubmissions",
+        "parameters": [
+          {
+            "name": "missionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListSubmissionSummaryResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
+    },
+    "/api/missions/{missionId}/submissions/{submissionId}": {
+      "get": {
+        "tags": ["Submission History"],
+        "summary": "제출 이력 상세",
+        "description": "특정 제출의 상세 정보를 반환합니다. 본인 제출이 아니면 404를 반환합니다.",
+        "operationId": "getSubmission",
+        "parameters": [
+          {
+            "name": "missionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "submissionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ApiResponseSubmissionDetailResponse" }
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
+    },
     "/api/missions/continue": {
       "get": {
         "tags": ["Mission"],
@@ -344,6 +525,151 @@
   },
   "components": {
     "schemas": {
+      "SaveDraftRequest": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "description": "프로그래밍 언어",
+            "enum": ["C", "CPP", "JAVA", "JAVASCRIPT", "GO", "PYTHON", "KOTLIN"],
+            "example": "PYTHON"
+          },
+          "code": { "type": "string", "description": "작업 중인 소스 코드", "minLength": 1 }
+        },
+        "required": ["code", "language"]
+      },
+      "ApiResponseVoid": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "status": { "type": "integer", "format": "int32" },
+          "message": { "type": "string" },
+          "data": {}
+        }
+      },
+      "SubmissionRequest": {
+        "type": "object",
+        "properties": {
+          "missionId": { "type": "integer", "format": "int64", "description": "미션 ID" },
+          "sourceCode": { "type": "string", "description": "제출할 소스 코드", "minLength": 1 },
+          "language": {
+            "type": "string",
+            "description": "프로그래밍 언어",
+            "enum": ["C", "CPP", "JAVA", "JAVASCRIPT", "GO", "PYTHON", "KOTLIN"],
+            "example": "PYTHON"
+          }
+        },
+        "required": ["language", "missionId", "sourceCode"]
+      },
+      "ApiResponseSubmissionResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "status": { "type": "integer", "format": "int32" },
+          "message": { "type": "string" },
+          "data": { "$ref": "#/components/schemas/SubmissionResponse" }
+        }
+      },
+      "SubmissionResponse": {
+        "type": "object",
+        "properties": {
+          "submissionId": { "type": "integer", "format": "int64", "description": "제출 ID" },
+          "overallStatus": {
+            "type": "string",
+            "description": "전체 채점 결과",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "WRONG_ANSWER",
+              "COMPILE_ERROR",
+              "RUNTIME_ERROR",
+              "TIME_LIMIT_EXCEEDED",
+              "SYSTEM_ERROR"
+            ]
+          },
+          "passedCount": {
+            "type": "integer",
+            "format": "int32",
+            "description": "통과한 테스트케이스 수"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32",
+            "description": "전체 테스트케이스 수"
+          },
+          "results": {
+            "type": "array",
+            "description": "테스트케이스별 결과",
+            "items": { "$ref": "#/components/schemas/TestCaseResult" }
+          }
+        }
+      },
+      "TestCaseResult": {
+        "type": "object",
+        "properties": {
+          "displayOrder": {
+            "type": "integer",
+            "format": "int32",
+            "description": "테스트케이스 순서"
+          },
+          "hidden": { "type": "boolean", "description": "히든 테스트케이스 여부" },
+          "passed": { "type": "boolean", "description": "통과 여부" },
+          "status": {
+            "type": "string",
+            "description": "채점 결과",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "WRONG_ANSWER",
+              "COMPILE_ERROR",
+              "RUNTIME_ERROR",
+              "TIME_LIMIT_EXCEEDED",
+              "SYSTEM_ERROR"
+            ]
+          }
+        }
+      },
+      "ExecutionRequest": {
+        "type": "object",
+        "properties": {
+          "sourceCode": { "type": "string", "description": "실행할 소스 코드", "minLength": 1 },
+          "language": {
+            "type": "string",
+            "description": "프로그래밍 언어",
+            "enum": ["C", "CPP", "JAVA", "JAVASCRIPT", "GO", "PYTHON", "KOTLIN"],
+            "example": "PYTHON"
+          },
+          "stdin": { "type": "string", "description": "표준 입력 (선택)" },
+          "missionId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "미션 ID (선택). 입력 시 실행 전 드래프트를 자동 저장 후 실행합니다. 미입력 시 드래프트 저장 없이 실행만 수행합니다."
+          }
+        },
+        "required": ["language", "sourceCode"]
+      },
+      "ApiResponseExecutionResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "status": { "type": "integer", "format": "int32" },
+          "message": { "type": "string" },
+          "data": { "$ref": "#/components/schemas/ExecutionResponse" }
+        }
+      },
+      "ExecutionResponse": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string", "description": "Judge0 제출 토큰" },
+          "stdout": { "type": "string", "description": "표준 출력" },
+          "stderr": { "type": "string", "description": "표준 에러" },
+          "compileOutput": { "type": "string", "description": "컴파일 출력" },
+          "statusId": { "type": "integer", "format": "int32", "description": "Judge0 상태 ID" },
+          "statusDescription": { "type": "string", "description": "Judge0 상태 설명" },
+          "time": { "type": "string", "description": "실행 시간(초)" },
+          "memory": { "type": "integer", "format": "int32", "description": "메모리 사용량(KB)" }
+        }
+      },
       "MissionProgressRequest": {
         "type": "object",
         "properties": { "status": { "type": "string", "enum": ["IN_PROGRESS", "COMPLETED"] } },
@@ -462,15 +788,6 @@
           }
         },
         "required": ["email"]
-      },
-      "ApiResponseVoid": {
-        "type": "object",
-        "properties": {
-          "success": { "type": "boolean" },
-          "status": { "type": "integer", "format": "int32" },
-          "message": { "type": "string" },
-          "data": {}
-        }
       },
       "LoginRequest": {
         "type": "object",
@@ -604,7 +921,11 @@
             "type": "array",
             "items": { "$ref": "#/components/schemas/PublicTestCaseResponse" }
           },
-          "userStatus": { "type": "string", "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"] }
+          "userStatus": { "type": "string", "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"] },
+          "languages": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SupportedLanguageResponse" }
+          }
         }
       },
       "PublicTestCaseResponse": {
@@ -613,6 +934,127 @@
           "inputData": { "type": "string" },
           "expectedOutput": { "type": "string" },
           "displayOrder": { "type": "integer", "format": "int32" }
+        }
+      },
+      "SupportedLanguageResponse": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "enum": ["C", "CPP", "JAVA", "JAVASCRIPT", "GO", "PYTHON", "KOTLIN"]
+          },
+          "displayName": { "type": "string" },
+          "version": { "type": "string" },
+          "fileExtension": { "type": "string" },
+          "starterCode": { "type": "string" }
+        }
+      },
+      "ApiResponseListSubmissionSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "status": { "type": "integer", "format": "int32" },
+          "message": { "type": "string" },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SubmissionSummaryResponse" }
+          }
+        }
+      },
+      "SubmissionSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "submissionId": { "type": "integer", "format": "int64", "description": "제출 ID" },
+          "status": {
+            "type": "string",
+            "description": "채점 결과",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "WRONG_ANSWER",
+              "COMPILE_ERROR",
+              "RUNTIME_ERROR",
+              "TIME_LIMIT_EXCEEDED",
+              "SYSTEM_ERROR"
+            ]
+          },
+          "language": {
+            "type": "string",
+            "description": "프로그래밍 언어",
+            "enum": ["C", "CPP", "JAVA", "JAVASCRIPT", "GO", "PYTHON", "KOTLIN"]
+          },
+          "submittedAt": { "type": "string", "format": "date-time", "description": "제출 시각" }
+        }
+      },
+      "ApiResponseSubmissionDetailResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "status": { "type": "integer", "format": "int32" },
+          "message": { "type": "string" },
+          "data": { "$ref": "#/components/schemas/SubmissionDetailResponse" }
+        }
+      },
+      "SubmissionDetailResponse": {
+        "type": "object",
+        "properties": {
+          "submissionId": { "type": "integer", "format": "int64", "description": "제출 ID" },
+          "status": {
+            "type": "string",
+            "description": "채점 결과",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "WRONG_ANSWER",
+              "COMPILE_ERROR",
+              "RUNTIME_ERROR",
+              "TIME_LIMIT_EXCEEDED",
+              "SYSTEM_ERROR"
+            ]
+          },
+          "language": {
+            "type": "string",
+            "description": "프로그래밍 언어",
+            "enum": ["C", "CPP", "JAVA", "JAVASCRIPT", "GO", "PYTHON", "KOTLIN"]
+          },
+          "code": { "type": "string", "description": "제출한 소스 코드" },
+          "submittedAt": { "type": "string", "format": "date-time", "description": "제출 시각" },
+          "executionTimeMs": {
+            "type": "integer",
+            "format": "int32",
+            "description": "실행 시간(ms). 채점 실패 또는 컴파일 오류 시 null"
+          },
+          "memoryUsedKb": {
+            "type": "integer",
+            "format": "int32",
+            "description": "메모리 사용량(KB). 채점 실패 또는 컴파일 오류 시 null"
+          }
+        }
+      },
+      "ApiResponseDraftResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "status": { "type": "integer", "format": "int32" },
+          "message": { "type": "string" },
+          "data": { "$ref": "#/components/schemas/DraftResponse" }
+        }
+      },
+      "DraftResponse": {
+        "type": "object",
+        "properties": {
+          "hasSavedCode": { "type": "boolean", "description": "저장된 드래프트 존재 여부" },
+          "language": {
+            "type": "string",
+            "description": "프로그래밍 언어",
+            "enum": ["C", "CPP", "JAVA", "JAVASCRIPT", "GO", "PYTHON", "KOTLIN"]
+          },
+          "code": { "type": "string", "description": "저장된 소스 코드" },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "마지막 저장 시각"
+          }
         }
       },
       "ApiResponseContinueLearningResponse": {

@@ -1,5 +1,7 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import './Gnb.css';
+import '../../styles/components/layout/Gnb.css';
 
 const BackArrowIcon = () => (
   <svg
@@ -54,7 +56,7 @@ const Gnb = ({
             <BackArrowIcon />
           </button>
         )}
-        <h1 className="gnb-title" onClick={() => navigate('/dev/home')}>
+        <h1 className="gnb-title" onClick={() => navigate('/home')}>
           {title}
         </h1>
       </div>
@@ -84,6 +86,16 @@ const Gnb = ({
       </div>
     </header>
   );
+};
+
+Gnb.propTypes = {
+  title: PropTypes.string,
+  showBackButton: PropTypes.bool,
+  onBackClick: PropTypes.func,
+  isLoggedIn: PropTypes.bool,
+  userName: PropTypes.string,
+  onLogoutClick: PropTypes.func,
+  onLoginClick: PropTypes.func,
 };
 
 export default Gnb;
