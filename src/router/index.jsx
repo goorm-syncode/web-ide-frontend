@@ -2,6 +2,7 @@ import DevSearchFilterPage from '../pages/dev/DevSearchFilterPage';
 import DevDifficultyFilterPage from '../pages/dev/DevDifficultyFilterPage';
 import DevStatusFilterPage from '../pages/dev/DevStatusFilterPage';
 import DevHomePage from '../pages/dev/DevHomePage';
+import HomePage from '../pages/HomePage';
 import DevProblemDescriptionPage from '../pages/dev/DevProblemDescriptionPage';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
@@ -48,10 +49,17 @@ const router = createBrowserRouter([
     path: '/signup',
     element: <SignupPage />,
   },
-
   {
-    path: '/dev/login',
-    element: <DevLoginPage />,
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/home',
+    element: <HomePage />,
+  },
+  {
+    path: '/missions/:missionId',
+    element: <div>임시 연결 페이지 (준비 중)</div>,
   },
   {
     path: '/dev/signup',

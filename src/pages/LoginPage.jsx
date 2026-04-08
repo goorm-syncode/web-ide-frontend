@@ -82,7 +82,7 @@ const LoginPage = () => {
         }),
       );
 
-      navigate('/dev/home'); // 성공 시 개발 홈 페이지로 이동
+      navigate('/home'); // 성공 시 홈 페이지로 이동
     } catch (error) {
       const message = error.message || '이메일 또는 비밀번호가 올바르지 않습니다.';
       setServerError(message);
@@ -132,10 +132,10 @@ const LoginPage = () => {
       </form>
 
       <div className="auth-links">
-        <Link to="/dev/signup" className="auth-link-text">
+        <Link to="/signup" className="auth-link-text">
           회원가입
         </Link>
-        <Link to="/dev/reset-password" className="auth-link-text">
+        <Link to="/reset-password" className="auth-link-text">
           비밀번호 찾기
         </Link>
       </div>
