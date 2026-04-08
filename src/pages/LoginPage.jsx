@@ -5,6 +5,7 @@ import AuthLayout from '../components/layout/AuthLayout';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import MessageBox from '../components/common/MessageBox';
+import Footer from '../components/common/Footer';
 import authService from '../services/auth';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 
@@ -96,61 +97,65 @@ const LoginPage = () => {
   const isSubmitDisabled = isLoading || !email || !password || !!errors.email || !!errors.password;
 
   return (
-    <AuthLayout>
-      <div className="auth-header">
-        <h1 className="auth-page-title">로그인</h1>
-        <p className="auth-page-subtitle">서비스에 로그인하여 모든 기능을 이용하세요.</p>
-      </div>
-
-      <form onSubmit={handleLogin} className="auth-form" noValidate>
-        <Input
-          type="email"
-          placeholder="이메일을 입력하세요"
-          name="email"
-          value={email}
-          onChange={handleEmailChange}
-          error={!!errors.email}
-          helperText={errors.email}
-          disabled={isLoading}
-        />
-        <Input
-          type="password"
-          placeholder="비밀번호를 입력하세요"
-          name="password"
-          value={password}
-          onChange={handlePasswordChange}
-          error={!!errors.password}
-          helperText={errors.password}
-          disabled={isLoading}
-        />
-
-        <div className="auth-submit-btn-wrapper">
-          <Button primary fullWidth type="submit" loading={isLoading} disabled={isSubmitDisabled}>
-            로그인
-          </Button>
+    <div className="login-page-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}>
+      <AuthLayout>
+        <div className="auth-header">
+          <h1 className="auth-page-title">로그인</h1>
+          <p className="auth-page-subtitle">서비스에 로그인하여 모든 기능을 이용하세요.</p>
         </div>
-      </form>
 
-      <div className="auth-links">
-        <Link to="/signup" className="auth-link-text">
-          회원가입
-        </Link>
-        <Link to="/reset-password" className="auth-link-text">
-          비밀번호 찾기
-        </Link>
-      </div>
+        <form onSubmit={handleLogin} className="auth-form" noValidate>
+          <Input
+            type="email"
+            placeholder="이메일을 입력하세요"
+            name="email"
+            value={email}
+            onChange={handleEmailChange}
+            error={!!errors.email}
+            helperText={errors.email}
+            disabled={isLoading}
+          />
+          <Input
+            type="password"
+            placeholder="비밀번호를 입력하세요"
+            name="password"
+            value={password}
+            onChange={handlePasswordChange}
+            error={!!errors.password}
+            helperText={errors.password}
+            disabled={isLoading}
+          />
 
-      <MessageBox
-        isOpen={!!serverError}
-        onClose={() => setServerError('')}
-        title="로그인 실패"
-        type="error"
-        onConfirm={() => setServerError('')}
-      >
-        {serverError}
-      </MessageBox>
-    </AuthLayout>
+          <div className="auth-submit-btn-wrapper">
+            <Button primary fullWidth type="submit" loading={isLoading} disabled={isSubmitDisabled}>
+              로그인
+            </Button>
+          </div>
+        </form>
+
+        <div className="auth-links">
+          <Link to="/signup" className="auth-link-text">
+            회원가입
+          </Link>
+          <Link to="/reset-password" className="auth-link-text">
+            비밀번호 찾기
+          </Link>
+        </div>
+
+        <MessageBox
+          isOpen={!!serverError}
+          onClose={() => setServerError('')}
+          title="로그인 실패"
+          type="error"
+          onConfirm={() => setServerError('')}
+        >
+          {serverError}
+        </MessageBox>
+      </AuthLayout>
+      <Footer />
+    </div>
   );
 };
+
 
 export default LoginPage;
