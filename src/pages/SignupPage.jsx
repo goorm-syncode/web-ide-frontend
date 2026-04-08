@@ -6,10 +6,18 @@ import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import MessageBox from '../components/common/MessageBox';
 import authService from '../services/auth.js';
+import { mapErrorMessage } from '../services/errorMapper';
 
 const SignupPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    email: '',
+    nickname: '',
+    password: '',
+    passwordConfirm: '',
+  });
+
+  const [errors, setErrors] = useState({
     email: '',
     nickname: '',
     password: '',
@@ -25,52 +33,62 @@ const SignupPage = () => {
     onConfirm: null,
   });
 
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'email':
+        if (!value) return '이메일을 입력해주세요.';
+        if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return '올바른 이메일 형식을 입력해주세요.';
+        if (value.length < 5 || value.length > 50) return '이메일은 5자 이상 50자 이하로 입력해주세요.';
+        return '';
+      case 'nickname':
+        if (!value) return '닉네임을 입력해주세요.';
+        if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
+        if (value.length < 2 || value.length > 12) return '닉네임은 2자 이상 12자 이하로 입력해주세요.';
+        if (!/^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$/.test(value)) return '닉네임은 한글, 영문, 숫자만 사용할 수 있습니다.';
+        return '';
+      case 'password':
+        if (!value) return '비밀번호를 입력해주세요.';
+        if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
+        if (value.length < 8 || value.length > 20) return '비밀번호는 8자 이상 20자 이하로 입력해주세요.';
+        if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$/.test(value)) return '비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.';
+        return '';
+      case 'passwordConfirm':
+        if (!value) return '비밀번호를 다시 확인합니다.';
+        if (value !== formData.password) return '비밀번호가 일치하지 않습니다.';
+        return '';
+      default:
+        return '';
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name, value),
+    }));
   };
 
-  const validate = () => {
-    const { email, nickname, password, passwordConfirm } = formData;
-
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return '유효한 이메일 주소를 입력해 주세요.';
-    }
-
-    if (!nickname || nickname.length < 2 || nickname.length > 50) {
-      return '닉네임은 2자 이상 50자 이하로 입력해 주세요.';
-    }
-
-    // Password pattern: 8-72 chars, Uppercase, Lowercase, Number, Special
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,72}$/;
-    if (!password || !passwordRegex.test(password)) {
-      return '비밀번호는 8~72자이며, 대문자, 소문자, 숫자, 특수문자를 각각 최소 1자 이상 포함해야 합니다.';
-    }
-
-    if (password !== passwordConfirm) {
-      return '비밀번호가 일치하지 않습니다.';
-    }
-
-    return null;
+  const validateAll = () => {
+    const newErrors = {
+      email: validateField('email', formData.email),
+      nickname: validateField('nickname', formData.nickname),
+      password: validateField('password', formData.password),
+      passwordConfirm: validateField('passwordConfirm', formData.passwordConfirm),
+    };
+    setErrors(newErrors);
+    return !Object.values(newErrors).some((error) => error !== '');
   };
 
   const handleSignup = async (e) => {
     if (e) e.preventDefault();
 
-    const validationError = validate();
-    if (validationError) {
-      setMessageBox({
-        isOpen: true,
-        type: 'warning',
-        title: '입력 확인',
-        message: validationError,
-        onConfirm: null
-      });
-      return;
-    }
+    if (!validateAll()) return;
 
     setLoading(true);
     try {
@@ -83,17 +101,16 @@ const SignupPage = () => {
         title: '회원가입 완료',
         message: '회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동합니다.',
         onConfirm: () => {
-          // SPA routing using navigate
           navigate('/login');
-
         },
       });
     } catch (error) {
+      const message = mapErrorMessage(error, '회원가입 처리 중 오류가 발생했습니다.');
       setMessageBox({
         isOpen: true,
         type: 'error',
         title: '회원가입 실패',
-        message: error.message || '회원가입 처리 중 오류가 발생했습니다.',
+        message: message,
         onConfirm: null
       });
     } finally {
@@ -123,6 +140,8 @@ const SignupPage = () => {
           name="email"
           value={formData.email}
           onChange={handleChange}
+          error={!!errors.email}
+          helperText={errors.email}
           required
         />
         <Input
@@ -131,6 +150,8 @@ const SignupPage = () => {
           name="nickname"
           value={formData.nickname}
           onChange={handleChange}
+          error={!!errors.nickname}
+          helperText={errors.nickname}
           required
         />
         <Input
@@ -139,8 +160,9 @@ const SignupPage = () => {
           name="password"
           value={formData.password}
           onChange={handleChange}
+          error={!!errors.password}
+          helperText={errors.password || '8~20자, 영문, 숫자, 특수문자 포함'}
           required
-          helperText="8~72자, 대/소문자, 숫자, 특수문자 포함"
         />
         <Input
           type="password"
@@ -148,10 +170,18 @@ const SignupPage = () => {
           name="passwordConfirm"
           value={formData.passwordConfirm}
           onChange={handleChange}
+          error={!!errors.passwordConfirm}
+          helperText={errors.passwordConfirm}
           required
         />
         <div className="auth-submit-btn-wrapper">
-          <Button primary fullWidth type="submit" loading={loading}>
+          <Button 
+            primary 
+            fullWidth 
+            type="submit" 
+            loading={loading}
+            disabled={loading || Object.values(errors).some(e => e !== '') || Object.values(formData).some(v => v === '')}
+          >
             가입하기
           </Button>
         </div>

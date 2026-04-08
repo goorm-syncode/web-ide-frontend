@@ -7,6 +7,7 @@ import Button from '../components/common/Button';
 import MessageBox from '../components/common/MessageBox';
 import authService from '../services/auth';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
+import { mapErrorMessage } from '../services/errorMapper';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -26,14 +27,17 @@ const LoginPage = () => {
   // Validation Functions
   const validateEmail = (value) => {
     if (!value) return '이메일을 입력해주세요.';
+    if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) return '올바른 이메일 형식을 입력해주세요.';
+    if (value.length < 5 || value.length > 50) return '이메일은 5자 이상 50자 이하로 입력해주세요.';
     return '';
   };
 
   const validatePassword = (value) => {
     if (!value) return '비밀번호를 입력해주세요.';
-    if (value.length < 8) return '비밀번호는 최소 8자 이상이어야 합니다.';
+    if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
+    if (value.length < 8 || value.length > 20) return '비밀번호는 8자 이상 20자 이하로 입력해주세요.';
     return '';
   };
 
@@ -82,9 +86,9 @@ const LoginPage = () => {
         }),
       );
 
-      navigate('/dev/home'); // 성공 시 개발 홈 페이지로 이동
+      navigate('/'); // 성공 시 메인 홈 페이지로 이동
     } catch (error) {
-      const message = error.message || '이메일 또는 비밀번호가 올바르지 않습니다.';
+      const message = mapErrorMessage(error, '이메일 또는 비밀번호가 올바르지 않습니다.');
       setServerError(message);
       dispatch(loginFailure(message));
     } finally {
@@ -132,10 +136,10 @@ const LoginPage = () => {
       </form>
 
       <div className="auth-links">
-        <Link to="/dev/signup" className="auth-link-text">
+        <Link to="/signup" className="auth-link-text">
           회원가입
         </Link>
-        <Link to="/dev/reset-password" className="auth-link-text">
+        <Link to="/reset-password" className="auth-link-text">
           비밀번호 찾기
         </Link>
       </div>

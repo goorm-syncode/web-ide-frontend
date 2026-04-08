@@ -17,6 +17,8 @@ import DevProblemListPage from '../pages/dev/DevProblemListPage';
 import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
 import DevPaginationPage from '../pages/dev/DevPaginationPage';
 import LoginPage from '../pages/LoginPage';
+import SignupPage from '../pages/SignupPage';
+import ResetPasswordPage from '../pages/ResetPasswordPage';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +48,14 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <SignupPage />,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/reset-password',
+    element: <ResetPasswordPage />,
   },
 
   {
