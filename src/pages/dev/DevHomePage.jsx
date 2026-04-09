@@ -9,6 +9,7 @@ import SearchFilter from '../../components/home/SearchFilter';
 import DifficultyFilter from '../../components/home/DifficultyFilter';
 import StatusFilter from '../../components/home/StatusFilter';
 import Pagination from '../../components/common/Pagination';
+import Gnb from '../../components/layout/Gnb';
 
 import authService from '../../services/auth';
 import { getContinueLearning } from '../../services/problem';
