@@ -15,9 +15,9 @@ export const getMissions = async ({
   const params = { page, size };
 
   // 각 필터가 존재하는 경우 API 연동에 적합하게 파싱하여 전달합니다.
-  if (category && category !== 'all') params.category = category;
-  if (difficulty && difficulty !== 'all') params.difficulty = difficulty.toUpperCase();
-  if (status && status !== 'all') params.status = status.toUpperCase();
+  if (category && category.toUpperCase() !== 'ALL') params.category = category;
+  if (difficulty && difficulty.toUpperCase() !== 'ALL') params.difficulty = difficulty.toUpperCase();
+  if (status && status.toUpperCase() !== 'ALL') params.status = status.toUpperCase();
   if (keyword) params.keyword = keyword;
 
   const response = await api.get('/api/missions', { params });
