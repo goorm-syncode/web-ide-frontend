@@ -34,3 +34,72 @@ export const getMissionById = async (missionId) => {
   const response = await api.get(`/api/missions/${missionId}`);
   return response;
 };
+
+/**
+ * 미션 진행 상태 조회
+ * @param {number|string} missionId
+ */
+export const getMissionProgress = async (missionId) => {
+  const response = await api.get(`/api/missions/${missionId}/progress`);
+  return response;
+};
+
+/**
+ * 미션 진행 상태 저장/갱신
+ * @param {number|string} missionId
+ * @param {'IN_PROGRESS'|'COMPLETED'} status
+ */
+export const updateMissionProgress = async (missionId, status) => {
+  const response = await api.post(`/api/missions/${missionId}/progress`, { status });
+  return response;
+};
+
+/**
+ * 코드 드래프트 불러오기
+ * @param {number|string} missionId
+ * @param {string} language - C, CPP, JAVA, JAVASCRIPT, GO, PYTHON, KOTLIN
+ */
+export const getDraft = async (missionId, language) => {
+  const response = await api.get(`/api/missions/${missionId}/draft`, {
+    params: { language: language.toUpperCase() },
+  });
+  return response;
+};
+
+/**
+ * 코드 드래프트 저장
+ * @param {number|string} missionId
+ * @param {string} language
+ * @param {string} code
+ */
+export const saveDraft = async (missionId, language, code) => {
+  const response = await api.put(`/api/missions/${missionId}/draft`, {
+    language: language.toUpperCase(),
+    code,
+  });
+  return response;
+};
+
+/**
+ * 코드 실행
+ * @param {Object} data - { missionId, sourceCode, language, stdin }
+ */
+export const executeCode = async (data) => {
+  const response = await api.post('/api/runner/executions', {
+    ...data,
+    language: data.language.toUpperCase(),
+  });
+  return response;
+};
+
+/**
+ * 코드 제출 및 채점
+ * @param {Object} data - { missionId, sourceCode, language }
+ */
+export const submitCode = async (data) => {
+  const response = await api.post('/api/runner/submissions', {
+    ...data,
+    language: data.language.toUpperCase(),
+  });
+  return response;
+};

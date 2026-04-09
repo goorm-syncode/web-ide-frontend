@@ -56,6 +56,13 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 #root {
   width: 100%;
   max-width: 100vw;
@@ -64,7 +71,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow: hidden;
+  /* 페이지 전체 스크롤 방지 */
 }
 
 h1,

@@ -2,13 +2,9 @@
    1. 기본 스타일 (Mobile First)
    ============================ */
 
-html, body {
-  background-color: #F5F5F5;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  overflow-y: scroll; /* 스크롤바 자리를 항상 확보하여 가로 꿀렁임 방지 */
-}
+/* html, body 전역 스타일은 다른 페이지(MissionPage 등)에 영향을 주므로
+   .dev-home-wrapper 스코프로 격리합니다. */
+
 
 /* GNB 포함 전체 창 컨테이너 */
 .dev-home-wrapper {
@@ -17,6 +13,8 @@ html, body {
   background-color: #F5F5F5;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto; /* 홈 페이지 내부에서만 세로 스크롤 허용 */
 }
 
 .home-top-spacer {
