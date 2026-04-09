@@ -61,6 +61,17 @@ const authService = {
   },
 
   /**
+   * 토큰을 사용한 새 비밀번호 확정 (임시 구현)
+   * TODO: 명세에 맞춘 백엔드 엔드포인트 확정 전까지 임시로 /api/auth/password-reset-confirm 혹은 관련 API 패스로 대체
+   * @param {string} token
+   * @param {string} newPassword
+   * @returns {Promise<void>}
+   */
+  confirmPasswordReset: async (token, newPassword) => {
+    return await api.post('/api/auth/password-reset-confirm', { token, newPassword });
+  },
+
+  /**
    * 내 프로필 정보 조회
    * @returns {Promise<Object>} UserResponse
    */
