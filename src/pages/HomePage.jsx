@@ -104,7 +104,7 @@ const HomePage = () => {
       <Gnb
         title="LearnCode"
         isLoggedIn={isAuthenticated}
-        userName={user?.userName || '사용자'}
+        userName={user?.nickname || '사용자'}
         onLogoutClick={handleLogout}
         onLoginClick={handleLogin}
       />

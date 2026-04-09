@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
+import { fetchMe } from '../../store/slices/authSlice';
 
 /**
  * AuthGuard component to protect routes that require authentication.
@@ -12,8 +13,16 @@ import { Navigate, useLocation } from 'react-router-dom';
  * @returns {React.ReactNode} - The children or a Navigate component.
  */
 const AuthGuard = ({ children }) => {
-  const { isAuthenticated, loading } = useSelector((state) => state.auth);
+  const { isAuthenticated, user, loading } = useSelector((state) => state.auth);
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    // 인증은 되었는데 사용자 정보가 없는 경우 정보를 가져옵니다.
+    if (isAuthenticated && !user && !loading) {
+      dispatch(fetchMe());
+    }
+  }, [isAuthenticated, user, loading, dispatch]);
 
   // Loading state can be handled here if needed (e.g., showing a spinner while checking token)
   if (loading) {
