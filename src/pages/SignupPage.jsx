@@ -7,6 +7,7 @@ import Button from '../components/common/Button.jsx';
 import MessageBox from '../components/common/MessageBox.jsx';
 import authService from '../services/auth.js';
 import { mapErrorMessage } from '../services/errorMapper.js';
+import Footer from '../components/layout/Footer.jsx';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -45,18 +46,16 @@ const SignupPage = () => {
       case 'nickname':
         if (!value) return '닉네임을 입력해주세요.';
         if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
-        if (value.length < 2 || value.length > 12)
-          return '닉네임은 2자 이상 12자 이하로 입력해주세요.';
-        if (!/^[a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]+$/.test(value))
-          return '닉네임은 한글, 영문, 숫자만 사용할 수 있습니다.';
+        if (value.length < 2 || value.length > 50)
+          return '닉네임은 2자 이상 50자 이하로 입력해주세요.';
         return '';
       case 'password':
         if (!value) return '비밀번호를 입력해주세요.';
         if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
-        if (value.length < 8 || value.length > 20)
-          return '비밀번호는 8자 이상 20자 이하로 입력해주세요.';
-        if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$/.test(value))
-          return '비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.';
+        if (value.length < 8 || value.length > 72)
+          return '비밀번호는 8자 이상 72자 이하로 입력해주세요.';
+        if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/.test(value))
+          return '비밀번호는 대문자, 소문자, 숫자, 특수문자를 모두 포함해야 합니다.';
         return '';
       case 'passwordConfirm':
         if (!value) return '비밀번호를 다시 확인합니다.';
@@ -132,7 +131,11 @@ const SignupPage = () => {
   };
 
   return (
-    <AuthLayout>
+    <div
+      className="signup-page-container"
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}
+    >
+      <AuthLayout>
       <div className="auth-header">
         <h1 className="auth-page-title">회원가입</h1>
         <p className="auth-page-subtitle">서비스 이용을 위해 정보를 입력해 주세요.</p>
@@ -166,7 +169,7 @@ const SignupPage = () => {
           value={formData.password}
           onChange={handleChange}
           error={!!errors.password}
-          helperText={errors.password || '8~20자, 영문, 숫자, 특수문자 포함'}
+          helperText={errors.password || '8~72자, 대/소문자, 숫자, 특수문자 포함'}
           required
         />
         <Input
@@ -212,6 +215,8 @@ const SignupPage = () => {
         {messageBox.message}
       </MessageBox>
     </AuthLayout>
+    <Footer />
+  </div>
   );
 };
 
