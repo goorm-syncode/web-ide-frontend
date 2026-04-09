@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-// import MyPageModal from './MyPageModal'; // 파일 복구 후 주석 해제 필요
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout as logoutAction } from '../store/slices/authSlice';
 import * as monaco from 'monaco-editor';
@@ -8,58 +7,44 @@ import Gnb from '../components/layout/Gnb';
 import Footer from '../components/layout/Footer';
 import ProblemDescriptionPanel from '../components/mission/ProblemDescriptionPanel';
 import ExecutionResultPanel from '../components/mission/ExecutionResultPanel';
+import {
+  getMissionById,
+  getDraft,
+  saveDraft,
+  executeCode,
+  submitCode,
+  updateMissionProgress,
+} from '../services/missions';
+import { mapErrorMessage } from '../services/errorMapper';
 import '../styles/pages/MissionPage.css';
 
-// Mock Problem Data
-const MOCK_PROBLEM = {
-  title: 'Two Sum',
-  difficulty: 'Easy',
-  markdownContent: `
-Given an array of integers \`nums\` and an integer \`target\`, return indices of the two numbers such that they add up to \`target\`.
-
-You may assume that each input would have **exactly one solution**, and you may not use the same element twice.
-
-You can return the answer in any order.
-
-### Constraints:
-- \`2 <= nums.length <= 104\`
-- \`-109 <= nums[i] <= 109\`
-- \`-109 <= target <= 109\`
-- **Only one valid answer exists.**
-  `,
-  examples: [
-    {
-      title: '예제 1',
-      input: 'nums = [2,7,11,15], target = 9',
-      output: '[0,1]',
-      explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].',
-    },
-    {
-      title: '예제 2',
-      input: 'nums = [3,2,4], target = 6',
-      output: '[1,2]',
-    },
-  ],
+const LANG_MAP = {
+  python: 'PYTHON',
+  javascript: 'JAVASCRIPT',
+  java: 'JAVA',
+  c: 'C',
 };
 
-const INITIAL_CODE = `class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        # Write your code here
-        prevMap = {} # val : index
-        
-        for i, n in enumerate(nums):
-            diff = target - n
-            if diff in prevMap:
-                return [prevMap[diff], i]
-            prevMap[n] = i
-        return
-`;
+const LANG_REVERSE_MAP = {
+  PYTHON: 'python',
+  JAVASCRIPT: 'javascript',
+  JAVA: 'java',
+  C: 'c',
+};
 
 const MissionPage = () => {
+  const { missionId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
-  // const [isMyPageOpen, setIsMyPageOpen] = useState(false); // 가용한 모달이 없어 임시 주석 처리 (빌드 경고 방지)
+
+  // Core Data State
+  const [mission, setMission] = useState(null);
+  const [lastSavedCode, setLastSavedCode] = useState('');
+  const [currentCode, setCurrentCode] = useState('');
+  const [language, setLanguage] = useState('javascript');
+  const [isLoaded, setIsLoaded] = useState(false);
+
   // Panel state with localStorage persistence
   const [leftWidth, setLeftWidth] = useState(() => {
     const saved = localStorage.getItem('mission-panel-left-width');
@@ -75,23 +60,79 @@ const MissionPage = () => {
     return saved ? parseFloat(saved) : 30; // Default 30%
   });
 
-  const [language, setLanguage] = useState('python');
-
   const [isResizingMain, setIsResizingMain] = useState(false);
   const [isResizingIde, setIsResizingIde] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [output, setOutput] = useState('');
+  const [errorTabContent, setErrorTabContent] = useState('');
+  const [testCaseInput, setTestCaseInput] = useState('');
 
   const monacoContainerRef = useRef(null);
   const editorInstance = useRef(null);
 
+  const isDirty = currentCode !== lastSavedCode;
+
+  // Fetch initial mission data
+  useEffect(() => {
+    const fetchMissionData = async () => {
+      try {
+        setIsLoading(true);
+        const missionData = await getMissionById(missionId);
+        setMission(missionData);
+
+        // Update progress to IN_PROGRESS if NOT_STARTED
+        if (missionData.userStatus === 'NOT_STARTED') {
+          await updateMissionProgress(missionId, 'IN_PROGRESS');
+        }
+
+        // Try to load draft for JAVASCRIPT if available, otherwise first available
+        const preferredLang =
+          missionData.languages?.find((l) => l.language === 'JAVASCRIPT') ||
+          missionData.languages?.[0];
+        const initialLang = preferredLang?.language || 'JAVASCRIPT';
+        const displayLang = LANG_REVERSE_MAP[initialLang] || 'javascript';
+        setLanguage(displayLang);
+
+        const draftData = await getDraft(missionId, initialLang);
+        let code = '';
+        if (draftData.hasSavedCode) {
+          code = draftData.code;
+        } else {
+          // Use starter code
+          code = missionData.languages.find((l) => l.language === initialLang)?.starterCode || '';
+        }
+        setLastSavedCode(code);
+        setCurrentCode(code);
+
+        // Set initial test case input from the first public test case
+        if (missionData.publicTestCases && missionData.publicTestCases.length > 0) {
+          setTestCaseInput(missionData.publicTestCases[0].inputData || '');
+        }
+
+        setIsLoaded(true);
+      } catch (err) {
+        console.error('Failed to fetch mission data:', err);
+        setOutput('Error: ' + mapErrorMessage(err));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (missionId) {
+      fetchMissionData();
+    }
+  }, [missionId]);
+
+  // Use a ref for handleSave to avoid re-initializing the editor when handleSave changes
+  const handleSaveRef = useRef(null);
+
   // Initialize Monaco Editor
   useEffect(() => {
-    if (monacoContainerRef.current) {
+    if (monacoContainerRef.current && isLoaded && !editorInstance.current) {
       editorInstance.current = monaco.editor.create(monacoContainerRef.current, {
-        value: INITIAL_CODE,
-        language: 'python',
-        theme: 'vs-dark',
+        value: lastSavedCode,
+        language: language,
+        theme: 'vs-light',
         automaticLayout: true,
         minimap: { enabled: true },
         fontSize: 14,
@@ -108,14 +149,78 @@ const MissionPage = () => {
         scrollBeyondLastLine: true,
         padding: { top: 16, bottom: 16 },
       });
+
+      // Track code changes
+      editorInstance.current.onDidChangeModelContent(() => {
+        setCurrentCode(editorInstance.current.getValue());
+      });
+
+      // Add Save Command (Ctrl+S / Cmd+S)
+      editorInstance.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+        handleSaveRef.current?.();
+      });
     }
 
     return () => {
-      if (editorInstance.current) {
-        editorInstance.current.dispose();
-      }
+      // Cleanup if needed
     };
-  }, []);
+  }, [isLoaded, language, lastSavedCode]);
+
+  // Handle Save
+  const handleSave = useCallback(async () => {
+    if (!editorInstance.current || isLoading) return;
+    const code = editorInstance.current.getValue();
+    if (code === lastSavedCode) return;
+
+    try {
+      setIsLoading(true);
+      await saveDraft(missionId, language.toUpperCase(), code);
+      setLastSavedCode(code);
+    } catch (err) {
+      console.error('Save failed:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading, lastSavedCode, missionId, language]);
+
+  // Keep handleSaveRef updated
+  useEffect(() => {
+    handleSaveRef.current = handleSave;
+  }, [handleSave]);
+
+  // 코드 초기화 (Reset)
+  const handleResetCode = useCallback(async () => {
+    if (!mission || !language) return;
+
+    const confirmReset = window.confirm(
+      '코드를 초기 상태로 되돌리시겠습니까? 현재 작성 중인 내용은 사라집니다.',
+    );
+    if (!confirmReset) return;
+
+    try {
+      setIsLoading(true);
+
+      // 현재 선택된 언어의 백엔드용 매핑 이름 확인 (예: javascript -> JAVASCRIPT)
+      const backendLang = LANG_MAP[language] || language.toUpperCase();
+      const starterCode =
+        mission.languages.find((l) => l.language === backendLang)?.starterCode || '';
+
+      // 서버의 드래프트 초기화
+      await saveDraft(missionId, backendLang, starterCode);
+
+      // 로컬 상태 및 에디터 동기화 (언어 상태는 유지)
+      setLastSavedCode(starterCode);
+      setCurrentCode(starterCode);
+
+      if (editorInstance.current) {
+        editorInstance.current.setValue(starterCode);
+      }
+    } catch (err) {
+      console.error('Reset failed:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [mission, language, missionId]);
 
   // Update layout when panels change
   useEffect(() => {
@@ -177,41 +282,137 @@ const MissionPage = () => {
     };
   }, [isResizingMain, isResizingIde]);
 
-  const handleLanguageChange = (e) => {
-    const newLang = e.target.value;
+  const handleLanguageChange = async (e) => {
+    const newLang = e.target.value; // 표시용 소문자 (e.g. 'javascript')
+    const backendLang = LANG_MAP[newLang] || newLang.toUpperCase(); // API용 대문자 (e.g. 'JAVASCRIPT')
+    const prevBackendLang = LANG_MAP[language] || language.toUpperCase();
+
+    // Auto save previous language code before switching
+    if (isDirty) {
+      try {
+        await saveDraft(missionId, prevBackendLang, currentCode);
+      } catch (err) {
+        console.warn('Auto-save failed during language switch', err);
+      }
+    }
+
     setLanguage(newLang);
-    if (editorInstance.current) {
-      const model = editorInstance.current.getModel();
-      monaco.editor.setModelLanguage(model, newLang);
+
+    // Load draft or starter code for new language
+    try {
+      setIsLoading(true);
+      const draftData = await getDraft(missionId, backendLang); // 대문자로 전달
+      let code = '';
+      if (draftData.hasSavedCode) {
+        code = draftData.code;
+      } else {
+        // mission.languages 배열에서 대문자 언어명으로 매칭
+        code = mission?.languages?.find((l) => l.language === backendLang)?.starterCode || '';
+      }
+
+      setLastSavedCode(code);
+      setCurrentCode(code);
+
+      if (editorInstance.current) {
+        editorInstance.current.setValue(code);
+        const model = editorInstance.current.getModel();
+        monaco.editor.setModelLanguage(model, newLang); // Monaco에는 소문자로 전달
+      }
+    } catch (err) {
+      console.error('Failed to load language draft:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleRun = () => {
+  const handleRun = useCallback(async () => {
+    if (!editorInstance.current) return;
+    const code = editorInstance.current.getValue();
+
     setIsLoading(true);
     setOutput('Running code...\n');
-    setTimeout(() => {
-      setOutput('Success!\nInput: nums = [2,7,11,15], target = 9\nOutput: [0,1]\nExpected: [0,1]');
-      setIsLoading(false);
-    }, 1500);
-  };
+    setErrorTabContent('');
 
-  const handleTest = () => {
+    try {
+      // Execute API will auto-save draft if missionId is provided
+      const result = await executeCode({
+        missionId,
+        sourceCode: code,
+        language,
+        stdin: testCaseInput,
+      });
+
+      const { stdout, stderr, compileOutput, statusDescription } = result;
+
+      if (stderr || compileOutput) {
+        setErrorTabContent(stderr || compileOutput);
+        setOutput(
+          `Execution Result: ${statusDescription}\n\n[Error Output Available in Error Tab]`,
+        );
+      } else {
+        const finalOutput =
+          stdout !== undefined && stdout !== null && !Number.isNaN(stdout)
+            ? stdout
+            : 'Success (No output)';
+        setOutput(finalOutput);
+      }
+
+      setLastSavedCode(code); // Update lastSavedCode since executeCode auto-saves
+    } catch (err) {
+      setOutput('Error: ' + mapErrorMessage(err));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [language, missionId, testCaseInput]);
+
+  const handleTest = useCallback(() => {
+    // Currently no specific API for individual tests in openapi.json
+    // besides execution with stdin which is not fully utilized here yet.
     setIsLoading(true);
     setOutput('Testing...\n');
     setTimeout(() => {
-      setOutput('All test cases passed.');
+      setOutput('Test functionality using public test cases will be integrated soon.');
       setIsLoading(false);
-    }, 1000);
-  };
+    }, 500);
+  }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(async () => {
+    if (!editorInstance.current) return;
+    const code = editorInstance.current.getValue();
+
     setIsLoading(true);
     setOutput('Submitting...\n');
-    setTimeout(() => {
-      setOutput('Accepted!\nRuntime: 48ms (Beats 92%)\nMemory: 15.2MB (Beats 85%)');
+    setErrorTabContent('');
+
+    try {
+      const result = await submitCode({
+        missionId,
+        sourceCode: code,
+        language,
+      });
+
+      const { overallStatus, passedCount = 0, totalCount = 0, results = [] } = result;
+
+      let resText = `Status: ${overallStatus}\nProgress: ${passedCount}/${totalCount} passed\n\n`;
+      if (results && results.length > 0) {
+        results.forEach((res, idx) => {
+          resText += `Test Case ${idx + 1}: ${res.status}${res.hidden ? ' (Hidden)' : ''}\n`;
+        });
+      }
+
+      setOutput(resText);
+      setLastSavedCode(code); // submitCode auto-saves draft
+
+      if (overallStatus === 'ACCEPTED') {
+        await updateMissionProgress(missionId, 'COMPLETED');
+        setMission((prev) => (prev ? { ...prev, userStatus: 'COMPLETED' } : prev));
+      }
+    } catch (err) {
+      setOutput('Error: ' + mapErrorMessage(err));
+    } finally {
       setIsLoading(false);
-    }, 2000);
-  };
+    }
+  }, [language, missionId]);
 
   return (
     <div className="mission-page-container">
@@ -228,12 +429,20 @@ const MissionPage = () => {
       <main className="mission-main-content">
         {/* Left: Problem Description */}
         <div className="panel-left" style={{ width: `${leftWidth}%` }}>
-          <ProblemDescriptionPanel
-            title={MOCK_PROBLEM.title}
-            difficulty={MOCK_PROBLEM.difficulty}
-            markdownContent={MOCK_PROBLEM.markdownContent}
-            examples={MOCK_PROBLEM.examples}
-          />
+          {mission ? (
+            <ProblemDescriptionPanel
+              title={mission.title}
+              difficulty={mission.difficulty}
+              status={mission.userStatus}
+              markdownContent={mission.description}
+              examples={mission.publicTestCases?.map((tc) => ({
+                input: tc.inputData,
+                output: tc.expectedOutput,
+              }))}
+            />
+          ) : (
+            <div className="panel-loading">Loading mission...</div>
+          )}
         </div>
 
         {/* Horizontal Resizer */}
@@ -249,10 +458,21 @@ const MissionPage = () => {
               <div className="editor-controls">
                 <div className="select-wrapper">
                   <select className="lang-select" value={language} onChange={handleLanguageChange}>
-                    <option value="python">Python</option>
-                    <option value="javascript">JavaScript</option>
-                    <option value="java">Java</option>
-                    <option value="c">C</option>
+                    {mission?.languages?.map((lang) => (
+                      <option
+                        key={lang.language}
+                        value={LANG_REVERSE_MAP[lang.language] || lang.language.toLowerCase()}
+                      >
+                        {lang.displayName}
+                      </option>
+                    )) || (
+                      <>
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="java">Java</option>
+                        <option value="c">C</option>
+                      </>
+                    )}
                   </select>
                   <svg
                     className="select-arrow"
@@ -270,41 +490,58 @@ const MissionPage = () => {
                     />
                   </svg>
                 </div>
-                <span className="file-name">
-                  {language === 'python'
-                    ? 'Solution.py'
-                    : language === 'javascript'
-                      ? 'Solution.js'
-                      : language === 'java'
-                        ? 'Solution.java'
-                        : 'Solution.c'}
-                </span>
               </div>
+
               <div className="editor-actions">
-                <button className="icon-btn" title="Settings">
+                <div
+                  className={`save-status ${isLoading ? 'loading' : isDirty ? 'dirty' : 'saved'}`}
+                >
+                  {isLoading ? (
+                    <span className="status-text">저장 중...</span>
+                  ) : isDirty ? (
+                    <span className="status-text">변경됨</span>
+                  ) : (
+                    <>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="status-icon"
+                      >
+                        <path d="M20 6L9 17l-5-5" />
+                      </svg>
+                      <span className="status-text">저장됨</span>
+                    </>
+                  )}
+                </div>
+
+                <div className="toolbar-divider" />
+
+                <button
+                  type="button"
+                  className="reset-btn"
+                  onClick={handleResetCode}
+                  title="코드 초기화"
+                >
                   <svg
-                    width="20"
-                    height="20"
+                    width="14"
+                    height="14"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
                   </svg>
-                </button>
-                <button className="icon-btn" title="Full Screen">
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                  </svg>
+                  <span>초기화</span>
                 </button>
               </div>
             </header>
@@ -321,7 +558,12 @@ const MissionPage = () => {
           <div className="panel-results" style={{ height: `${bottomHeight}%` }}>
             <ExecutionResultPanel
               output={output}
+              testcase={testCaseInput}
+              onTestcaseChange={setTestCaseInput}
+              error={errorTabContent}
               isLoading={isLoading}
+              isSaveDisabled={!isDirty}
+              onSave={handleSave}
               onRun={handleRun}
               onTest={handleTest}
               onSubmit={handleSubmit}

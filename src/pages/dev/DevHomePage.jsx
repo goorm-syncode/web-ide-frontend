@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // import MyPageModal from '../MyPageModal'; // 파일 복구 후 주석 해제 필요
 import { useNavigate } from 'react-router-dom';
-import Gnb from '../../components/layout/Gnb';
 import ProgressBanner from '../../components/home/ProgressBanner';
 import ProblemList from '../../components/home/ProblemList';
 import Footer from '../../components/layout/Footer';
