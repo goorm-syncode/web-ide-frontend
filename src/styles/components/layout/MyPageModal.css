@@ -1,0 +1,162 @@
+.mypage-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.mypage-modal-card {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+.mypage-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 16px;
+}
+
+.mypage-modal-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #22262b;
+  margin: 0;
+}
+
+.mypage-close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #8b95a1;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.mypage-close-button:hover {
+  background-color: #f3f4f6;
+  color: #22262b;
+}
+
+.mypage-modal-body {
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mypage-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mypage-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-left: 4px;
+}
+
+.mypage-section-box {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mypage-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mypage-info-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #8b95a1;
+}
+
+.mypage-info-value-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 40px;
+}
+
+.mypage-info-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #22262b;
+}
+
+.mypage-edit-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6366f1;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.mypage-edit-button:hover {
+  background-color: #eef2ff;
+}
+
+.mypage-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mypage-password-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.mypage-password-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.mypage-submit-wrapper {
+  margin-top: 8px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

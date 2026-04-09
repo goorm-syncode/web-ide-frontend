@@ -68,6 +68,26 @@
   font-weight: 500;
 }
 
+.gnb-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  color: #4B5563;
+}
+
+.gnb-user-profile:hover {
+  background-color: #F3F4F6;
+  color: #22262B;
+}
+
+.gnb-user-profile .gnb-username {
+  color: inherit;
+}
+
 .gnb-action-button {
   display: flex;
   align-items: center;
