@@ -1,12 +1,14 @@
 .gnb-container {
   width: 100%;
-  height: 65px; /* 80px -> 65px로 15px 축소 */
+  height: 65px;
+  /* 80px -> 65px로 15px 축소 */
   background-color: #FFFFFF;
   font-family: 'Pretendard', sans-serif;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* 경계 구분을 위해 얇은 선 추가 */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  /* 경계 구분을 위해 얇은 선 추가 */
 }
 
 .gnb-inner {
@@ -14,15 +16,22 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1660px; /* HomePage의 dev-home-content와 동일한 가로 너비 설정 */
+  max-width: 1660px;
+  /* HomePage의 dev-home-content와 동일한 가로 너비 설정 */
   padding: 0 32px;
   box-sizing: border-box;
+}
+
+.gnb-inner.fluid {
+  max-width: 100%;
+  padding: 0 24px;
+  /* mission panel의 기본 여백 등과 어울리는 최소 여백 */
 }
 
 .gnb-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 4px;
 }
 
 .gnb-back-button {
@@ -34,7 +43,7 @@
   cursor: pointer;
   color: #4B5563;
   /* Text Secondary */
-  padding: 8px;
+  padding: 4px;
   border-radius: 8px;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
@@ -139,9 +148,10 @@
 @media screen and (max-width: 768px) {
   .gnb-inner {
     height: 56px;
-    padding: 0 24px; /* 모바일: 콘텐츠 padding-left(24px)와 맞춤 */
+    padding: 0 24px;
+    /* 모바일: 콘텐츠 padding-left(24px)와 맞춤 */
   }
-  
+
   .gnb-container {
     height: 56px;
   }
@@ -174,7 +184,8 @@
 /* 아주 작은 모바일 화면용 예외 처리 */
 @media screen and (max-width: 480px) {
   .gnb-inner {
-    padding: 0 12px; /* Spacing 토큰: 12 */
+    padding: 0 12px;
+    /* Spacing 토큰: 12 */
   }
 
   .gnb-title {
