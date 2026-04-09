@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import AuthLayout from '../components/layout/AuthLayout';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
@@ -9,14 +9,30 @@ import authService from '../services/auth';
 import { mapErrorMessage } from '../services/errorMapper';
 
 const ResetPasswordPage = () => {
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+  const navigate = useNavigate();
+
+  // Mode: request-link OR reset-password
+  const isResetMode = !!token;
+
   const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+    passwordConfirm: '',
+  });
+
   const [loading, setLoading] = useState(false);
   const [messageBox, setMessageBox] = useState({
     isOpen: false,
     type: 'info',
     title: '',
     message: '',
+    onConfirm: null,
   });
 
   const validateEmail = (value) => {
@@ -28,18 +44,50 @@ const ResetPasswordPage = () => {
     return '';
   };
 
+  const validatePassword = (value) => {
+    if (!value) return '비밀번호를 입력해주세요.';
+    if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
+    if (value.length < 8 || value.length > 20)
+      return '비밀번호는 8자 이상 20자 이하로 입력해주세요.';
+    return '';
+  };
+
+  const validatePasswordConfirm = (pwd, confirmPwd) => {
+    if (!confirmPwd) return '비밀번호 확인을 입력해주세요.';
+    if (pwd !== confirmPwd) return '비밀번호가 일치하지 않습니다.';
+    return '';
+  };
+
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
-    setError(validateEmail(value));
+    setErrors((prev) => ({ ...prev, email: validateEmail(value) }));
   };
 
-  const handleSubmit = async (e) => {
-    if (e) e.preventDefault();
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    setErrors((prev) => ({
+      ...prev,
+      password: validatePassword(value),
+      passwordConfirm: validatePasswordConfirm(value, passwordConfirm), // Re-validate confirm if password changes
+    }));
+  };
 
-    const validationError = validateEmail(email);
-    if (validationError) {
-      setError(validationError);
+  const handlePasswordConfirmChange = (e) => {
+    const value = e.target.value;
+    setPasswordConfirm(value);
+    setErrors((prev) => ({
+      ...prev,
+      passwordConfirm: validatePasswordConfirm(password, value),
+    }));
+  };
+
+  const handleRequestSubmit = async (e) => {
+    e.preventDefault();
+    const emailError = validateEmail(email);
+    if (emailError) {
+      setErrors((prev) => ({ ...prev, email: emailError }));
       return;
     }
 
@@ -51,6 +99,7 @@ const ResetPasswordPage = () => {
         type: 'success',
         title: '요청 완료',
         message: '비밀번호 재설정 링크가 이메일로 발송되었습니다.',
+        onConfirm: closeMessageBox,
       });
     } catch (err) {
       const message = mapErrorMessage(err, '비밀번호 재설정 요청 중 문제가 발생했습니다.');
@@ -59,9 +108,46 @@ const ResetPasswordPage = () => {
         type: 'error',
         title: '요청 실패',
         message: message,
+        onConfirm: closeMessageBox,
       });
     } finally {
-      setLoading(true); // Wait, this is bug in develop? It should be false.
+      setLoading(false);
+    }
+  };
+
+  const handleResetSubmit = async (e) => {
+    e.preventDefault();
+    const pwdError = validatePassword(password);
+    const pwdConfirmError = validatePasswordConfirm(password, passwordConfirm);
+    
+    if (pwdError || pwdConfirmError) {
+      setErrors((prev) => ({ ...prev, password: pwdError, passwordConfirm: pwdConfirmError }));
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await authService.confirmPasswordReset(token, password);
+      setMessageBox({
+        isOpen: true,
+        type: 'success',
+        title: '재설정 완료',
+        message: '비밀번호가 성공적으로 변경되었습니다. 다시 로그인해주세요.',
+        onConfirm: () => {
+          closeMessageBox();
+          navigate('/login');
+        },
+      });
+    } catch (err) {
+      const message = mapErrorMessage(err, '비밀번호 변경 중 문제가 발생했습니다. 링크가 만료되었을 수 있습니다.');
+      setMessageBox({
+        isOpen: true,
+        type: 'error',
+        title: '변경 실패',
+        message: message,
+        onConfirm: closeMessageBox,
+      });
+    } finally {
       setLoading(false);
     }
   };
@@ -70,7 +156,8 @@ const ResetPasswordPage = () => {
     setMessageBox((prev) => ({ ...prev, isOpen: false }));
   };
 
-  const isSubmitDisabled = loading || !email || !!error;
+  const isRequestDisabled = loading || !email || !!errors.email;
+  const isResetDisabled = loading || !password || !passwordConfirm || !!errors.password || !!errors.passwordConfirm;
 
   return (
     <div
@@ -79,31 +166,64 @@ const ResetPasswordPage = () => {
     >
       <AuthLayout>
         <div className="auth-header">
-          <h1 className="auth-page-title">비밀번호 찾기</h1>
+          <h1 className="auth-page-title">{isResetMode ? '새 비밀번호 설정' : '비밀번호 찾기'}</h1>
           <p className="auth-page-subtitle">
-            가입하신 이메일 주소를 입력하시면 비밀번호 재설정 링크를 보내드립니다.
+            {isResetMode
+              ? '안전한 사용을 위해 새로운 비밀번호를 설정해주세요.'
+              : '가입하신 이메일 주소를 입력하시면 비밀번호 재설정 링크를 보내드립니다.'}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="auth-form" noValidate>
-          <Input
-            type="email"
-            placeholder="이메일을 입력하세요"
-            name="email"
-            value={email}
-            onChange={handleEmailChange}
-            error={!!error}
-            helperText={error}
-            disabled={loading}
-            required
-          />
-
-          <div className="auth-submit-btn-wrapper">
-            <Button primary fullWidth type="submit" loading={loading} disabled={isSubmitDisabled}>
-              요청 보내기
-            </Button>
-          </div>
-        </form>
+        {!isResetMode ? (
+          <form onSubmit={handleRequestSubmit} className="auth-form" noValidate>
+            <Input
+              type="email"
+              placeholder="이메일을 입력하세요"
+              name="email"
+              value={email}
+              onChange={handleEmailChange}
+              error={!!errors.email}
+              helperText={errors.email}
+              disabled={loading}
+              required
+            />
+            <div className="auth-submit-btn-wrapper">
+              <Button primary fullWidth type="submit" loading={loading} disabled={isRequestDisabled}>
+                재설정 링크 요청
+              </Button>
+            </div>
+          </form>
+        ) : (
+          <form onSubmit={handleResetSubmit} className="auth-form" noValidate>
+            <Input
+              type="password"
+              placeholder="새 비밀번호를 입력하세요"
+              name="password"
+              value={password}
+              onChange={handlePasswordChange}
+              error={!!errors.password}
+              helperText={errors.password}
+              disabled={loading}
+              required
+            />
+            <Input
+              type="password"
+              placeholder="새 비밀번호 확인"
+              name="passwordConfirm"
+              value={passwordConfirm}
+              onChange={handlePasswordConfirmChange}
+              error={!!errors.passwordConfirm}
+              helperText={errors.passwordConfirm}
+              disabled={loading}
+              required
+            />
+            <div className="auth-submit-btn-wrapper">
+              <Button primary fullWidth type="submit" loading={loading} disabled={isResetDisabled}>
+                비밀번호 변경
+              </Button>
+            </div>
+          </form>
+        )}
 
         <div className="auth-links">
           <Link to="/login" className="auth-link-text">
@@ -116,7 +236,7 @@ const ResetPasswordPage = () => {
           onClose={closeMessageBox}
           type={messageBox.type}
           title={messageBox.title}
-          onConfirm={closeMessageBox}
+          onConfirm={messageBox.onConfirm || closeMessageBox}
         >
           {messageBox.message}
         </MessageBox>
@@ -125,7 +245,5 @@ const ResetPasswordPage = () => {
     </div>
   );
 };
-
-ResetPasswordPage.propTypes = {};
 
 export default ResetPasswordPage;
