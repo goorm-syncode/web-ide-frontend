@@ -50,39 +50,41 @@ const Gnb = ({
 
   return (
     <header className="gnb-container">
-      <div className="gnb-left">
-        {showBackButton && (
-          <button className="gnb-back-button" onClick={onBackClick} aria-label="뒤로 가기">
-            <BackArrowIcon />
-          </button>
-        )}
-        <h1 className="gnb-title" onClick={() => navigate('/home')}>
-          {title}
-        </h1>
-      </div>
+      <div className="gnb-inner">
+        <div className="gnb-left">
+          {showBackButton && (
+            <button className="gnb-back-button" onClick={onBackClick} aria-label="뒤로 가기">
+              <BackArrowIcon />
+            </button>
+          )}
+          <h1 className="gnb-title" onClick={() => navigate('/home')}>
+            {title}
+          </h1>
+        </div>
 
-      <div className="gnb-right">
-        {isLoggedIn ? (
-          <>
-            <span className="gnb-username">{userName}</span>
+        <div className="gnb-right">
+          {isLoggedIn ? (
+            <>
+              <span className="gnb-username">{userName}</span>
+              <button
+                className="gnb-action-button gnb-auth-button"
+                onClick={onLogoutClick}
+                aria-label="로그아웃"
+              >
+                <span>Logout</span>
+                <LogoutIcon />
+              </button>
+            </>
+          ) : (
             <button
               className="gnb-action-button gnb-auth-button"
-              onClick={onLogoutClick}
-              aria-label="로그아웃"
+              onClick={onLoginClick}
+              aria-label="로그인"
             >
-              <span>Logout</span>
-              <LogoutIcon />
+              Login
             </button>
-          </>
-        ) : (
-          <button
-            className="gnb-action-button gnb-auth-button"
-            onClick={onLoginClick}
-            aria-label="로그인"
-          >
-            Login
-          </button>
-        )}
+          )}
+        </div>
       </div>
     </header>
   );

@@ -20,17 +20,16 @@ html, body {
 }
 
 .home-top-spacer {
-  height: 12px; /* 24px -> 12px 상단 공간 최적화 */
-  width: 100%;
+  display: none; /* 가변 요소 제거로 페이지 전환 시 들썩임 방지 */
 }
 
 /* GNB 아래 본문 영역 */
 .dev-home-content {
   max-width: 1660px;
   width: 100%;
-  margin: 0 auto;
+  margin: 4px auto 0 auto; /* 상단 마진을 정수(4px)로 고정하여 위치 안정화 */
   padding: 32px 32px 0 32px; /* 하단 패딩을 0으로 제거 */
-  flex: initial; /* flex: 1 대신 initial로 설정하여 콘텐츠만큼만 늘어나도록 수정 */
+  flex: 1; /* 남은 공간을 모두 차지하여 footer를 항상 하단으로 밀어냄 */
   display: flex;
   flex-direction: column;
   overflow: visible;

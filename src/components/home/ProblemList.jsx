@@ -10,12 +10,23 @@ import '../../styles/components/home/ProblemList.css';
  * @param {Function} [props.onProblemClick] - 카드 내 액션 버튼 클릭 핸들러
  */
 const ProblemList = ({ problems = [], onProblemClick }) => {
+  // 서버 API 상태값 → ProblemCard 내부 상태값 변환
+  const normalizeStatus = (serverStatus) => {
+    switch (serverStatus) {
+      case 'COMPLETED':    return 'solved';
+      case 'IN_PROGRESS':  return 'in_progress';
+      case 'NOT_STARTED':  return 'unattempted';
+      default:             return 'unattempted';
+    }
+  };
+
   return (
     <div className="problem-list-container">
       {problems.map((problem) => (
         <ProblemCard
           key={problem.id}
           {...problem}
+          status={normalizeStatus(problem.status)}
           description={problem.summary}
           onClickAction={() => onProblemClick && onProblemClick(problem.id)}
         />

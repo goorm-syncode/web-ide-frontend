@@ -31,8 +31,8 @@ const HomePage = () => {
 
   // 필터 및 페이지네이션 상태
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('ALL');
+  const [selectedStatus, setSelectedStatus] = useState('ALL');
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
 
