@@ -63,12 +63,13 @@ const Gnb = ({
   onLogoutClick,
   onLoginClick,
   onSettingsClick,
+  fluid = false,
 }) => {
   const navigate = useNavigate();
 
   return (
     <header className="gnb-container">
-      <div className="gnb-inner">
+      <div className={`gnb-inner ${fluid ? 'fluid' : ''}`}>
         <div className="gnb-left">
           {showBackButton && (
             <button className="gnb-back-button" onClick={onBackClick} aria-label="뒤로 가기">
@@ -126,6 +127,7 @@ Gnb.propTypes = {
   onLogoutClick: PropTypes.func,
   onLoginClick: PropTypes.func,
   onSettingsClick: PropTypes.func,
+  fluid: PropTypes.bool,
 };
 
 export default Gnb;

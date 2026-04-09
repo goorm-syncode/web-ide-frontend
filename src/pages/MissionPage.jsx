@@ -18,6 +18,58 @@ import {
 import { mapErrorMessage } from '../services/errorMapper';
 import '../styles/pages/MissionPage.css';
 
+const RunIcon = () => (
+  <svg
+    className="btn-icon"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <polygon points="5 3 19 12 5 21 5 3" />
+  </svg>
+);
+
+const SaveIcon = () => (
+  <svg
+    className="btn-icon"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+    <polyline points="7 3 7 8 15 8"></polyline>
+  </svg>
+);
+
+const SubmitIcon = () => (
+  <svg
+    className="btn-icon"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M22 2L11 13" />
+    <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+  </svg>
+);
+
 const LANG_MAP = {
   python: 'PYTHON',
   javascript: 'JAVASCRIPT',
@@ -365,16 +417,6 @@ const MissionPage = () => {
     }
   }, [language, missionId, testCaseInput]);
 
-  const handleTest = useCallback(() => {
-    // Currently no specific API for individual tests in openapi.json
-    // besides execution with stdin which is not fully utilized here yet.
-    setIsLoading(true);
-    setOutput('Testing...\n');
-    setTimeout(() => {
-      setOutput('Test functionality using public test cases will be integrated soon.');
-      setIsLoading(false);
-    }, 500);
-  }, []);
 
   const handleSubmit = useCallback(async () => {
     if (!editorInstance.current) return;
@@ -418,6 +460,7 @@ const MissionPage = () => {
     <div className="mission-page-container">
       <Gnb
         title="LearnCode"
+        fluid={true}
         isLoggedIn={isAuthenticated}
         userName={user?.nickname || '사용자'}
         showBackButton
@@ -524,9 +567,21 @@ const MissionPage = () => {
 
                 <button
                   type="button"
-                  className="reset-btn"
+                  className="toolbar-action-btn"
+                  onClick={handleSave}
+                  disabled={isLoading || !isDirty}
+                  title="코드 저장 (Ctrl+S)"
+                >
+                  <SaveIcon />
+                  <span>저장</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="toolbar-action-btn"
                   onClick={handleResetCode}
                   title="코드 초기화"
+                  disabled={isLoading}
                 >
                   <svg
                     width="14"
@@ -542,6 +597,27 @@ const MissionPage = () => {
                     <path d="M3 3v5h5" />
                   </svg>
                   <span>초기화</span>
+                </button>
+
+                <div className="toolbar-divider" />
+
+                <button
+                  type="button"
+                  className="toolbar-action-btn run-btn"
+                  onClick={handleRun}
+                  disabled={isLoading}
+                >
+                  <RunIcon />
+                  <span>테스트</span>
+                </button>
+                <button
+                  type="button"
+                  className="toolbar-action-btn submit-btn"
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                >
+                  <SubmitIcon />
+                  <span>제출</span>
                 </button>
               </div>
             </header>
@@ -562,11 +638,6 @@ const MissionPage = () => {
               onTestcaseChange={setTestCaseInput}
               error={errorTabContent}
               isLoading={isLoading}
-              isSaveDisabled={!isDirty}
-              onSave={handleSave}
-              onRun={handleRun}
-              onTest={handleTest}
-              onSubmit={handleSubmit}
             />
           </div>
         </div>

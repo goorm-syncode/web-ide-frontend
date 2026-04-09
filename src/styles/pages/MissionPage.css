@@ -111,7 +111,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: 8px 24px; /* GNB fluid 패딩(24px)과 정렬 맞춤 */
   background-color: #ffffff;
   border-bottom: 1px solid var(--panel-border);
   height: 48px;
@@ -206,7 +206,7 @@
   margin: 0 4px;
 }
 
-.reset-btn {
+.toolbar-action-btn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -221,14 +221,45 @@
   transition: all 0.2s;
 }
 
-.reset-btn:hover {
+.toolbar-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toolbar-action-btn:not(:disabled):hover {
+  background-color: #f8fafc;
+  color: #334155;
+}
+
+.toolbar-action-btn[title="코드 초기화"]:not(:disabled):hover {
   background-color: #fef2f2;
   border-color: #fecaca;
   color: #ef4444;
 }
 
-.reset-btn svg {
-  opacity: 0.8;
+.toolbar-action-btn.run-btn {
+  color: #6366f1;
+  border-color: #e0e7ff;
+}
+
+.toolbar-action-btn.run-btn:not(:disabled):hover {
+  background-color: #e0e7ff;
+  border-color: #c7d2fe;
+}
+
+.toolbar-action-btn.submit-btn {
+  background-color: #6366f1;
+  color: #ffffff;
+  border-color: #6366f1;
+}
+
+.toolbar-action-btn.submit-btn:not(:disabled):hover {
+  background-color: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.toolbar-action-btn svg {
+  opacity: 0.9;
 }
 
 .monaco-container {
