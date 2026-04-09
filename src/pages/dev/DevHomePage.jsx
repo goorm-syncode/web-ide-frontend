@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// import MyPageModal from '../MyPageModal'; // 파일 복구 후 주석 해제 필요
 import { useNavigate } from 'react-router-dom';
 import Gnb from '../../components/layout/Gnb';
 import ProgressBanner from '../../components/home/ProgressBanner';
@@ -9,6 +10,7 @@ import SearchFilter from '../../components/home/SearchFilter';
 import DifficultyFilter from '../../components/home/DifficultyFilter';
 import StatusFilter from '../../components/home/StatusFilter';
 import Pagination from '../../components/common/Pagination';
+
 import authService from '../../services/auth';
 import { getContinueLearning } from '../../services/problem';
 
@@ -143,6 +145,8 @@ const DevHomePage = () => {
     type: 'info',
   });
 
+  const [isMyPageOpen, setIsMyPageOpen] = useState(false);
+
   const [authState, setAuthState] = useState({
     isLoggedIn: true,
     userName: 'Alex Coder',
@@ -238,6 +242,7 @@ const DevHomePage = () => {
         userName={authState.userName}
         onLogoutClick={handleLogout}
         onLoginClick={handleLogin}
+        onSettingsClick={() => setIsMyPageOpen(true)}
       />
       <div className="home-top-spacer" />
       <div className="dev-home-content">
@@ -302,6 +307,13 @@ const DevHomePage = () => {
       >
         {modalState.message}
       </MessageBox>
+
+      {/* 마이페이지 모달 (파일 복구 후 주석 해제 필요)
+      <MyPageModal 
+        isOpen={isMyPageOpen} 
+        onClose={() => setIsMyPageOpen(false)} 
+      />
+      */}
     </div>
   );
 };

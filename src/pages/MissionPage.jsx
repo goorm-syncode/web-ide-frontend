@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import MyPageModal from './MyPageModal'; // 파일 복구 후 주석 해제 필요import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout as logoutAction } from '../store/slices/authSlice';
 import * as monaco from 'monaco-editor';
@@ -58,6 +58,7 @@ const MissionPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const [isMyPageOpen, setIsMyPageOpen] = useState(false);
   // Panel state with localStorage persistence
   const [leftWidth, setLeftWidth] = useState(() => {
     const saved = localStorage.getItem('mission-panel-left-width');
@@ -220,6 +221,7 @@ const MissionPage = () => {
         showBackButton
         onBackClick={() => navigate('/home')}
         onLogoutClick={() => dispatch(logoutAction())}
+        onSettingsClick={() => setIsMyPageOpen(true)}
       />
 
       <main className="mission-main-content">
@@ -328,6 +330,13 @@ const MissionPage = () => {
       </main>
 
       <Footer />
+
+      {/* 마이페이지 모달 (파일 복구 후 주석 해제 필요)
+      <MyPageModal 
+        isOpen={isMyPageOpen} 
+        onClose={() => setIsMyPageOpen(false)} 
+      />
+      */}
     </div>
   );
 };
