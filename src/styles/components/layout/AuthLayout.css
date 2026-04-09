@@ -76,3 +76,40 @@
   text-decoration: underline;
   color: #6366f1;
 }
+
+/* Pastel Purple Button Override */
+.auth-btn-purple {
+  background-color: #bca0ff !important;
+  color: white !important;
+  border-radius: 8px; /* 통일감 */
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(188, 160, 255, 0.4);
+}
+
+.auth-btn-purple:hover:not(:disabled) {
+  background-color: #a88bec !important;
+  box-shadow: 0 6px 15px rgba(188, 160, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+.auth-btn-purple:disabled {
+  background-color: #d1c4f5 !important;
+  box-shadow: none;
+}
+
+/* Muted link */
+.auth-link-muted {
+  color: #9ca3af;
+}
+
+.auth-link-muted:hover {
+  color: #bca0ff !important;
+  text-decoration: none !important;
+}
+
+/* Enhancing input borders for dynamic feel */
+.auth-form input:focus {
+  border-color: #bca0ff !important;
+  box-shadow: 0 0 0 3px rgba(188, 160, 255, 0.2) !important;
+}
