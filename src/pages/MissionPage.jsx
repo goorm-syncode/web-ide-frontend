@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-// import MyPageModal from './MyPageModal'; // 파일 복구 후 주석 해제 필요import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+// import MyPageModal from './MyPageModal'; // 파일 복구 후 주석 해제 필요
 import { useDispatch, useSelector } from 'react-redux';
 import { logout as logoutAction } from '../store/slices/authSlice';
 import * as monaco from 'monaco-editor';
@@ -58,7 +59,7 @@ const MissionPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
-  const [isMyPageOpen, setIsMyPageOpen] = useState(false);
+  // const [isMyPageOpen, setIsMyPageOpen] = useState(false); // 가용한 모달이 없어 임시 주석 처리 (빌드 경고 방지)
   // Panel state with localStorage persistence
   const [leftWidth, setLeftWidth] = useState(() => {
     const saved = localStorage.getItem('mission-panel-left-width');
@@ -221,7 +222,7 @@ const MissionPage = () => {
         showBackButton
         onBackClick={() => navigate('/home')}
         onLogoutClick={() => dispatch(logoutAction())}
-        onSettingsClick={() => setIsMyPageOpen(true)}
+        onSettingsClick={() => console.log('Settings clicked')} // setIsMyPageOpen(true) 모달 복구 전까지 임시 주석 처리
       />
 
       <main className="mission-main-content">

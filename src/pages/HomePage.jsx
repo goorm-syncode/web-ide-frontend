@@ -30,7 +30,7 @@ const HomePage = () => {
     type: 'info',
   });
 
-  const [isMyPageOpen, setIsMyPageOpen] = useState(false);
+  // const [isMyPageOpen, setIsMyPageOpen] = useState(false); // 모달 복구 전까지 임시 주석 처리 (빌드 경고 방지)
 
   // 필터 및 페이지네이션 상태
   const [searchQuery, setSearchQuery] = useState('');
@@ -110,7 +110,7 @@ const HomePage = () => {
         userName={user?.nickname || '사용자'}
         onLogoutClick={handleLogout}
         onLoginClick={handleLogin}
-        onSettingsClick={() => setIsMyPageOpen(true)}
+        onSettingsClick={() => console.log('Settings clicked')} // setIsMyPageOpen(true) 모달 복구 전까지 임시 주석 처리
       />
       <div className="home-top-spacer" />
       <div className="dev-home-content">

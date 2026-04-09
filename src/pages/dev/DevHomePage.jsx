@@ -145,7 +145,7 @@ const DevHomePage = () => {
     type: 'info',
   });
 
-  const [isMyPageOpen, setIsMyPageOpen] = useState(false);
+  // const [isMyPageOpen, setIsMyPageOpen] = useState(false); // 모달 복구 전까지 임시 주석 처리 (빌드 경고 방지)
 
   const [authState, setAuthState] = useState({
     isLoggedIn: true,
@@ -242,7 +242,7 @@ const DevHomePage = () => {
         userName={authState.userName}
         onLogoutClick={handleLogout}
         onLoginClick={handleLogin}
-        onSettingsClick={() => setIsMyPageOpen(true)}
+        onSettingsClick={() => console.log('Settings clicked')} // setIsMyPageOpen(true) 모달 복구 전까지 임시 주석 처리
       />
       <div className="home-top-spacer" />
       <div className="dev-home-content">
