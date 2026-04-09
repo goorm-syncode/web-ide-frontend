@@ -8,7 +8,7 @@ import axios from 'axios';
  * - 응답: 공통 ApiResponse 형식 처리 및 에러 핸들링
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://d1jum4zzr45u1b.cloudfront.net';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://d3mpsqo9lnx0wo.cloudfront.net';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
