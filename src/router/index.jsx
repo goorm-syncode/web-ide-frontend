@@ -44,6 +44,10 @@ const router = createBrowserRouter([
     element: <Suspense fallback={<PageLoader />}><Pages.DevGnbPage /></Suspense>,
   },
   {
+    path: '/dev/mypage',
+    element: <Suspense fallback={<PageLoader />}><Pages.MyPageModalPage /></Suspense>,
+  },
+  {
     path: '/dev/Input',
     element: <Suspense fallback={<PageLoader />}><Pages.DevInputPage /></Suspense>,
   },
