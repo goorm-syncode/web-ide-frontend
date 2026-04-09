@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Gnb from '../../components/layout/Gnb';
 import ProgressBanner from '../../components/home/ProgressBanner';
 import ProblemList from '../../components/home/ProblemList';
 import Footer from '../../components/layout/Footer';
@@ -232,13 +231,6 @@ const DevHomePage = () => {
 
   return (
     <div className="dev-home-wrapper">
-      <Gnb
-        title="CODING TEST"
-        isLoggedIn={authState.isLoggedIn}
-        userName={authState.userName}
-        onLogoutClick={handleLogout}
-        onLoginClick={handleLogin}
-      />
       <div className="home-top-spacer" />
       <div className="dev-home-content">
         <div className="home-header">

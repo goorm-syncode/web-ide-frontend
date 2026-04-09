@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import Input from '../common/Input';
-import Button from '../common/Button';
-import MessageBox from '../common/MessageBox';
-import authService from '../../services/auth';
-import { updateUser } from '../../store/slices/authSlice';
-import { mapErrorMessage } from '../../services/errorMapper';
-import '../../styles/components/layout/MyPageModal.css';
-
-const CloseIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
-  </svg>
-);
+import Input from '../components/common/Input';
+import Button from '../components/common/Button';
+import MessageBox from '../components/common/MessageBox';
+import authService from '../services/auth';
+import { updateUser } from '../store/slices/authSlice';
+import { mapErrorMessage } from '../services/errorMapper';
+import '../styles/pages/MyPageModal.css';
 
 const EditIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -35,7 +27,7 @@ const ChevronUpIcon = () => (
   </svg>
 );
 
-const MyPageModal = ({ isOpen, onClose }) => {
+const MyPageModal = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
@@ -64,8 +56,6 @@ const MyPageModal = ({ isOpen, onClose }) => {
       setNewNickname(user.nickname);
     }
   }, [user]);
-
-  if (!isOpen) return null;
 
   const handleUpdateNickname = async () => {
     if (!newNickname || newNickname === user?.nickname) {
@@ -140,13 +130,10 @@ const MyPageModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="mypage-modal-overlay" onClick={onClose}>
-      <div className="mypage-modal-card" onClick={(e) => e.stopPropagation()}>
+    <div className="mypage-page-container">
+      <div className="mypage-modal-card">
         <div className="mypage-modal-header">
           <h2>마이페이지</h2>
-          <button className="mypage-close-button" onClick={onClose} aria-label="닫기">
-            <CloseIcon />
-          </button>
         </div>
 
         <div className="mypage-modal-body">
@@ -255,11 +242,6 @@ const MyPageModal = ({ isOpen, onClose }) => {
       </MessageBox>
     </div>
   );
-};
-
-MyPageModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default MyPageModal;

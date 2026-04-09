@@ -40,10 +40,6 @@ const router = createBrowserRouter([
     element: <Suspense fallback={<PageLoader />}><Pages.DevMessageBoxPage /></Suspense>,
   },
   {
-    path: '/dev/gnb',
-    element: <Suspense fallback={<PageLoader />}><Pages.DevGnbPage /></Suspense>,
-  },
-  {
     path: '/dev/Input',
     element: <Suspense fallback={<PageLoader />}><Pages.DevInputPage /></Suspense>,
   },
