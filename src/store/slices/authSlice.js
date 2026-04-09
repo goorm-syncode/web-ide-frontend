@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getCurrentUser } from '../../services/userService';
 
 const initialState = {
   user: null,
@@ -7,6 +8,16 @@ const initialState = {
   loading: false,
   error: null,
 };
+
+// 현재 사용자 정보 비동기 조회
+export const fetchMe = createAsyncThunk('auth/fetchMe', async (_, { rejectWithValue }) => {
+  try {
+    const data = await getCurrentUser();
+    return data;
+  } catch (error) {
+    return rejectWithValue(error.message || '사용자 정보를 불러오는데 실패했습니다.');
+  }
+});
 
 const authSlice = createSlice({
   name: 'auth',
@@ -40,6 +51,25 @@ const authSlice = createSlice({
     updateToken: (state, action) => {
       state.accessToken = action.payload.accessToken;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchMe.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMe.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.isAuthenticated = true;
+      })
+      .addCase(fetchMe.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        // 토큰이 유효하지 않은 경우 등으로 실패하면 인증 상태를 유지할지 고민 가능
+        // 만약 401 등으로 실패했다면 api.js의 인터셉터가 처리하겠지만, 
+        // 여기서는 안전하게 user만 null로 유지하거나 상황에 따라 처리
+      });
   },
 });
 

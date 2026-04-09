@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// import MyPageModal from '../MyPageModal'; // 파일 복구 후 주석 해제 필요
 import { useNavigate } from 'react-router-dom';
 import ProgressBanner from '../../components/home/ProgressBanner';
 import ProblemList from '../../components/home/ProblemList';
@@ -8,6 +9,8 @@ import SearchFilter from '../../components/home/SearchFilter';
 import DifficultyFilter from '../../components/home/DifficultyFilter';
 import StatusFilter from '../../components/home/StatusFilter';
 import Pagination from '../../components/common/Pagination';
+import Gnb from '../../components/layout/Gnb';
+
 import authService from '../../services/auth';
 import { getContinueLearning } from '../../services/problem';
 
@@ -142,6 +145,8 @@ const DevHomePage = () => {
     type: 'info',
   });
 
+  // const [isMyPageOpen, setIsMyPageOpen] = useState(false); // 모달 복구 전까지 임시 주석 처리 (빌드 경고 방지)
+
   const [authState, setAuthState] = useState({
     isLoggedIn: true,
     userName: 'Alex Coder',
@@ -231,6 +236,14 @@ const DevHomePage = () => {
 
   return (
     <div className="dev-home-wrapper">
+      <Gnb
+        title="CODING TEST"
+        isLoggedIn={authState.isLoggedIn}
+        userName={authState.userName}
+        onLogoutClick={handleLogout}
+        onLoginClick={handleLogin}
+        onSettingsClick={() => console.log('Settings clicked')} // setIsMyPageOpen(true) 모달 복구 전까지 임시 주석 처리
+      />
       <div className="home-top-spacer" />
       <div className="dev-home-content">
         <div className="home-header">
@@ -294,6 +307,13 @@ const DevHomePage = () => {
       >
         {modalState.message}
       </MessageBox>
+
+      {/* 마이페이지 모달 (파일 복구 후 주석 해제 필요)
+      <MyPageModal 
+        isOpen={isMyPageOpen} 
+        onClose={() => setIsMyPageOpen(false)} 
+      />
+      */}
     </div>
   );
 };

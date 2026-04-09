@@ -419,10 +419,11 @@ const MissionPage = () => {
       <Gnb
         title="LearnCode"
         isLoggedIn={isAuthenticated}
-        userName={user?.userName || '사용자'}
+        userName={user?.nickname || '사용자'}
         showBackButton
         onBackClick={() => navigate('/home')}
         onLogoutClick={() => dispatch(logoutAction())}
+        onSettingsClick={() => console.log('Settings clicked')} // setIsMyPageOpen(true) 모달 복구 전까지 임시 주석 처리
       />
 
       <main className="mission-main-content">
@@ -572,6 +573,13 @@ const MissionPage = () => {
       </main>
 
       <Footer />
+
+      {/* 마이페이지 모달 (파일 복구 후 주석 해제 필요)
+      <MyPageModal 
+        isOpen={isMyPageOpen} 
+        onClose={() => setIsMyPageOpen(false)} 
+      />
+      */}
     </div>
   );
 };

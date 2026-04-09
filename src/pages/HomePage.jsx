@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// import MyPageModal from './MyPageModal'; // 파일 복구 후 주석 해제 필요
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout as logoutAction } from '../store/slices/authSlice';
@@ -28,6 +29,8 @@ const HomePage = () => {
     message: '',
     type: 'info',
   });
+
+  // const [isMyPageOpen, setIsMyPageOpen] = useState(false); // 모달 복구 전까지 임시 주석 처리 (빌드 경고 방지)
 
   // 필터 및 페이지네이션 상태
   const [searchQuery, setSearchQuery] = useState('');
@@ -104,9 +107,10 @@ const HomePage = () => {
       <Gnb
         title="LearnCode"
         isLoggedIn={isAuthenticated}
-        userName={user?.userName || '사용자'}
+        userName={user?.nickname || '사용자'}
         onLogoutClick={handleLogout}
         onLoginClick={handleLogin}
+        onSettingsClick={() => console.log('Settings clicked')} // setIsMyPageOpen(true) 모달 복구 전까지 임시 주석 처리
       />
       <div className="home-top-spacer" />
       <div className="dev-home-content">
@@ -168,6 +172,13 @@ const HomePage = () => {
       >
         {modalState.message}
       </MessageBox>
+
+      {/* 마이페이지 모달 (파일 복구 후 주석 해제 필요)
+      <MyPageModal 
+        isOpen={isMyPageOpen} 
+        onClose={() => setIsMyPageOpen(false)} 
+      />
+      */}
     </div>
   );
 };
