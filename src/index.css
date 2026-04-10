@@ -1,3 +1,5 @@
+@import './styles/responsive.css';
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -107,5 +109,3 @@ code {
   background: var(--code-bg);
 }
 
-/* 공통 반응형 유틸리티 스타일 임포트 */
-@import './styles/responsive.css';
