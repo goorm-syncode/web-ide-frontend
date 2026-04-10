@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import MyPageModal from './MyPageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout as logoutAction } from '../store/slices/authSlice';
@@ -96,6 +97,7 @@ const MissionPage = () => {
   const [currentCode, setCurrentCode] = useState('');
   const [language, setLanguage] = useState('javascript');
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMyPageOpen, setIsMyPageOpen] = useState(false);
 
   // Panel state with localStorage persistence
   const [leftWidth, setLeftWidth] = useState(() => {
@@ -466,7 +468,7 @@ const MissionPage = () => {
         showBackButton
         onBackClick={() => navigate('/home')}
         onLogoutClick={() => dispatch(logoutAction())}
-        onSettingsClick={() => console.log('Settings clicked')} // setIsMyPageOpen(true) 모달 복구 전까지 임시 주석 처리
+        onSettingsClick={() => setIsMyPageOpen(true)}
       />
 
       <main className="mission-main-content">
@@ -645,12 +647,10 @@ const MissionPage = () => {
 
       <Footer />
 
-      {/* 마이페이지 모달 (파일 복구 후 주석 해제 필요)
       <MyPageModal 
         isOpen={isMyPageOpen} 
         onClose={() => setIsMyPageOpen(false)} 
       />
-      */}
     </div>
   );
 };
