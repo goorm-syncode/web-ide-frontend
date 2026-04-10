@@ -1,15 +1,19 @@
 .footer-container {
   width: 100%;
   margin-top: 0;
-  background-color: transparent; /* 흰색 바(Bar) 형태를 투명하게 변경하여 통일성 확보 */
-  color: #8b95a1; /* Muted Text 유지 */
+  background-color: transparent;
+  color: var(--text-muted);
   text-align: center;
-  padding: 24px 0; /* 세로 여백은 유지하여 여유로운 느낌 부여 */
+  padding: 24px 0;
   font-size: 11px;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+}
+
+.dark-theme .footer-container {
+  color: var(--text-muted-on-page);
 }
 
 .footer-text {
@@ -19,3 +23,4 @@
   font-weight: 400;
   text-align: center;
 }
+

@@ -43,11 +43,11 @@ const ProblemCard = ({
   const getDifficultyText = (level) => {
     switch (level) {
       case 'EASY':
-        return '쉬움';
+        return 'Easy';
       case 'MEDIUM':
-        return '보통';
+        return 'Medium';
       case 'HARD':
-        return '어려움';
+        return 'Hard';
       default:
         return level;
     }
@@ -56,7 +56,7 @@ const ProblemCard = ({
   const renderStatus = () => {
     const statusMap = {
       solved: { text: '완료', colorClass: 'solved', showDot: true },
-      in_progress: { text: '진행중', colorClass: 'in_progress', showDot: true },
+      in_progress: { text: '진행 중', colorClass: 'in_progress', showDot: true },
       unattempted: { text: '미해결', colorClass: 'unattempted', showDot: true },
     };
 

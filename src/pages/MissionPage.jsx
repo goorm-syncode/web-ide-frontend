@@ -2,12 +2,14 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import MyPageModal from './MyPageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTheme } from '../hooks/useTheme';
 import { logout as logoutAction } from '../store/slices/authSlice';
 import * as monaco from 'monaco-editor';
 import Gnb from '../components/layout/Gnb';
 import Footer from '../components/layout/Footer';
 import ProblemDescriptionPanel from '../components/mission/ProblemDescriptionPanel';
 import ExecutionResultPanel from '../components/mission/ExecutionResultPanel';
+import MessageBox from '../components/common/MessageBox';
 import {
   getMissionById,
   getDraft,
@@ -120,9 +122,17 @@ const MissionPage = () => {
   const [output, setOutput] = useState('');
   const [errorTabContent, setErrorTabContent] = useState('');
   const [testCaseInput, setTestCaseInput] = useState('');
+  const [messageBox, setMessageBox] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'info',
+    onConfirm: null,
+  });
 
   const monacoContainerRef = useRef(null);
   const editorInstance = useRef(null);
+  const handleSaveRef = useRef(null);
 
   const isDirty = currentCode !== lastSavedCode;
 
@@ -177,8 +187,23 @@ const MissionPage = () => {
     }
   }, [missionId]);
 
-  // Use a ref for handleSave to avoid re-initializing the editor when handleSave changes
-  const handleSaveRef = useRef(null);
+  const { isDark, toggleTheme } = useTheme();
+
+  // Update layout when panels change
+  useEffect(() => {
+    if (editorInstance.current) {
+      editorInstance.current.layout();
+    }
+    localStorage.setItem('mission-panel-left-width', leftWidth);
+    localStorage.setItem('mission-panel-bottom-height', bottomHeight);
+  }, [leftWidth, bottomHeight]);
+
+  // Update editor theme when isDark changes
+  useEffect(() => {
+    if (editorInstance.current) {
+      monaco.editor.setTheme(isDark ? 'vs-dark' : 'vs-light');
+    }
+  }, [isDark]);
 
   // Initialize Monaco Editor
   useEffect(() => {
@@ -186,7 +211,7 @@ const MissionPage = () => {
       editorInstance.current = monaco.editor.create(monacoContainerRef.current, {
         value: lastSavedCode,
         language: language,
-        theme: 'vs-light',
+        theme: isDark ? 'vs-dark' : 'vs-light',
         automaticLayout: true,
         minimap: { enabled: true },
         fontSize: 14,
@@ -218,7 +243,7 @@ const MissionPage = () => {
     return () => {
       // Cleanup if needed
     };
-  }, [isLoaded, language, lastSavedCode]);
+  }, [isLoaded, language, lastSavedCode, isDark]);
 
   // Handle Save
   const handleSave = useCallback(async () => {
@@ -246,34 +271,38 @@ const MissionPage = () => {
   const handleResetCode = useCallback(async () => {
     if (!mission || !language) return;
 
-    const confirmReset = window.confirm(
-      '코드를 초기 상태로 되돌리시겠습니까? 현재 작성 중인 내용은 사라집니다.',
-    );
-    if (!confirmReset) return;
+    setMessageBox({
+      isOpen: true,
+      title: '코드 초기화',
+      message: '코드를 초기 상태로 되돌리시겠습니까? 현재 작성 중인 내용은 사라집니다.',
+      type: 'warning',
+      onConfirm: async () => {
+        setMessageBox((prev) => ({ ...prev, isOpen: false }));
+        try {
+          setIsLoading(true);
 
-    try {
-      setIsLoading(true);
+          // 현재 선택된 언어의 백엔드용 매핑 이름 확인 (예: javascript -> JAVASCRIPT)
+          const backendLang = LANG_MAP[language] || language.toUpperCase();
+          const starterCode =
+            mission.languages.find((l) => l.language === backendLang)?.starterCode || '';
 
-      // 현재 선택된 언어의 백엔드용 매핑 이름 확인 (예: javascript -> JAVASCRIPT)
-      const backendLang = LANG_MAP[language] || language.toUpperCase();
-      const starterCode =
-        mission.languages.find((l) => l.language === backendLang)?.starterCode || '';
+          // 서버의 드래프트 초기화
+          await saveDraft(missionId, backendLang, starterCode);
 
-      // 서버의 드래프트 초기화
-      await saveDraft(missionId, backendLang, starterCode);
+          // 로컬 상태 및 에디터 동기화 (언어 상태는 유지)
+          setLastSavedCode(starterCode);
+          setCurrentCode(starterCode);
 
-      // 로컬 상태 및 에디터 동기화 (언어 상태는 유지)
-      setLastSavedCode(starterCode);
-      setCurrentCode(starterCode);
-
-      if (editorInstance.current) {
-        editorInstance.current.setValue(starterCode);
-      }
-    } catch (err) {
-      console.error('Reset failed:', err);
-    } finally {
-      setIsLoading(false);
-    }
+          if (editorInstance.current) {
+            editorInstance.current.setValue(starterCode);
+          }
+        } catch (err) {
+          console.error('Reset failed:', err);
+        } finally {
+          setIsLoading(false);
+        }
+      },
+    });
   }, [mission, language, missionId]);
 
   // Update layout when panels change
@@ -458,6 +487,10 @@ const MissionPage = () => {
     }
   }, [language, missionId]);
 
+  const closeMessageBox = () => {
+    setMessageBox((prev) => ({ ...prev, isOpen: false }));
+  };
+
   return (
     <div className="mission-page-container">
       <Gnb
@@ -486,7 +519,7 @@ const MissionPage = () => {
               }))}
             />
           ) : (
-            <div className="panel-loading">Loading mission...</div>
+            <div className="panel-loading">미션을 불러오는 중...</div>
           )}
         </div>
 
@@ -651,6 +684,16 @@ const MissionPage = () => {
         isOpen={isMyPageOpen} 
         onClose={() => setIsMyPageOpen(false)} 
       />
+
+      <MessageBox
+        isOpen={messageBox.isOpen}
+        onClose={closeMessageBox}
+        title={messageBox.title}
+        type={messageBox.type}
+        onConfirm={messageBox.onConfirm}
+      >
+        {messageBox.message}
+      </MessageBox>
     </div>
   );
 };

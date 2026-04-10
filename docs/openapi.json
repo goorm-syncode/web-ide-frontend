@@ -3,8 +3,12 @@
   "info": { "title": "SynCode WebIDE API", "description": "Web IDE API", "version": "1.0.0" },
   "servers": [{ "url": "https://d1jum4zzr45u1b.cloudfront.net" }],
   "tags": [
+    { "name": "Chat", "description": "채팅 SSE API" },
     { "name": "Mission Progress", "description": "미션 진행 상태 API" },
+    { "name": "Chat", "description": "채팅 채널 API" },
     { "name": "Submission History", "description": "제출 이력 조회 API" },
+    { "name": "Chat", "description": "채팅 메시지 API" },
+    { "name": "Chat", "description": "채팅 Presence API" },
     { "name": "User", "description": "사용자 API" },
     { "name": "Draft", "description": "코드 드래프트 API" },
     { "name": "Mission", "description": "문제 관련 API" },
@@ -61,6 +65,34 @@
         "requestBody": {
           "content": {
             "application/json": { "schema": { "$ref": "#/components/schemas/SaveDraftRequest" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseVoid" } } }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
+    },
+    "/api/chat/channels/{id}/read": {
+      "put": {
+        "tags": ["Chat"],
+        "summary": "읽음 커서 업데이트",
+        "operationId": "markRead",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/MarkReadRequest" } }
           },
           "required": true
         },
@@ -179,6 +211,108 @@
         "security": [{ "Bearer Authentication": [] }]
       }
     },
+    "/api/chat/channels/{id}/messages": {
+      "get": {
+        "tags": ["Chat"],
+        "summary": "메시지 목록 조회 (cursor 기반)",
+        "operationId": "getMessages",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "beforeId",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseMessagePageResponse" } }
+            }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      },
+      "post": {
+        "tags": ["Chat"],
+        "summary": "메시지 전송",
+        "operationId": "sendMessage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/SendMessageRequest" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseChatMessageResponse" } }
+            }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
+    },
+    "/api/chat/channels/{id}/join": {
+      "post": {
+        "tags": ["Chat"],
+        "summary": "채널 참여 (idempotent)",
+        "operationId": "joinChannel",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseVoid" } } }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
+    },
+    "/api/chat/channels/{id}/heartbeat": {
+      "post": {
+        "tags": ["Chat"],
+        "summary": "하트비트 (온라인 상태 갱신)",
+        "operationId": "heartbeat",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseVoid" } } }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
+    },
     "/api/auth/signup": {
       "post": {
         "tags": ["Auth"],
@@ -225,12 +359,34 @@
       "post": {
         "tags": ["Auth"],
         "summary": "비밀번호 재설정 요청",
-        "description": "미구현 - 이메일 발송 로직 추후 추가 예정",
-        "operationId": "passwordReset",
+        "description": "입력한 이메일로 재설정 링크를 발송합니다. 이메일 존재 여부와 무관하게 동일한 응답을 반환합니다.",
+        "operationId": "requestPasswordReset",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": { "$ref": "#/components/schemas/PasswordResetRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseVoid" } } }
+          }
+        }
+      }
+    },
+    "/api/auth/password-reset/confirm": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "비밀번호 재설정 확인",
+        "description": "재설정 토큰과 새 비밀번호를 검증하여 비밀번호를 변경합니다.",
+        "operationId": "confirmPasswordReset",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PasswordResetConfirmRequest" }
             }
           },
           "required": true
@@ -521,6 +677,72 @@
         "operationId": "health",
         "responses": { "200": { "description": "OK" } }
       }
+    },
+    "/api/chat/channels": {
+      "get": {
+        "tags": ["Chat"],
+        "summary": "참여 중인 채널 목록 조회",
+        "operationId": "getMyChannels",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ApiResponseListChatChannelResponse" }
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
+    },
+    "/api/chat/channels/{id}/subscribe": {
+      "get": {
+        "tags": ["Chat"],
+        "summary": "채널 SSE 구독",
+        "operationId": "subscribe",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/event-stream": { "schema": { "$ref": "#/components/schemas/SseEmitter" } }
+            }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
+    },
+    "/api/chat/channels/{id}/online-count": {
+      "get": {
+        "tags": ["Chat"],
+        "summary": "채널 온라인 인원 수 조회",
+        "operationId": "getOnlineCount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseOnlineCountResponse" } }
+            }
+          }
+        },
+        "security": [{ "Bearer Authentication": [] }]
+      }
     }
   },
   "components": {
@@ -546,6 +768,11 @@
           "message": { "type": "string" },
           "data": {}
         }
+      },
+      "MarkReadRequest": {
+        "type": "object",
+        "properties": { "lastReadMessageId": { "type": "integer", "format": "int64" } },
+        "required": ["lastReadMessageId"]
       },
       "SubmissionRequest": {
         "type": "object",
@@ -691,6 +918,31 @@
           "status": { "type": "string", "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"] }
         }
       },
+      "SendMessageRequest": {
+        "type": "object",
+        "properties": { "content": { "type": "string", "maxLength": 2000, "minLength": 0 } },
+        "required": ["content"]
+      },
+      "ApiResponseChatMessageResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "status": { "type": "integer", "format": "int32" },
+          "message": { "type": "string" },
+          "data": { "$ref": "#/components/schemas/ChatMessageResponse" }
+        }
+      },
+      "ChatMessageResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "channelId": { "type": "integer", "format": "int64" },
+          "senderId": { "type": "integer", "format": "int64" },
+          "senderNickname": { "type": "string" },
+          "content": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
       "SignupRequest": {
         "type": "object",
         "description": "회원가입 요청",
@@ -788,6 +1040,27 @@
           }
         },
         "required": ["email"]
+      },
+      "PasswordResetConfirmRequest": {
+        "type": "object",
+        "description": "비밀번호 재설정 확인 요청",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "비밀번호 재설정 토큰",
+            "example": "aB3xYz...",
+            "minLength": 1
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "새 비밀번호 (8~72자)",
+            "example": "NewPass1!",
+            "maxLength": 72,
+            "minLength": 8,
+            "pattern": "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^a-zA-Z0-9]).{8,}$"
+          }
+        },
+        "required": ["newPassword", "token"]
       },
       "LoginRequest": {
         "type": "object",
@@ -1079,6 +1352,62 @@
           "category": { "type": "string" },
           "displayOrder": { "type": "integer", "format": "int32" },
           "status": { "type": "string", "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"] }
+        }
+      },
+      "ApiResponseListChatChannelResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "status": { "type": "integer", "format": "int32" },
+          "message": { "type": "string" },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ChatChannelResponse" }
+          }
+        }
+      },
+      "ChatChannelResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["GROUP", "DIRECT"] }
+        }
+      },
+      "SseEmitter": {
+        "type": "object",
+        "properties": { "timeout": { "type": "integer", "format": "int64" } }
+      },
+      "ApiResponseOnlineCountResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "status": { "type": "integer", "format": "int32" },
+          "message": { "type": "string" },
+          "data": { "$ref": "#/components/schemas/OnlineCountResponse" }
+        }
+      },
+      "OnlineCountResponse": {
+        "type": "object",
+        "properties": { "onlineCount": { "type": "integer", "format": "int64" } }
+      },
+      "ApiResponseMessagePageResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "status": { "type": "integer", "format": "int32" },
+          "message": { "type": "string" },
+          "data": { "$ref": "#/components/schemas/MessagePageResponse" }
+        }
+      },
+      "MessagePageResponse": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ChatMessageResponse" }
+          },
+          "hasMore": { "type": "boolean" }
         }
       }
     },

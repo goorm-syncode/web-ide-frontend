@@ -1,17 +1,33 @@
 /* ProblemCard.css */
 
 .problem-card-container {
-  width: 100%;   
-  height: 100%; 
+  width: 100%;
+  height: 100%;
   max-width: 420px;
   margin: 0 auto;
-  min-height: 240px; /* 카드 최소 높이 고정 - 태그 줄멀임에 의한 높이 차이 방지 */
+  min-height: 240px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth spring-like transition */
+  cursor: pointer;
 }
 
-/* Card.css의 기본 padding을 오버라이드하여 내부 여백 통일 */
+.problem-card-container:hover {
+  transform: translateY(-6px);
+  border-color: #6d28d9; /* Deep Purple (Violet 700) */
+  box-shadow: 0 12px 24px -8px rgba(109, 40, 217, 0.2); /* Soft Violet Glow Shadow */
+}
+
+/* Ensure the underlying Common Card also transitions smoothly */
+.problem-card-container .card-content {
+  transition: border-color 0.3s ease;
+}
+
+.problem-card-container:hover .card-content {
+  border-color: #6d28d9;
+}
+
 .problem-card-container .card-content {
   padding: 24px;
   flex: 1;
@@ -40,7 +56,7 @@
 
 .problem-category {
   font-size: 12px;
-  color: #8b95a1;
+  color: var(--text-muted);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -53,34 +69,45 @@
   font-weight: 600;
 }
 
-.problem-status.solved { color: #34c759; }
-.problem-status.in_progress { color: #e7c85c; }
-.problem-status.unattempted { color: #8b95a1; }
+.problem-status.solved {
+  color: var(--stat-completed);
+}
+.problem-status.in_progress {
+  color: var(--stat-inprogress);
+}
+.problem-status.unattempted {
+  color: var(--text-muted);
+}
 
 .status-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
 }
-.status-dot.solved { background-color: #34c759; }
-.status-dot.in_progress { background-color: #e7c85c; }
-.status-dot.unattempted { background-color: #8b95a1; }
+.status-dot.solved {
+  background-color: var(--stat-completed);
+}
+.status-dot.in_progress {
+  background-color: var(--stat-inprogress);
+}
+.status-dot.unattempted {
+  background-color: var(--text-muted);
+}
 
-/* [핵심] 제목과 설명 영역의 높이를 고정하여 카드 높이 통일 */
 .problem-body {
-  margin-bottom: 12px; /* 24px -> 12px로 축소 */
+  margin-bottom: 12px;
   text-align: left;
-  min-height: 64px; /* 84px -> 64px로 조정하여 빈 공간 감소 */
+  min-height: 64px;
   display: flex;
   flex-direction: column;
 }
 
 h3.problem-title {
   margin: 0 0 4px 0;
-  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-family: var(--sans);
   font-size: 16px;
   font-weight: 800;
-  color: #22262b;
+  color: var(--text-primary);
   line-height: 1.25;
   letter-spacing: -0.03em;
   display: -webkit-box;
@@ -93,7 +120,7 @@ h3.problem-title {
 .problem-description {
   margin: 0;
   font-size: 14px;
-  color: #4b5563;
+  color: var(--text-secondary);
   line-height: 1.45;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -103,7 +130,6 @@ h3.problem-title {
   text-overflow: ellipsis;
 }
 
-/* 하단 영역을 하단에 고정하여 모든 카드의 하단 패딩을 통일 */
 .problem-footer-section {
   margin-top: auto;
   display: flex;
@@ -111,15 +137,14 @@ h3.problem-title {
   gap: 12px;
 }
 
-/* [핵심] 태그 영역을 1줄로 고정하여 태그 개수 차이에 의한 높이 변동 방지 */
 .problem-tags {
   display: flex;
-  flex-wrap: nowrap; /* 줄바꿈 금지로 태그 항상 1줄 유지 */
+  flex-wrap: nowrap;
   align-items: center;
   gap: 8px;
   min-height: 32px;
-  max-height: 32px; /* 딱 1줄 높이로 고정 */
-  overflow: hidden; /* 넘치는 태그는 숨김 처리 */
+  max-height: 32px;
+  overflow: hidden;
 }
 
 .problem-footer-button {
@@ -131,14 +156,36 @@ h3.problem-title {
   height: 38px;
   border: none;
   font-size: 14px;
+  transition: all 0.2s ease;
 }
 
+/* Code Review Button - Soft Action Style */
 .problem-card-container .problem-footer-button .btn.problem-btn-light {
-  background-color: #f3f4f6;
-  color: #6366f1;
+  background-color: var(--hover-brand);
+  color: var(--primary); /* Standard Primary Indigo */
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  font-weight: 700; /* Increased weight for visibility */
 }
 
+/* Dark Mode Text Contrast Fix */
+.dark-theme .problem-card-container .problem-footer-button .btn.problem-btn-light {
+  color: #c7d2fe; /* Indigo 200 - Much brighter and readable in Dark Mode */
+}
+
+.problem-card-container .problem-footer-button .btn.problem-btn-light:hover {
+  background-color: var(--hover-brand);
+  border-color: var(--primary);
+}
+
+/* Solve Problem Button - Bold Action Style */
 .problem-card-container .problem-footer-button .btn.problem-btn-soft {
-  background-color: #e0e7ff;
-  color: #4338ca;
+  background-color: var(--primary);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
+}
+
+.problem-card-container .problem-footer-button .btn.problem-btn-soft:hover {
+  background-color: var(--primary-hover);
+  transform: none; /* Removed the jump */
 }

@@ -7,6 +7,7 @@ import MessageBox from '../components/common/MessageBox';
 import Footer from '../components/layout/Footer';
 import authService from '../services/auth';
 import { mapErrorMessage } from '../services/errorMapper';
+import learncodeIcon from '../assets/learncode-icon.png';
 
 const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
@@ -164,13 +165,10 @@ const ResetPasswordPage = () => {
     loading || !password || !passwordConfirm || !!errors.password || !!errors.passwordConfirm;
 
   return (
-    <div
-      className="reset-password-page-container"
-      style={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}
-    >
-      <AuthLayout>
+    <AuthLayout>
         <div className="auth-header">
-          <h1 className="auth-page-title">{isResetMode ? '새 비밀번호 설정' : '비밀번호 찾기'}</h1>
+          <img src={learncodeIcon} alt="Learn Code" className="auth-logo-icon" />
+          <h1 className="auth-page-title"><em>Learn Code</em> {isResetMode ? '비밀번호 변경' : '비밀번호 찾기'}</h1>
           <p className="auth-page-subtitle">
             {isResetMode
               ? '안전한 사용을 위해 새로운 비밀번호를 설정해주세요.'
@@ -251,8 +249,6 @@ const ResetPasswordPage = () => {
           {messageBox.message}
         </MessageBox>
       </AuthLayout>
-      <Footer />
-    </div>
   );
 };
 

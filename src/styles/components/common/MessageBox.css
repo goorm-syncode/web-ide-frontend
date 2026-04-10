@@ -1,28 +1,28 @@
-/* src/styles/components/MessageBox.css */
-
 .message-box-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(34, 38, 43, 0.4); /* Text Primary 40% */
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(2px);
 }
 
 .message-box-container {
-  background-color: #FFFFFF; /* Card background */
-  border-radius: 8px; /* rules */
-  padding: 24px; /* Expanded padding based on UI spacing rule */
+  background-color: var(--bg-card);
+  border-radius: 8px;
+  padding: 24px;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  gap: 16px; /* Increased text spacing */
+  gap: 16px;
+  transition: background-color 0.3s ease;
 }
 
 .message-box-header {
@@ -43,7 +43,7 @@
 .message-box-title {
   font-size: 16px;
   font-weight: 600;
-  color: #22262B; /* Primary Text */
+  color: var(--text-primary);
   margin: 0;
   line-height: 1.5;
   text-align: left;
@@ -51,11 +51,10 @@
 
 .message-box-body {
   font-size: 14px;
-  color: #4B5563; /* Secondary Text */
+  color: var(--text-secondary);
   line-height: 1.5;
   margin: 0;
   text-align: left;
-  /* 만약 icon이 있으면 약간 들여쓰기하여 정렬을 맞춥니다. React에서 동적 클래스로 제어 */
 }
 
 .message-box-body.with-icon-padding {
@@ -66,22 +65,23 @@
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  margin-top: 16px; /* Added more margin to push buttons away from text */
+  margin-top: 16px;
 }
 
-/* 에이전트 지침 문서 (UI_RULES.md) Status 컬러 적용 */
+/* Status 컬러 적용 */
 .message-box-success .message-box-icon {
-  color: #34C759;
+  color: var(--success);
 }
 
 .message-box-warning .message-box-icon {
-  color: #E7C85C;
+  color: var(--warning);
 }
 
 .message-box-error .message-box-icon {
-  color: #EF4444;
+  color: var(--error);
 }
 
 .message-box-info .message-box-icon {
-  color: #6366F1; /* Primary 컬러를 Info에 매핑 */
+  color: var(--info);
 }
+

@@ -1,12 +1,13 @@
-/* src/styles/AuthLayout.css */
-
 .auth-layout-container {
   flex: 1;
   width: 100%;
+  padding-top: 65px; /* Offset for GNB if present, or just top padding */
   display: flex;
   flex-direction: column;
-  background-color: #f5f5f5;
+  background-color: var(--bg-page);
   box-sizing: border-box;
+  transition: background-color 0.3s ease;
+  min-height: 100vh;
 }
 
 .auth-layout-card-wrapper {
@@ -15,32 +16,92 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   margin: 0 auto;
   padding: 16px;
   box-sizing: border-box;
 }
 
+.auth-theme-toggle {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  background: none;
+  border: 1px solid var(--border-default);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  background-color: var(--bg-input);
+  z-index: 100;
+}
+
+.auth-theme-toggle:hover {
+  background-color: var(--border-soft);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
 
 .auth-header {
   margin-bottom: 24px;
   text-align: center;
 }
 
+.auth-logo-icon {
+  width: 80px;
+  height: auto;
+  margin-bottom: 24px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.2));
+}
+
+/* For dark mode, if the logo text is dark, we might need adjustments */
+.dark-theme .auth-logo-icon {
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.2));
+}
+
 .auth-page-title {
-  font-family: 'Pretendard', sans-serif;
+  font-family: var(--sans);
+  font-size: 32px; /* Increased size */
+  font-weight: 800; /* Extra bold */
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+  letter-spacing: -0.04em;
+  transition: all 0.3s ease;
+}
+
+/* Specific styling for brand names if present */
+.auth-page-title em {
+  font-style: normal;
+  color: var(--primary);
+}
+
+.auth-mypage-title {
+  font-family: var(--sans);
   font-size: 28px;
-  font-weight: 700;
-  color: #22262b;
-  margin: 0 0 8px 0;
+  font-weight: 800;
+  color: var(--primary); /* Use brand color for modal titles */
+  text-align: center;
+  margin: 0;
+  letter-spacing: -0.03em;
+  transition: color 0.3s ease;
 }
 
 .auth-page-subtitle {
-  font-family: 'Pretendard', sans-serif;
+  font-family: var(--sans);
   font-size: 14px;
-  color: #8b95a1;
+  color: var(--text-muted);
   margin: 0;
+  transition: color 0.3s ease;
 }
+
 
 .auth-form {
   display: flex;
@@ -65,51 +126,61 @@
 }
 
 .auth-link-text {
-  font-family: 'Pretendard', sans-serif;
+  font-family: var(--sans);
   font-size: 14px;
-  color: #4b5563;
+  color: var(--text-secondary);
   text-decoration: none;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .auth-link-text:hover {
   text-decoration: underline;
-  color: #6366f1;
+  color: var(--primary);
 }
 
-/* Pastel Purple Button Override */
+/* Auth Specific Primary Button Override (Aligned with UI_RULES.md) */
 .auth-btn-purple {
-  background-color: #bca0ff !important;
-  color: white !important;
-  border-radius: 8px; /* 통일감 */
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+  border-radius: 8px;
   border: none;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(188, 160, 255, 0.4);
+  box-shadow: var(--shadow);
 }
 
 .auth-btn-purple:hover:not(:disabled) {
-  background-color: #a88bec !important;
-  box-shadow: 0 6px 15px rgba(188, 160, 255, 0.6);
+  background-color: var(--primary-hover) !important;
   transform: translateY(-2px);
 }
 
 .auth-btn-purple:disabled {
-  background-color: #d1c4f5 !important;
+  opacity: 0.5 !important;
   box-shadow: none;
 }
 
 /* Muted link */
 .auth-link-muted {
-  color: #9ca3af;
+  color: var(--text-muted);
 }
 
 .auth-link-muted:hover {
-  color: #bca0ff !important;
-  text-decoration: none !important;
+  color: var(--primary) !important;
+  text-decoration: underline !important;
+}
+
+.dark-theme .mypage-modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Enhancing input borders for dynamic feel */
 .auth-form input:focus {
-  border-color: #bca0ff !important;
-  box-shadow: 0 0 0 3px rgba(188, 160, 255, 0.2) !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
 }
+
+.auth-card {
+  padding: 40px 32px;
+  box-shadow: var(--shadow);
+}
+
