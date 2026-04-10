@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
@@ -219,6 +220,11 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
       </MessageBox>
     </div>
   );
+};
+
+MyPageModal.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
 export default MyPageModal;
