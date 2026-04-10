@@ -1,73 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../common/Button';
 import '../../styles/components/mission/ExecutionResultPanel.css';
 
-const RunIcon = () => (
-  <svg
-    className="btn-icon"
-    width="12"
-    height="12"
-    viewBox="0 0 12 12"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M2.5 1.5L10 6L2.5 10.5V1.5Z" fill="currentColor" />
-  </svg>
-);
 
-const TestIcon = () => (
+
+const CopyIcon = () => (
   <svg
-    className="btn-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
     width="14"
     height="14"
-    viewBox="0 0 14 14"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
   >
-    <path
-      d="M2 3.5H9M2 7H7M2 10.5H5"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
-    <path
-      d="M9.5 8L11 9.5L13.5 7"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
   </svg>
 );
 
+
+
+const RenderFormattedCode = ({ text }) => {
+  const lines = text.split('\n');
+  const formattedContent = lines.map((line, lineIdx) => {
+    const chars = line.split('').map((char, charIdx) => {
+      if (char === ' ') {
+        return (
+          <span key={`s-${lineIdx}-${charIdx}`} className="space-indicator">
+            ·
+          </span>
+        );
+      }
+      if (char === '\t') {
+        return (
+          <span key={`t-${lineIdx}-${charIdx}`} className="tab-indicator">
+            ⇥
+          </span>
+        );
+      }
+      return char;
+    });
+
+    return (
+      <span key={lineIdx} className="code-line">
+        {chars}
+        {lineIdx < lines.length - 1 && <span className="newline-indicator">↵</span>}
+      </span>
+    );
+  });
+
+  return <div className="formatted-code-container">{formattedContent}</div>;
+};
+
+RenderFormattedCode.propTypes = {
+  text: PropTypes.string.isRequired,
+};
+
 const TABS = [
-  { key: 'output', label: 'Output' },
-  { key: 'testcase', label: 'Testcase' },
-  { key: 'error', label: 'Error' },
+  { key: 'output', label: '출력' },
+  { key: 'testcase', label: '입력' },
 ];
 
-/**
- * 실행 결과 패널 컴포넌트
- * @param {Object} props
- * @param {string} [props.output] - Output 탭 출력 내용
- * @param {string} [props.testcase] - Testcase 탭 내용
- * @param {string} [props.error] - Error 탭 내용
- * @param {boolean} [props.isLoading=false] - 버튼 로딩/비활성화 상태
- * @param {Function} [props.onRun] - Run 버튼 클릭 핸들러
- * @param {Function} [props.onTest] - Test 버튼 클릭 핸들러
- * @param {Function} [props.onSubmit] - Submit 버튼 클릭 핸들러
- */
 const ExecutionResultPanel = ({
   output = '',
   testcase = '',
   error = '',
-  isLoading = false,
-  onRun,
-  onTest,
-  onSubmit,
+  onTestcaseChange,
 }) => {
   const [activeTab, setActiveTab] = useState('output');
+  const [copyStatus, setCopyStatus] = useState(false);
+  const scrollRef = useRef(null);
 
   const contentMap = {
     output,
@@ -78,12 +80,54 @@ const ExecutionResultPanel = ({
   const currentContent = contentMap[activeTab];
   const isEmpty = !currentContent;
 
+  // 자동 스크롤 로직: 컨텐츠가 변경 되거나 탭이 전환될 때 최하단으로 이동
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [currentContent, activeTab]);
+
+  const handleCopy = () => {
+    if (isEmpty) return;
+
+    const copyToClipboard = (str) => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(str);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = str;
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          return Promise.resolve();
+        } catch (e) {
+          document.body.removeChild(textarea);
+          return Promise.reject(e);
+        }
+      }
+    };
+
+    copyToClipboard(currentContent)
+      .then(() => {
+        setCopyStatus(true);
+        setTimeout(() => setCopyStatus(false), 2000);
+      })
+      .catch((err) => {
+        console.error('Copy failed:', err);
+      });
+  };
+
   return (
     <div className="execution-panel">
       <div className="panel-header">
         <div className="panel-tabs">
           {TABS.map((tab) => (
             <button
+              type="button"
               key={tab.key}
               className={`panel-tab ${activeTab === tab.key ? 'panel-tab--active' : ''}`}
               onClick={() => setActiveTab(tab.key)}
@@ -92,45 +136,38 @@ const ExecutionResultPanel = ({
             </button>
           ))}
         </div>
-
-        <div className="panel-actions">
-          <Button
-            type="secondary"
-            disabled={isLoading}
-            onClick={onRun}
-            id="btn-run"
-          >
-            <RunIcon />
-            Run
-          </Button>
-          <Button
-            type="secondary"
-            disabled={isLoading}
-            onClick={onTest}
-            id="btn-test"
-          >
-            <TestIcon />
-            Test
-          </Button>
-          <Button
-            primary
-            loading={isLoading}
-            onClick={onSubmit}
-            id="btn-submit"
-          >
-            Submit
-          </Button>
-        </div>
       </div>
 
-      <div className="panel-content">
-        {isEmpty ? (
-          <p className="panel-placeholder">
-            Ready to execute. Click &apos;Run&apos; to see results here.
-          </p>
-        ) : (
-          <pre className="panel-output">{currentContent}</pre>
+      <div className="panel-body-container">
+        {!isEmpty && activeTab !== 'testcase' && (
+          <button
+            type="button"
+            className={`copy-button ${copyStatus ? 'copied' : ''}`}
+            onClick={handleCopy}
+            title="Copy results"
+          >
+            {copyStatus ? 'Copied!' : <CopyIcon />}
+          </button>
         )}
+        <div ref={scrollRef} className={`panel-content ${isEmpty ? 'panel-content--empty' : ''}`}>
+          {isEmpty && activeTab !== 'testcase' ? (
+            <p className="panel-placeholder">&apos;테스트&apos; 버튼을 눌러 결과를 확인하세요.</p>
+          ) : activeTab === 'testcase' ? (
+            <textarea
+              className="testcase-textarea"
+              value={testcase}
+              onChange={(e) => onTestcaseChange?.(e.target.value)}
+              placeholder="Enter test input here..."
+              spellCheck="false"
+            />
+          ) : (
+            <div className="result-container">
+              <pre className="panel-output">
+                <RenderFormattedCode text={currentContent} />
+              </pre>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -140,10 +177,7 @@ ExecutionResultPanel.propTypes = {
   output: PropTypes.string,
   testcase: PropTypes.string,
   error: PropTypes.string,
-  isLoading: PropTypes.bool,
-  onRun: PropTypes.func,
-  onTest: PropTypes.func,
-  onSubmit: PropTypes.func,
+  onTestcaseChange: PropTypes.func.isRequired,
 };
 
 export default ExecutionResultPanel;

@@ -119,7 +119,7 @@ const ResetPasswordPage = () => {
     e.preventDefault();
     const pwdError = validatePassword(password);
     const pwdConfirmError = validatePasswordConfirm(password, passwordConfirm);
-    
+
     if (pwdError || pwdConfirmError) {
       setErrors((prev) => ({ ...prev, password: pwdError, passwordConfirm: pwdConfirmError }));
       return;
@@ -139,7 +139,10 @@ const ResetPasswordPage = () => {
         },
       });
     } catch (err) {
-      const message = mapErrorMessage(err, '비밀번호 변경 중 문제가 발생했습니다. 링크가 만료되었을 수 있습니다.');
+      const message = mapErrorMessage(
+        err,
+        '비밀번호 변경 중 문제가 발생했습니다. 링크가 만료되었을 수 있습니다.',
+      );
       setMessageBox({
         isOpen: true,
         type: 'error',
@@ -157,7 +160,8 @@ const ResetPasswordPage = () => {
   };
 
   const isRequestDisabled = loading || !email || !!errors.email;
-  const isResetDisabled = loading || !password || !passwordConfirm || !!errors.password || !!errors.passwordConfirm;
+  const isResetDisabled =
+    loading || !password || !passwordConfirm || !!errors.password || !!errors.passwordConfirm;
 
   return (
     <div
@@ -188,8 +192,14 @@ const ResetPasswordPage = () => {
               required
             />
             <div className="auth-submit-btn-wrapper">
-              <Button primary fullWidth type="submit" className="auth-btn-purple" loading={loading} disabled={isRequestDisabled}>
-                요청 보내기
+              <Button
+                primary
+                fullWidth
+                type="submit"
+                loading={loading}
+                disabled={isRequestDisabled}
+              >
+                재설정 링크 요청
               </Button>
             </div>
           </form>

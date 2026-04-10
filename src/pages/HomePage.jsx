@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import MyPageModal from './MyPageModal';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout as logoutAction } from '../store/slices/authSlice';
@@ -29,10 +30,12 @@ const HomePage = () => {
     type: 'info',
   });
 
+  const [isMyPageOpen, setIsMyPageOpen] = useState(false);
+
   // 필터 및 페이지네이션 상태
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('ALL');
+  const [selectedStatus, setSelectedStatus] = useState('ALL');
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
 
@@ -104,9 +107,10 @@ const HomePage = () => {
       <Gnb
         title="LearnCode"
         isLoggedIn={isAuthenticated}
-        userName={user?.userName || '사용자'}
+        userName={user?.nickname || '사용자'}
         onLogoutClick={handleLogout}
         onLoginClick={handleLogin}
+        onSettingsClick={() => setIsMyPageOpen(true)}
       />
       <div className="home-top-spacer" />
       <div className="dev-home-content">
@@ -168,6 +172,11 @@ const HomePage = () => {
       >
         {modalState.message}
       </MessageBox>
+
+      <MyPageModal 
+        isOpen={isMyPageOpen} 
+        onClose={() => setIsMyPageOpen(false)} 
+      />
     </div>
   );
 };

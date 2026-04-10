@@ -52,7 +52,19 @@ RenderFormattedCode.propTypes = {
   isInline: PropTypes.bool,
 };
 
-const ProblemDescriptionPanel = ({ title, difficulty, markdownContent, examples = [] }) => {
+const STATUS_MAP = {
+  NOT_STARTED: { text: '시작 전', type: 'default' },
+  IN_PROGRESS: { text: '도전 중', type: 'warning' },
+  COMPLETED: { text: '해결 완료', type: 'success' },
+};
+
+const ProblemDescriptionPanel = ({
+  title,
+  difficulty,
+  status,
+  markdownContent,
+  examples = [],
+}) => {
   const [copyStatus, setCopyStatus] = useState({});
 
   const handleCopy = (text, id) => {
@@ -128,11 +140,19 @@ const ProblemDescriptionPanel = ({ title, difficulty, markdownContent, examples 
     return <TagBadge type={type} text={diff} />;
   };
 
+  const renderStatusTag = (st) => {
+    const config = STATUS_MAP[st] || { text: st, type: 'default' };
+    return <TagBadge type={config.type} text={config.text} />;
+  };
+
   return (
     <div className="problem-description-wrapper">
       <div className="panel-header">
         <h1 className="problem-title">{title}</h1>
-        {difficulty && renderDifficultyTag(difficulty)}
+        <div className="header-tags">
+          {difficulty && renderDifficultyTag(difficulty)}
+          {status && renderStatusTag(status)}
+        </div>
       </div>
       <div className="panel-content">
         <ReactMarkdown components={{ code: renderCode, pre: renderPre }}>
@@ -176,6 +196,7 @@ const ProblemDescriptionPanel = ({ title, difficulty, markdownContent, examples 
 ProblemDescriptionPanel.propTypes = {
   title: PropTypes.string.isRequired,
   difficulty: PropTypes.string,
+  status: PropTypes.string,
   markdownContent: PropTypes.string.isRequired,
   examples: PropTypes.arrayOf(
     PropTypes.shape({

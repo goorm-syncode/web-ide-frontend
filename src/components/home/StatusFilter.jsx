@@ -7,18 +7,18 @@ import '../../styles/components/home/StatusFilter.css';
  * value는 백엔드 API 파라미터와 동일하게 정의
  */
 const STATUS_OPTIONS = [
-  { label: '전체', value: 'all', dotClass: 'status-filter__dot--all' },
+  { label: '전체', value: 'ALL', dotClass: 'status-filter__dot--all' },
   {
     label: '미해결',
-    value: 'unattempted',
+    value: 'NOT_STARTED',
     dotClass: 'status-filter__dot--unattempted',
   },
   {
     label: '진행 중',
-    value: 'in_progress',
+    value: 'IN_PROGRESS',
     dotClass: 'status-filter__dot--in-progress',
   },
-  { label: '완료', value: 'solved', dotClass: 'status-filter__dot--solved' },
+  { label: '완료', value: 'COMPLETED', dotClass: 'status-filter__dot--solved' },
 ];
 
 /**
