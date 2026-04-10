@@ -9,6 +9,7 @@ import Footer from '../components/layout/Footer';
 import authService from '../services/auth';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 import { mapErrorMessage } from '../services/errorMapper';
+import learncodeImg from '../assets/learncode-icon.png';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -108,7 +109,13 @@ const LoginPage = () => {
     >
       <AuthLayout>
         <div className="auth-header">
-          <h1 className="auth-page-title">로그인</h1>
+          <img
+            src={learncodeImg}
+            alt="Learn Code Logo"
+            className="auth-logo-icon"
+            style={{ width: '80px', marginBottom: '16px' }}
+          />
+          <h1 className="auth-page-title">Learn Code 로그인</h1>
           <p className="auth-page-subtitle">서비스에 로그인하여 모든 기능을 이용하세요.</p>
         </div>
 
@@ -122,6 +129,7 @@ const LoginPage = () => {
             error={!!errors.email}
             helperText={errors.email}
             disabled={isLoading}
+            autoFocus
           />
           <Input
             type="password"
