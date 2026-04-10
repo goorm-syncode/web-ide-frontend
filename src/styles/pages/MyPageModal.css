@@ -1,26 +1,55 @@
 /* src/styles/pages/MyPageModal.css */
-.mypage-page-container {
-  min-height: 100svh;
-  background-color: #f5f5f5; /* Subtle background matching auth layouts */
+.mypage-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem;
   box-sizing: border-box;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .mypage-modal-card {
+  position: relative;
   background-color: #ffffff;
   width: 100%;
   max-width: 440px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Softer shadow for glassmorphism feel */
-  padding: 32px 24px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px 28px;
   display: flex;
   flex-direction: column;
-  gap: 32px; /* Sufficient visual separation between email, nickname, password */
+  gap: 32px;
   box-sizing: border-box;
-  animation: slideUp 0.3s ease-out;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mypage-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.mypage-modal-close:hover {
+  background-color: #f3f4f6;
+  color: #4b5563;
 }
 
 .mypage-title {
@@ -97,21 +126,42 @@
 }
 
 @keyframes slideUp {
-  from { transform: translateY(10px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slideDown {
-  from { transform: translateY(-10px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 480px) {
-  .mypage-page-container {
+  .mypage-modal-overlay {
     padding: 0;
     align-items: flex-start;
   }
-  
+
   .mypage-modal-card {
     max-width: none;
     min-height: 100svh;
