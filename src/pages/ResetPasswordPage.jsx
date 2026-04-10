@@ -4,7 +4,7 @@ import AuthLayout from '../components/layout/AuthLayout';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import MessageBox from '../components/common/MessageBox';
-import Footer from '../components/layout/Footer';
+
 import authService from '../services/auth';
 import { mapErrorMessage } from '../services/errorMapper';
 import learncodeIcon from '../assets/learncode-icon.png';

@@ -187,7 +187,7 @@ const MissionPage = () => {
     }
   }, [missionId]);
 
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark } = useTheme();
 
   // Update layout when panels change
   useEffect(() => {

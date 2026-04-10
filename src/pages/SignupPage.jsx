@@ -7,7 +7,7 @@ import Button from '../components/common/Button.jsx';
 import MessageBox from '../components/common/MessageBox.jsx';
 import authService from '../services/auth.js';
 import { mapErrorMessage } from '../services/errorMapper.js';
-import Footer from '../components/layout/Footer.jsx';
+
 import learncodeIcon from '../assets/learncode-icon.png';
 
 const SignupPage = () => {
