@@ -33,11 +33,10 @@ const ProgressBanner = ({
   return (
     <div className={`progress-card ${className}`.trim()}>
       <div className="progress-card-info">
-        <h3 className="progress-card-label">나의 학습 진행도</h3>
         <div className="progress-card-detail">
           <div className="progress-card-title-row">
             <span className="progress-card-title">
-              {missionTitle ? `"${missionTitle}" 이어하기` : '진행 중인 미션이 없습니다'}
+              {missionTitle && `"${missionTitle}" 이어하기`}
             </span>
             <span className="progress-card-percent">{progress}%</span>
           </div>
