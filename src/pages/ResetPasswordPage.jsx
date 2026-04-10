@@ -228,7 +228,7 @@ const ResetPasswordPage = () => {
               required
             />
             <div className="auth-submit-btn-wrapper">
-              <Button primary fullWidth type="submit" loading={loading} disabled={isResetDisabled}>
+              <Button primary fullWidth type="submit" className="auth-btn-purple" loading={loading} disabled={isResetDisabled}>
                 비밀번호 변경
               </Button>
             </div>
@@ -236,7 +236,7 @@ const ResetPasswordPage = () => {
         )}
 
         <div className="auth-links">
-          <Link to="/login" className="auth-link-text">
+          <Link to="/login" className="auth-link-text auth-link-muted">
             로그인 페이지로 돌아가기
           </Link>
         </div>
