@@ -172,7 +172,7 @@ const HomePage = () => {
       <div className="home-top-spacer" />
       <div className="home-content">
         <div className="home-header">
-          <h1 className="home-title">문제 목록</h1>
+          <h1 className="home-title">Problem Set</h1>
           <div className="home-progress">
             <ProgressBanner
               progress={Math.round(progress)}
