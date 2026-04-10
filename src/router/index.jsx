@@ -75,6 +75,10 @@ const router = createBrowserRouter([
     path: '/dev/pagination',
     element: <Suspense fallback={<PageLoader />}><Pages.DevPaginationPage /></Suspense>,
   },
+  {
+    path: '/dev/chat-widget',
+    element: <Suspense fallback={<PageLoader />}><Pages.DevChatWidgetPage /></Suspense>,
+  },
 
   /* 메인 서비스 페이지들 */
   {

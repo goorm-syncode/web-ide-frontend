@@ -23,5 +23,6 @@ export const DevProblemCardPage = lazy(() => import('../pages/dev/DevProblemCard
 export const DevProblemListPage = lazy(() => import('../pages/dev/DevProblemListPage'));
 export const DevExecutionResultPage = lazy(() => import('../pages/dev/DevExecutionResultPage'));
 export const DevPaginationPage = lazy(() => import('../pages/dev/DevPaginationPage'));
+export const DevChatWidgetPage = lazy(() => import('../pages/dev/DevChatWidgetPage'));
 export const DevGnbPage = lazy(() => import('../pages/dev/DevGnbPage'));
 export const MyPageModalPage = lazy(() => import('../pages/MyPageModal'));
