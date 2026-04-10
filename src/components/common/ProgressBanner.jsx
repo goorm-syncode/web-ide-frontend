@@ -5,9 +5,22 @@ import '../../styles/components/ProgressBanner.css';
  * @param {Object} props
  * @param {number} [props.progress=0] - 진행률 (0-100)
  * @param {Function} [props.onContinue] - 이어하기 버튼 클릭 핸들러
+ * @param {boolean} [props.loading=false] - 로딩 상태 여부
  * @param {string} [props.className=''] - 추가 클래스명
  */
-const ProgressBanner = ({ progress = 0, onContinue, className = '' }) => {
+const ProgressBanner = ({ progress = 0, onContinue, loading = false, className = '' }) => {
+  if (loading) {
+    return (
+      <div className={`progress-banner loading ${className}`.trim()}>
+        <div className="progress-section">
+          <div className="progress-track skeleton-shimmer"></div>
+          <div className="progress-text-skeleton skeleton-shimmer"></div>
+        </div>
+        <div className="progress-btn-skeleton skeleton-shimmer"></div>
+      </div>
+    );
+  }
+
   return (
     <div className={`progress-banner ${className}`.trim()}>
       <div className="progress-section">

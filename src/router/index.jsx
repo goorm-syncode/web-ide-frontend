@@ -18,6 +18,7 @@ import DevExecutionResultPage from '../pages/dev/DevExecutionResultPage';
 import DevPaginationPage from '../pages/dev/DevPaginationPage';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from './signup';
+import HomePage from '../pages/HomePage';
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <App />,
+    element: <HomePage />,
   },
   {
     path: '/signup',
