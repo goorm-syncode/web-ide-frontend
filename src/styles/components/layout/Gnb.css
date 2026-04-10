@@ -94,8 +94,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
-  border: 1px solid #E5E7EB;
+  background-color: transparent;
+  border: none;
   color: #6B7280;
   cursor: pointer;
   padding: 6px;
@@ -106,7 +106,6 @@
 .gnb-settings-button:hover {
   background-color: #6366F1;
   color: white;
-  border-color: #6366F1;
   transform: rotate(45deg);
 }
 
