@@ -40,24 +40,38 @@ html, body {
 .home-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px; /* 20px -> 24px 상향 */
+  align-items: flex-end; /* center -> flex-end for better alignment with subtitle */
+  margin-bottom: 32px; 
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 24px;
+}
+
+.home-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .home-title {
   font-family: Pretendard, sans-serif;
-  font-size: 28px; /* UI Rules 8: Page Title 28px */
+  font-size: 32px; /* UI Rules 8: Page Title 28px -> 32px for better prominence */
   font-weight: 800;
-  color: #22262B;
+  color: #1E293B;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.home-subtitle {
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  color: #64748B;
   margin: 0;
 }
 
 .home-progress {
   flex: 1;
-  min-width: 220px; /* 더 길어진 바를 위해 최소 너비 확대 */
-  max-width: 440px; /* 이전 336px에서 440px로 다시 확대 */
+  min-width: 320px;
+  max-width: 520px; /* Increased from 440px to fit card content */
 }
 
 /* 필터 행 */

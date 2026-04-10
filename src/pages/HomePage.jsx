@@ -172,10 +172,14 @@ const HomePage = () => {
       <div className="home-top-spacer" />
       <div className="home-content">
         <div className="home-header">
-          <h1 className="home-title">Problem Set</h1>
+          <div className="home-title-section">
+            <h1 className="home-title">Problem Set</h1>
+            <p className="home-subtitle">지능형 코드 분석으로 실력을 향상시키세요</p>
+          </div>
           <div className="home-progress">
             <ProgressBanner
               progress={Math.round(progress)}
+              missionTitle={continueMission?.title}
               onContinue={handleContinue}
               loading={isProgressLoading}
             />

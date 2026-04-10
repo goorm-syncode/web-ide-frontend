@@ -1,47 +1,87 @@
-.progress-banner {
+.progress-card {
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* 목업에 근접한 색상 및 스타일 */
   background-color: #F8FAFC; 
   border: 1px solid #E2E8F0;
-  border-radius: 16px; /* 더 둥근 모서리 */
-  padding: 10px 20px;
-  gap: 24px;
+  border-radius: 16px; 
+  padding: 20px 24px;
+  gap: 32px;
   width: 100%;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05); /* 은은한 쉐도우 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
-.progress-section {
+.progress-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+}
+
+.progress-card-info {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  gap: 12px;
   flex-grow: 1;
 }
 
-.progress-track {
-  flex: 1;
-  min-width: 120px;
-  height: 8px; /* 약간 더 두껍게 */
+.progress-card-label {
+  margin: 0;
+  font-family: Pretendard, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.progress-card-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-card-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.progress-card-title {
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1E293B;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress-card-percent {
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #4F46E5;
+}
+
+.progress-card-track {
+  width: 100%;
+  height: 10px;
   background-color: #E2E8F0;
-  border-radius: 100px;
+  border-radius: 999px;
   overflow: hidden;
 }
 
-.progress-fill {
+.progress-card-fill {
   height: 100%;
-  background-color: #4F46E5; /* 인디고 블루 */
-  border-radius: 100px;
-  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(90deg, #4F46E5 0%, #6366F1 100%);
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.progress-text {
-  font-family: Pretendard, sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: #4F46E5;
-  min-width: 40px;
+.progress-card-btn-box {
+  display: flex;
+  align-items: center;
 }
 
 .progress-continue-btn {
@@ -53,22 +93,30 @@
   font-family: Pretendard, sans-serif;
   font-size: 14px;
   font-weight: 600;
-  padding: 10px 24px;
-  border-radius: 10px;
+  padding: 12px 28px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
-}
-
-.progress-continue-btn:hover {
-  background-color: #4338CA;
-  transform: translateY(-1px);
   box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
 }
 
-.progress-continue-btn:active {
+.progress-continue-btn:hover:not(:disabled) {
+  background-color: #4338CA;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+}
+
+.progress-continue-btn:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.progress-continue-btn:disabled {
+  background-color: #CBD5E1;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
 }
 
 .progress-continue-icon {
@@ -78,25 +126,30 @@
   transition: transform 0.2s ease;
 }
 
-.progress-continue-btn:hover .progress-continue-icon {
-  transform: translateX(2px);
+.progress-continue-btn:hover:not(:disabled) .progress-continue-icon {
+  transform: translateX(3px);
 }
 
+/* Responseive */
 @media (max-width: 768px) {
-  .progress-banner {
-    padding: 12px 16px;
-    gap: 16px;
+  .progress-card {
+    padding: 16px 20px;
+    gap: 20px;
   }
 }
 
 @media (max-width: 600px) {
-  .progress-banner {
+  .progress-card {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
+    gap: 20px;
   }
   
-  .progress-section {
+  .progress-card-btn-box {
+    justify-content: flex-end;
+  }
+  
+  .progress-continue-btn {
     width: 100%;
   }
 }
@@ -111,27 +164,28 @@
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
-.progress-text-skeleton {
-  width: 40px;
+.progress-card-title-skeleton {
+  width: 180px;
   height: 20px;
 }
 
+.progress-card-track-skeleton {
+  width: 100%;
+  height: 10px;
+}
+
 .progress-btn-skeleton {
-  width: 100px;
-  height: 44px;
-  border-radius: 10px;
+  width: 110px;
+  height: 46px;
+  border-radius: 12px;
 }
 
 
