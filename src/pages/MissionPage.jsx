@@ -524,22 +524,31 @@ const MissionPage = () => {
       />
 
       {isMobile && (
-        <div className="mobile-tab-nav">
+        <div className="mobile-tab-nav" role="tablist">
           <button 
             className={`mobile-tab-item ${activeMobileTab === 'description' ? 'active' : ''}`}
             onClick={() => setActiveMobileTab('description')}
+            role="tab"
+            aria-selected={activeMobileTab === 'description'}
+            aria-label="문제 설명 보기"
           >
             문제 설명
           </button>
           <button 
             className={`mobile-tab-item ${activeMobileTab === 'editor' ? 'active' : ''}`}
             onClick={() => setActiveMobileTab('editor')}
+            role="tab"
+            aria-selected={activeMobileTab === 'editor'}
+            aria-label="코드 에디터 보기"
           >
             에디터
           </button>
           <button 
             className={`mobile-tab-item ${activeMobileTab === 'results' ? 'active' : ''}`}
             onClick={() => setActiveMobileTab('results')}
+            role="tab"
+            aria-selected={activeMobileTab === 'results'}
+            aria-label="실행 결과 보기"
           >
             실행 결과
           </button>
@@ -666,6 +675,7 @@ const MissionPage = () => {
                     onClick={handleResetCode}
                     title="코드 초기화"
                     disabled={isLoading}
+                    aria-label="코드 초기화"
                   >
                     <svg
                       width="14"
@@ -691,6 +701,7 @@ const MissionPage = () => {
                   className="toolbar-action-btn run-btn"
                   onClick={handleRun}
                   disabled={isLoading}
+                  aria-label="코드 실행 테스트"
                 >
                   <RunIcon />
                   <span>테스트</span>
@@ -700,6 +711,7 @@ const MissionPage = () => {
                   className="toolbar-action-btn submit-btn"
                   onClick={handleSubmit}
                   disabled={isLoading}
+                  aria-label="최종 코드 제출"
                 >
                   <SubmitIcon />
                   <span>제출</span>
