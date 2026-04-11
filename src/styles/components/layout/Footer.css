@@ -4,18 +4,20 @@
   background-color: transparent;
   color: var(--text-muted);
   text-align: center;
-  padding: 12px 0; /* Reduced from 24px */
-  font-size: 10px; /* Reduced from 11px */
+  padding: 16px 0;
+  /* Reduced from 24px */
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  opacity: 0.8; /* Added transparency */
+  opacity: 0.8;
+  /* Added transparency */
 }
 
 .dark-theme .footer-container {
   color: var(--text-muted);
-  opacity: 0.6; /* Slightly more transparent in dark mode */
+  opacity: 0.6;
+  /* Slightly more transparent in dark mode */
 }
 
 .footer-text {
@@ -23,6 +25,6 @@
   padding: 0;
   letter-spacing: 0.05em;
   font-weight: 400;
+  font-size: 13px;
   text-align: center;
 }
-
