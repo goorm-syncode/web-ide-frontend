@@ -124,7 +124,7 @@ export const subscribeToMessages = (channelId, onMessage, onError) => {
             await handleTokenRefresh();
             // Try again immediately with new token
             return subscribe();
-          } catch (refreshError) {
+          } catch {
             throw new Error('SSE Auth refresh failed');
           }
         }

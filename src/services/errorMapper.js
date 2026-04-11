@@ -28,24 +28,27 @@ const ERROR_MESSAGES = {
 export const mapErrorMessage = (error, fallback = '알 수 없는 오류가 발생했습니다.') => {
   if (!error) return fallback;
 
-  // error가 문자열인 경우
-  if (typeof error === 'string') {
-    return ERROR_MESSAGES[error] || error || fallback;
-  }
-
   // Axios 에러 객체인 경우 (api.js에서 1차 가공됨)
-  const message = error.message || (error.response?.data?.message);
+  const message = error.mappedMessage || error.response?.data?.message || error.message;
+  const status = error.response?.status;
   
-  // 특정 키워드 매핑
-  if (message?.includes('Network Error')) return ERROR_MESSAGES.NETWORK_ERROR;
+  // 1. 특정 에러 코드/메시지 매핑
   if (message === 'INVALID_CREDENTIALS' || message === 'USER_NOT_FOUND' || message === 'INVALID_PASSWORD') {
     return ERROR_MESSAGES.LOGIN_FAILED;
   }
   if (message === 'EMAIL_ALREADY_EXISTS') return ERROR_MESSAGES.EMAIL_ALREADY_EXISTS;
   if (message === 'NICKNAME_ALREADY_EXISTS') return ERROR_MESSAGES.NICKNAME_ALREADY_EXISTS;
   if (message === 'USER_NOT_FOUND_BY_EMAIL') return ERROR_MESSAGES.EMAIL_NOT_FOUND;
+  if (message?.includes('Network Error')) return ERROR_MESSAGES.NETWORK_ERROR;
 
-  return message || fallback;
+  // 2. HTTP 상태 코드별 기본 매핑
+  if (status === 401) return ERROR_MESSAGES.LOGIN_FAILED;
+  if (status === 403) return '접근 권한이 없습니다.';
+  if (status === 404) return '요청하신 리소스를 찾을 수 없습니다.';
+  if (status >= 500) return ERROR_MESSAGES.SERVER_ERROR;
+
+  // 3. 커스텀 메시지가 있으면 그대로 반환 (이미 한국어일 수 있음), 없으면 fallback
+  return (message && message !== 'error' && message !== '[object Object]') ? message : fallback;
 };
 
 export default ERROR_MESSAGES;

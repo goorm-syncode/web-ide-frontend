@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import AuthLayout from '../components/layout/AuthLayout';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
-import MessageBox from '../components/common/MessageBox';
 import Footer from '../components/layout/Footer';
 import authService from '../services/auth';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
@@ -25,6 +24,16 @@ const LoginPage = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState('');
+  const [isShaking, setIsShaking] = useState(false);
+  const passwordInputRef = useRef(null);
+
+  // 에러 발생 시 자동 포커스 및 전체 선택
+  useEffect(() => {
+    if (serverError && passwordInputRef.current) {
+      passwordInputRef.current.focus();
+      passwordInputRef.current.select();
+    }
+  }, [serverError]);
 
   // Validation Functions
   const validateEmail = (value) => {
@@ -48,12 +57,14 @@ const LoginPage = () => {
     const value = e.target.value;
     setEmail(value);
     setErrors((prev) => ({ ...prev, email: validateEmail(value) }));
+    if (serverError) setServerError('');
   };
 
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
     setErrors((prev) => ({ ...prev, password: validatePassword(value) }));
+    if (serverError) setServerError('');
   };
 
   const handleLogin = async (e) => {
@@ -94,6 +105,10 @@ const LoginPage = () => {
       const message = mapErrorMessage(error, '이메일 또는 비밀번호가 올바르지 않습니다.');
       setServerError(message);
       dispatch(loginFailure(message));
+
+      // 프리미엄 UX: 에러 발생 시 폼 흔들기
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500); // 애니메이션 시간 후 초기화
     } finally {
       setIsLoading(false);
     }
@@ -112,7 +127,7 @@ const LoginPage = () => {
         overflow: 'hidden',
       }}
     >
-      <AuthLayout>
+      <AuthLayout shake={isShaking}>
         <div className="auth-header">
           <img src={learncodeImg} alt="Learn Code Logo" className="auth-logo-icon" />
           <h1 className="auth-page-title">
@@ -137,12 +152,20 @@ const LoginPage = () => {
             type="password"
             placeholder="비밀번호를 입력하세요"
             name="password"
+            ref={passwordInputRef}
             value={password}
             onChange={handlePasswordChange}
             error={!!errors.password}
             helperText={errors.password}
             disabled={isLoading}
           />
+
+          {serverError && (
+            <div className="auth-error-message">
+              <span className="auth-error-icon">!</span>
+              {serverError}
+            </div>
+          )}
 
           <div className="auth-submit-btn-wrapper">
             <Button primary fullWidth type="submit" loading={isLoading} disabled={isSubmitDisabled}>
@@ -155,20 +178,12 @@ const LoginPage = () => {
           <Link to="/signup" className="auth-link-text">
             회원가입
           </Link>
-          <Link to="/reset-password" className="auth-link-text">
+          <Link to="/forgot-password" className="auth-link-text">
             비밀번호 찾기
           </Link>
         </div>
 
-        <MessageBox
-          isOpen={!!serverError}
-          onClose={() => setServerError('')}
-          title="로그인 실패"
-          type="error"
-          onConfirm={() => setServerError('')}
-        >
-          {serverError}
-        </MessageBox>
+
       </AuthLayout>
 
       <Footer />

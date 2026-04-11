@@ -30,12 +30,10 @@ const ResetPasswordPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [messageBox, setMessageBox] = useState({
-    isOpen: false,
-    type: 'info',
-    title: '',
-    message: '',
     onConfirm: null,
   });
+
+  const [serverError, setServerError] = useState('');
 
   const validateEmail = (value) => {
     if (!value) return '이메일을 입력해주세요.';
@@ -74,6 +72,7 @@ const ResetPasswordPage = () => {
     const value = e.target.value;
     setEmail(value);
     setErrors((prev) => ({ ...prev, email: validateEmail(value) }));
+    if (serverError) setServerError('');
   };
 
   const handlePasswordChange = (e) => {
@@ -82,8 +81,9 @@ const ResetPasswordPage = () => {
     setErrors((prev) => ({
       ...prev,
       password: validatePassword(value),
-      passwordConfirm: validatePasswordConfirm(value, passwordConfirm), // Re-validate confirm if password changes
+      passwordConfirm: validatePasswordConfirm(value, passwordConfirm),
     }));
+    if (serverError) setServerError('');
   };
 
   const handlePasswordConfirmChange = (e) => {
@@ -93,6 +93,7 @@ const ResetPasswordPage = () => {
       ...prev,
       passwordConfirm: validatePasswordConfirm(password, value),
     }));
+    if (serverError) setServerError('');
   };
 
   const handleRequestSubmit = async (e) => {
@@ -115,13 +116,7 @@ const ResetPasswordPage = () => {
       });
     } catch (err) {
       const message = mapErrorMessage(err, '비밀번호 재설정 요청 중 문제가 발생했습니다.');
-      setMessageBox({
-        isOpen: true,
-        type: 'error',
-        title: '요청 실패',
-        message: message,
-        onConfirm: closeMessageBox,
-      });
+      setServerError(message);
     } finally {
       setLoading(false);
     }
@@ -140,6 +135,7 @@ const ResetPasswordPage = () => {
     setLoading(true);
     try {
       await authService.confirmPasswordReset(token, password);
+      // Success keeps MessageBox
       setMessageBox({
         isOpen: true,
         type: 'success',
@@ -151,17 +147,8 @@ const ResetPasswordPage = () => {
         },
       });
     } catch (err) {
-      const message = mapErrorMessage(
-        err,
-        '비밀번호 변경 중 문제가 발생했습니다. 링크가 만료되었을 수 있습니다.',
-      );
-      setMessageBox({
-        isOpen: true,
-        type: 'error',
-        title: '변경 실패',
-        message: message,
-        onConfirm: closeMessageBox,
-      });
+      const message = mapErrorMessage(err, '비밀번호 변경 중 문제가 발생했습니다. 링크가 만료되었을 수 있습니다.');
+      setServerError(message);
     } finally {
       setLoading(false);
     }
@@ -192,9 +179,14 @@ const ResetPasswordPage = () => {
             <em>Learn Code</em> {isResetMode ? '비밀번호 변경' : '비밀번호 찾기'}
           </h1>
           <p className="auth-page-subtitle">
-            {isResetMode
-              ? '안전한 사용을 위해 새로운 비밀번호를 설정해주세요.'
-              : '가입하신 이메일 주소를 입력하시면 비밀번호 재설정 링크를 보내드립니다.'}
+            {isResetMode ? (
+              '안전한 사용을 위해 새로운 비밀번호를 설정해주세요.'
+            ) : (
+              <>
+                가입하신 이메일 주소를 입력하시면 <br />
+                비밀번호 재설정 링크를 보내드립니다.
+              </>
+            )}
           </p>
         </div>
 
@@ -212,6 +204,12 @@ const ResetPasswordPage = () => {
               required
               autoFocus
             />
+            {serverError && (
+              <div className="auth-error-message">
+                <span className="auth-error-icon">!</span>
+                {serverError}
+              </div>
+            )}
             <div className="auth-submit-btn-wrapper">
               <Button
                 primary
@@ -249,6 +247,12 @@ const ResetPasswordPage = () => {
               disabled={loading}
               required
             />
+            {serverError && (
+              <div className="auth-error-message">
+                <span className="auth-error-icon">!</span>
+                {serverError}
+              </div>
+            )}
             <div className="auth-submit-btn-wrapper">
               <Button
                 primary
@@ -265,7 +269,7 @@ const ResetPasswordPage = () => {
         )}
 
         <div className="auth-links">
-          <Link to="/login" className="auth-link-text auth-link-muted">
+          <Link to="/login" className="auth-link-text">
             로그인 페이지로 돌아가기
           </Link>
         </div>
