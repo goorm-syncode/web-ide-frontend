@@ -22,7 +22,7 @@
   height: 6px;
   background-color: #dbeafe;
   border-radius: 100px;
-  overflow: hidden;
+  position: relative;
 }
 
 .progress-fill {
@@ -37,6 +37,17 @@
   font-size: 14px;
   font-weight: 600;
   color: #4f46e5;
+}
+
+.progress-cat {
+  position: absolute;
+  bottom: 0px; /* 바 위에 살짝 걸치게 배치 */
+  height: 32px; /* 고양이 크기 조정 */
+  width: auto;
+  transform: translate(-50%, -4px); /* 중앙 정렬 및 위로 살짝 이동 */
+  transition: left 0.3s ease; /* 진행도 변화에 맞춰 부드럽게 이동 */
+  z-index: 10;
+  pointer-events: none;
 }
 
 .progress-continue-btn {

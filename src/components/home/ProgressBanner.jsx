@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import '../../styles/components/home/ProgressBanner.css';
+import catGif from '../../assets/cat.gif';
 
 /**
  * 진행률 및 이어하기 배너 컴포넌트
@@ -14,6 +15,12 @@ const ProgressBanner = ({ progress = 0, onContinue, className = '' }) => {
     <div className={`progress-banner ${className}`.trim()}>
       <div className="progress-section">
         <div className="progress-track">
+          <img
+            src={catGif}
+            alt="progress cat"
+            className="progress-cat"
+            style={{ left: `${progress}%` }}
+          />
           <div className="progress-fill" style={{ width: `${progress}%` }}></div>
         </div>
         <span className="progress-text">{progress}%</span>
