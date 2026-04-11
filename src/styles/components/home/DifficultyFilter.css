@@ -1,10 +1,12 @@
 .difficulty-filter {
   display: flex;
   align-items: center;
-  background-color: #f1f4f9;
+  background-color: var(--border-soft);
   border-radius: 8px;
   padding: 4px;
   width: fit-content;
+  height: 38px;
+  box-sizing: border-box;
 }
 
 .difficulty-filter__btn {
@@ -15,7 +17,7 @@
   font-weight: 500;
   border: none;
   background-color: transparent;
-  color: #5e6c84;
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   white-space: nowrap;
@@ -23,8 +25,8 @@
 }
 
 .difficulty-filter__btn:hover:not(.difficulty-filter__btn--active) {
-  background-color: rgba(226, 232, 240, 0.5);
-  color: #172b4d;
+  background-color: var(--border-default);
+  color: var(--text-primary);
 }
 
 .difficulty-filter__btn--active {

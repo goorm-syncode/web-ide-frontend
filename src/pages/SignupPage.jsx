@@ -7,7 +7,8 @@ import Button from '../components/common/Button.jsx';
 import MessageBox from '../components/common/MessageBox.jsx';
 import authService from '../services/auth.js';
 import { mapErrorMessage } from '../services/errorMapper.js';
-import Footer from '../components/layout/Footer.jsx';
+
+import learncodeIcon from '../assets/learncode-icon.png';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -131,13 +132,10 @@ const SignupPage = () => {
   };
 
   return (
-    <div
-      className="signup-page-container"
-      style={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}
-    >
-      <AuthLayout>
+    <AuthLayout>
       <div className="auth-header">
-        <h1 className="auth-page-title">회원가입</h1>
+        <img src={learncodeIcon} alt="Learn Code" className="auth-logo-icon" />
+        <h1 className="auth-page-title"><em>Learn Code</em> 회원가입</h1>
         <p className="auth-page-subtitle">서비스 이용을 위해 정보를 입력해 주세요.</p>
       </div>
 
@@ -215,8 +213,6 @@ const SignupPage = () => {
         {messageBox.message}
       </MessageBox>
     </AuthLayout>
-    <Footer />
-  </div>
   );
 };
 

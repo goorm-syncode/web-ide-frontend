@@ -3,8 +3,8 @@
 .execution-panel {
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -14,9 +14,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px; /* GNB 및 에디터 툴바 패딩(24px)과 정렬 맞춤 */
-  border-bottom: 1px solid #e5e7eb;
-  min-height: 40px; /* 48px -> 40px */
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border-default);
+  min-height: 40px;
   gap: 16px;
 }
 
@@ -31,11 +31,11 @@
 .execution-panel .panel-tab {
   display: inline-flex;
   align-items: center;
-  height: 40px; /* 48px -> 40px */
+  height: 40px;
   padding: 0 16px;
   font-size: 14px;
   font-weight: 500;
-  color: #8b95a1;
+  color: var(--text-muted);
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
@@ -45,12 +45,12 @@
 }
 
 .execution-panel .panel-tab:hover {
-  color: #22262b;
+  color: var(--text-primary);
 }
 
 .execution-panel .panel-tab--active {
-  color: #6366f1;
-  border-bottom-color: #6366f1;
+  color: var(--primary);
+  border-bottom-color: var(--primary);
 }
 
 /* ── Actions ── */
@@ -78,32 +78,32 @@
 /* ── Content ── */
 .execution-panel .panel-content {
   flex: 1;
-  padding: 12px 24px; /* GNB 및 에디터 툴바와 여백 통일 (24px) */
+  padding: 12px 24px;
   overflow: auto;
   min-height: 120px;
-  text-align: left; /* 터미널 스타일: 좌측 정렬 */
-  background-color: #ffffff;
+  text-align: left;
+  background-color: var(--bg-card);
 }
 
 .execution-panel .panel-content--empty {
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center; /* 초기 상태: 중앙 정렬 */
-  background-color: #ffffff;
+  text-align: center;
+  background-color: var(--bg-card);
 }
 
 .panel-placeholder {
-  font-size: 14px; /* 기존 UI 텍스트 크기 일관성 회복 */
-  color: #8b95a1;
+  font-size: 14px;
+  color: var(--text-muted);
   margin: 0;
   line-height: 1.5;
 }
 
 .panel-output {
-  font-size: 14px; /* 13px -> 14px (에디터 코드 크기와 동일하게 조정) */
-  color: #22262b;
-  font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-family: var(--mono);
   white-space: pre-wrap;
   word-break: break-all;
   margin: 0;
@@ -121,8 +121,8 @@
   position: absolute;
   top: 12px;
   right: 16px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
   border-radius: 4px;
   padding: 4px 6px;
   cursor: pointer;
@@ -130,22 +130,21 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  color: #94a3b8;
-  z-index: 100; /* Ensure button stays on top of scrolled content */
+  color: var(--text-muted);
+  z-index: 100;
   font-size: 11px;
   font-weight: 600;
 }
 
 .execution-panel .copy-button:hover {
-  background-color: #f8fafc;
-  border-color: #cbd5e1;
-  color: #475569;
+  background-color: var(--border-soft);
+  color: var(--text-primary);
 }
 
 .execution-panel .copy-button.copied {
-  background-color: #f0fdf4;
-  border-color: #bbf7d0;
-  color: #16a34a;
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: var(--success);
+  color: var(--success);
 }
 
 /* ── Whitespace Indicators ── */
@@ -184,12 +183,12 @@
   height: 100%;
   min-height: 150px;
   padding: 8px;
-  font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+  font-family: var(--mono);
   font-size: 14px;
   line-height: 1.6;
-  color: #22262b;
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
   border-radius: 4px;
   resize: vertical;
   outline: none;
@@ -197,7 +196,6 @@
 }
 
 .testcase-textarea:focus {
-  border-color: #6366f1;
+  border-color: var(--primary);
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
-  background-color: #ffffff;
 }

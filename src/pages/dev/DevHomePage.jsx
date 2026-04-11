@@ -228,7 +228,8 @@ const DevHomePage = () => {
   const handleContinue = () => {
     if (continueMission) {
       // 문제 상세 페이지로 이동 (라우터 설정에 따라 경로 조정 가능)
-      navigate(`/dev/problem-description?id=${continueMission.missionId}`);
+      // 프로덕션 경로인 /missions/:id 로 이동하도록 수정
+      navigate(`/missions/${continueMission.missionId}`);
     } else {
       showModal('안내', '현재 이어서 진행할 문제가 없습니다. 새로운 문제를 시작해보세요!', 'info');
     }

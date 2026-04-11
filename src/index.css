@@ -2,65 +2,92 @@
 @import './styles/responsive.css';
 
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #f5f5f5;
-  /* Page Background from UI_RULES.md */
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* Light Theme (Premium SaaS Palette) */
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  
+  --text-primary: #0f172a;   /* Slate 900 */
+  --text-secondary: #475569; /* Slate 600 */
+  --text-muted: #94A3B8;     /* Slate 400 */
+  
+  --bg-page: #f8fafc;  /* Slate 50 */
+  --bg-card: #ffffff;  /* Strictly white */
+  --bg-input: #ffffff;
+  
+  --border-default: #e2e8f0; /* Slate 200 */
+  --border-soft: #f1f5f9;    /* Slate 100 */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  /* High-Saliency Difficulty Badges (Classic Premium) */
+  --diff-easy: #10b981;   /* Emerald Green (Intuitive) */
+  --diff-medium: #06b6d4; /* Vibrant Cyan */
+  --diff-hard: #be123c;   /* Deep Crimson (Classic Hard) */
+  
+  /* Modern SaaS Status Badges (Soft) */
+  --stat-notstarted: #64748b; /* Slate 500 */
+  --stat-inprogress: #3b82f6; /* Blue 500 */
+  --stat-completed: #6366f1;  /* Primary Indigo (Aligned with Brand) */
+
+  --hover-brand: #eef2ff; /* Indigo 50 (Soft Action) */
+
+  /* Semantic Status Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #f43f5e;
+  --info: #4f46e5;
+
+  /* Typography & Others */
+  --sans: 'Pretendard', system-ui, -apple-system, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  font: 14px/1.5 var(--sans);
+  color: var(--text-primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+/* Dark Mode Overrides */
+body.dark-theme {
+  --primary: #818cf8;       /* Saturated Indigo 400 */
+  --primary-hover: #6366f1; 
+  
+  --text-primary: #f8fafc;  /* Slate 50 */
+  --text-secondary: #e2e8f0; /* Slate 200 */
+  --text-muted: #94a3b8;     /* Slate 400 */
+  
+  --bg-page: #0f172a;  /* Deep Slate 900 */
+  --bg-card: #1e293b;  /* Slate 800 */
+  --bg-input: #0f172a; /* Back to dark for global inputs */ 
+  --bg-gnb: #1e293b;  
+  
+  --border-default: #334155; /* Slate 700 */
+  --border-soft: #1e293b;   /* Slate 800 */
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+  --diff-easy: #10b981;   /* Emerald Green - Classic */
+  --diff-medium: #22d3ee; /* Cyan 400 */
+  --diff-hard: #be123c;   /* Deep Crimson - Classic */
+  
+  --stat-notstarted: #94a3b8; 
+  --stat-inprogress: #60a5fa; 
+  --stat-completed: #818cf8;  /* Primary Indigo (Dark Mode) */
+
+  --hover-brand: #312e81; /* Indigo 900 (Deep Action) */
+
+  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
 }
 
 * {
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
@@ -72,53 +99,45 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  /* 페이지 전체 스크롤 방지 */
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+h1, h2 {
+  font-family: var(--sans);
+  font-weight: 800; /* Extra bold for premium feel */
+  color: inherit;
+  letter-spacing: -0.04em;
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+  font-size: 28px;
+  margin: 24px 0;
 }
 
 h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+  font-size: 20px;
+  margin: 0 0 12px;
 }
 
 p {
   margin: 0;
+  font-size: 14px;
 }
 
-code,
-.counter {
+code, .counter {
   font-family: var(--mono);
   display: inline-flex;
   border-radius: 4px;
-  color: var(--text-h);
 }
 
 code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  font-size: 13px;
+  padding: 2px 6px;
+  background: var(--border-soft);
+  color: var(--primary);
+}
+
+/* Auth Layout Global Title */
+.auth-page-title em {
+    font-style: normal;
+    color: var(--primary);
 }

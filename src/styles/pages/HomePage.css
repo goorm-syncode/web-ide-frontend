@@ -1,13 +1,10 @@
-/* ============================
-   1. 기본 스타일 (Mobile First)
-   ============================ */
-
-/* html, body 전역 스타일은 다른 페이지(MissionPage 등)에 영향을 주므로
-   .dev-home-wrapper 스코프로 격리합니다. */
-
+/* 
+  HomePage.css
+  Standardized Production Styles for Home Page
+*/
 
 /* GNB 포함 전체 창 컨테이너 */
-.dev-home-wrapper {
+.home-wrapper {
   width: 100%;
   min-height: 100vh;
   background-color: var(--bg-page);
@@ -23,7 +20,7 @@
 }
 
 /* GNB 아래 본문 영역 */
-.dev-home-content {
+.home-content {
   max-width: 1660px;
   width: 100%;
   margin: 4px auto 0 auto;
@@ -47,7 +44,7 @@
 }
 
 .home-title {
-  font-family: Pretendard, sans-serif;
+  font-family: var(--sans);
   font-size: 28px;
   font-weight: 800;
   color: inherit;
@@ -68,18 +65,18 @@
   margin-bottom: 24px;
   gap: 20px;
   width: 100%;
-  background-color: var(--border-soft);
-  padding: 8px 16px;
-  border-radius: 8px;
+  background-color: var(--border-soft); /* Restored to subtle gray/tint */
+  border: 1px solid var(--border-default);
+  padding: 12px 20px;
+  border-radius: 12px;
   box-sizing: border-box;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .dark-theme .home-filter-row {
-  background-color: #1F2937; /* Gray 800 to match GNB and depth system */
+  background-color: var(--bg-card);
+  border-color: var(--border-default);
 }
-
-
 
 .home-filters-left {
   display: flex;
@@ -90,7 +87,7 @@
 .filter-divider {
   width: 1px;
   height: 24px;
-  background-color: #CBD5E1;
+  background-color: var(--border-default);
   margin: 0 4px;
 }
 
@@ -106,12 +103,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 48px; /* UI_RULES: 50px -> 48px 보정 */
+  margin-top: 48px;
   padding: 0 0 32px 0;
 }
 
 /* 플로팅 채팅 버튼 */
-.placeholder-floating-chat {
+.floating-chat-button {
   position: fixed;
   bottom: 40px;
   right: 40px;
@@ -119,34 +116,20 @@
   height: 64px;
   border-radius: 50%;
   background-color: rgba(99, 102, 241, 0.1);
-  border: 2px dashed #6366F1;
+  border: 2px dashed var(--primary);
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: #6366F1;
-  font-family: Pretendard, sans-serif;
+  color: var(--primary);
+  font-family: var(--sans);
   font-size: 11px;
   font-weight: 600;
   z-index: 1000;
-  cursor: pointer; /* 인라인 스타일을 CSS로 이동 */
+  cursor: pointer;
 }
 
-/* 푸터 */
-.home-footer {
-  text-align: center;
-  font-family: Pretendard, sans-serif;
-  font-size: 12px;
-  color: #8B95A1;
-  padding: 16px 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-/* ============================
-   2. 반응형 미디어 쿼리
-   ============================ */
-
-/* 헤더: 900px 이하 → 세로 스택 */
+/* 반응형 미디어 쿼리 */
 @media (max-width: 900px) {
   .home-header {
     flex-direction: column;
@@ -170,9 +153,8 @@
   }
 }
 
-/* 태블릿/모바일: 1024px 이하 → 창 스타일 해제, 풀스크린 */
 @media screen and (max-width: 1024px) {
-  .dev-home-wrapper {
+  .home-wrapper {
     max-width: 100%;
     min-width: 0;
     height: auto;
@@ -184,19 +166,17 @@
     overflow: visible;
   }
 
-  /* ↓ 기본 스타일 이후에 선언되어야 올바르게 덮어씀 */
-  .dev-home-content {
+  .home-content {
     overflow: visible;
-    padding: 16px 24px; /* 모바일 GNB padding(0 24px)과 맞춤 */
+    padding: 16px 24px;
     width: 100%;
     max-width: 100%;
   }
 }
 
-/* 모바일 초소형 기기: 480px 이하 */
 @media screen and (max-width: 480px) {
   .home-filters-left {
-    gap: 8px; /* 16px -> 8px 축소 */
-    flex-wrap: wrap; /* 난이도와 상태 필터가 한 줄에 안 들어가면 줄바꿈 허용 */
+    gap: 8px;
+    flex-wrap: wrap;
   }
 }

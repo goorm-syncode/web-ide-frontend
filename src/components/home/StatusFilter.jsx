@@ -83,81 +83,83 @@ const StatusFilter = ({ value, onChange }) => {
       {/* 외부 레이블 — 버튼과 독립 */}
       <span className="status-filter__label">상태:</span>
 
-      {/* 트리거 버튼 — 선택값 + 화살표 */}
-      <button
-        type="button"
-        className={`status-filter__trigger${isOpen ? ' status-filter__trigger--open' : ''}`}
-        onClick={() => setIsOpen((prev) => !prev)}
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        aria-label={`상태 필터: ${selectedOption.label} 선택됨`}
-      >
-        <span className="status-filter__trigger-value">
-          {selectedOption.label}
-        </span>
-        {/* 화살표 아이콘 (SVG) */}
-        <svg
-          className="status-filter__arrow"
-          viewBox="0 0 16 16"
-          fill="none"
-          aria-hidden="true"
+      {/* 버튼과 드롭다운을 묶어주는 앵커 포인트 */}
+      <div className="status-filter__control">
+        <button
+          type="button"
+          className={`status-filter__trigger${isOpen ? ' status-filter__trigger--open' : ''}`}
+          onClick={() => setIsOpen((prev) => !prev)}
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+          aria-label={`상태 필터: ${selectedOption.label} 선택됨`}
         >
-          <path
-            d="M4 6l4 4 4-4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </button>
+          <span className="status-filter__trigger-value">
+            {selectedOption.label}
+          </span>
+          {/* 화살표 아이콘 (SVG) */}
+          <svg
+            className="status-filter__arrow"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M4 6l4 4 4-4"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
 
-      {/* 드롭다운 패널 */}
-      {isOpen && (
-        <ul
-          className="status-filter__dropdown"
-          role="listbox"
-          aria-label="상태 필터 옵션"
-        >
-          {STATUS_OPTIONS.map((option) => {
-            const isSelected = selected === option.value;
-            return (
-              <li key={option.value} role="none">
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={isSelected}
-                  className={`status-filter__option${isSelected ? ' status-filter__option--selected' : ''}`}
-                  onClick={() => handleSelect(option.value)}
-                >
-                  <span
-                    className={`status-filter__dot ${option.dotClass}`}
-                    aria-hidden="true"
-                  />
-                  {option.label}
-                  {/* 선택된 항목 체크마크 */}
-                  {isSelected && (
-                    <svg
-                      className="status-filter__check"
-                      viewBox="0 0 14 14"
-                      fill="none"
+        {/* 드롭다운 패널 — 이제 버튼 바로 아래에 위치 */}
+        {isOpen && (
+          <ul
+            className="status-filter__dropdown"
+            role="listbox"
+            aria-label="Status filter options"
+          >
+            {STATUS_OPTIONS.map((option) => {
+              const isSelected = selected === option.value;
+              return (
+                <li key={option.value} role="none">
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={isSelected}
+                    className={`status-filter__option${isSelected ? ' status-filter__option--selected' : ''}`}
+                    onClick={() => handleSelect(option.value)}
+                  >
+                    <span
+                      className={`status-filter__dot ${option.dotClass}`}
                       aria-hidden="true"
-                    >
-                      <path
-                        d="M2 7l3.5 3.5L12 3"
-                        stroke="currentColor"
-                        strokeWidth="1.6"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+                    />
+                    {option.label}
+                    {/* 선택된 항목 체크마크 */}
+                    {isSelected && (
+                      <svg
+                        className="status-filter__check"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M2 7l3.5 3.5L12 3"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };

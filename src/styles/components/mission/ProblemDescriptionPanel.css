@@ -3,9 +3,9 @@
   height: 100%;
   overflow-y: auto;
   box-sizing: border-box;
-  background-color: #FFFFFF;
-  color: #22262B;
-  font-family: Pretendard, system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  font-family: var(--sans);
   text-align: left;
 }
 
@@ -16,7 +16,7 @@
   gap: 12px;
   margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid var(--border-default);
 }
 
 .header-tags {
@@ -30,7 +30,7 @@
   font-size: 20px;
   font-weight: 700;
   margin: 0;
-  color: #22262B;
+  color: var(--text-primary);
   letter-spacing: -0.01em;
   line-height: 1.2;
 }
@@ -38,7 +38,7 @@
 .problem-description-wrapper .panel-content {
   font-size: 14px;
   line-height: 1.6;
-  color: #374151;
+  color: var(--text-secondary);
 }
 
 .panel-content p {
@@ -48,17 +48,16 @@
 
 .panel-content strong {
   font-weight: 600;
-  color: #22262B;
+  color: var(--text-primary);
 }
 
 .panel-content code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  background-color: #F5F5F5;
+  font-family: var(--mono);
+  background-color: var(--border-soft);
   padding: 2px 6px;
   border-radius: 4px;
-  color: #6366F1;
+  color: var(--primary);
   font-size: 14px;
-  /* 13px -> 14px (에디터 코드 크기와 조화) */
 }
 
 .example-box-wrapper {
@@ -67,17 +66,17 @@
   margin-top: 16px;
   margin-bottom: 24px;
   border-radius: 8px;
-  border: 1px solid #E5E7EB;
-  border-left: 4px solid #6366F1;
-  background-color: #F8FAFC;
+  border: 1px solid var(--border-default);
+  border-left: 4px solid var(--primary);
+  background-color: #FFFFFF; /* Forced White for Readability as requested */
 }
 
 .problem-description-wrapper .copy-button {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
+  background-color: #FFFFFF !important;
+  border: none !important;
   border-radius: 4px;
   padding: 4px 6px;
   cursor: pointer;
@@ -85,20 +84,19 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  color: #94A3B8;
+  color: #0F172A !important;
   z-index: 10;
 }
 
 .problem-description-wrapper .copy-button:hover {
-  background-color: #F8FAFC;
-  border-color: #CBD5E1;
-  color: #475569;
+  background-color: var(--border-soft);
+  color: var(--text-primary);
 }
 
 .problem-description-wrapper .copy-button.copied {
-  background-color: #F0FDF4;
-  border-color: #BBF7D0;
-  color: #16A34A;
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: var(--success);
+  color: var(--success);
 }
 
 .problem-description-wrapper .copy-success-text {
@@ -141,18 +139,18 @@
   font-weight: 600;
   margin-top: 20px;
   margin-bottom: 8px;
-  color: #374151;
+  color: var(--text-primary);
 }
 
 .panel-content pre code,
-.example-box-pre code {
+.example-box-pre code,
+.formatted-code-block {
   background-color: transparent;
   padding: 0;
-  color: #4B5563;
+  color: #0F172A !important; /* Force Slate 900 for example blocks */
   font-size: 13px;
   line-height: 1.6;
   display: block;
-  /* Ensure the code block is a block container */
 }
 
 .problem-description-wrapper .code-line {
@@ -164,11 +162,18 @@
 .problem-description-wrapper .space-indicator,
 .problem-description-wrapper .tab-indicator,
 .problem-description-wrapper .newline-indicator {
-  color: #6366F1;
+  color: var(--primary);
   /* More prominent color */
   font-weight: bold;
   user-select: none;
   opacity: 0.4;
+}
+
+.dark-theme .problem-description-wrapper .space-indicator,
+.dark-theme .problem-description-wrapper .tab-indicator,
+.dark-theme .problem-description-wrapper .newline-indicator {
+  color: var(--primary);
+  opacity: 0.7; /* Higher visibility in dark theme */
 }
 
 .problem-description-wrapper .newline-indicator {
@@ -185,7 +190,7 @@
 .problem-description-wrapper .panel-content h4,
 .problem-description-wrapper .panel-content h5,
 .problem-description-wrapper .panel-content h6 {
-  color: #22262B;
+  color: var(--text-primary);
   font-weight: 700;
   margin-top: 20px;
   margin-bottom: 12px;

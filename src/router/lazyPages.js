@@ -14,7 +14,7 @@ export const DevStatusFilterPage = lazy(() => import('../pages/dev/DevStatusFilt
 export const DevHomePage = lazy(() => import('../pages/dev/DevHomePage'));
 export const DevTestPage = lazy(() => import('../pages/dev/DevTestPage'));
 export const DevProblemDescriptionPage = lazy(() => import('../pages/dev/DevProblemDescriptionPage'));
-export const DevSignupPage = lazy(() => import('../pages/dev/DevSignupPage'));
+
 export const DevMessageBoxPage = lazy(() => import('../pages/dev/DevMessageBoxPage'));
 export const DevInputPage = lazy(() => import('../pages/dev/DevInputPage'));
 export const DevProgressBannerPage = lazy(() => import('../pages/dev/DevProgressBannerPage'));

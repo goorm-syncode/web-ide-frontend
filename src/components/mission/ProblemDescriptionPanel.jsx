@@ -53,9 +53,9 @@ RenderFormattedCode.propTypes = {
 };
 
 const STATUS_MAP = {
-  NOT_STARTED: { text: '시작 전', type: 'default' },
-  IN_PROGRESS: { text: '도전 중', type: 'warning' },
-  COMPLETED: { text: '해결 완료', type: 'success' },
+  NOT_STARTED: { text: '미해결', type: 'todo' },
+  IN_PROGRESS: { text: '진행 중', type: 'inprogress' },
+  COMPLETED: { text: '완료', type: 'solved' },
 };
 
 const ProblemDescriptionPanel = ({
@@ -132,16 +132,23 @@ const ProblemDescriptionPanel = ({
 
   const renderDifficultyTag = (diff) => {
     let type = 'default';
-    switch (diff) {
-      case 'Easy': case '쉬움': type = 'success'; break;
-      case 'Medium': case '보통': type = 'warning'; break;
-      case 'Hard': case '어려움': type = 'error'; break;
+    const d = diff.toUpperCase();
+    let text = d;
+    switch (d) {
+      case 'EASY': case '쉬움': 
+        type = 'success'; text = 'Easy'; break;
+      case 'MEDIUM': case '보통': 
+        type = 'warning'; text = 'Medium'; break;
+      case 'HARD': case '어려움': 
+        type = 'error'; text = 'Hard'; break;
     }
-    return <TagBadge type={type} text={diff} />;
+    return <TagBadge type={type} text={text} />;
   };
 
   const renderStatusTag = (st) => {
-    const config = STATUS_MAP[st] || { text: st, type: 'default' };
+    if (!st) return null;
+    const key = st.toUpperCase().replace(/\s+/g, '_');
+    const config = STATUS_MAP[key] || { text: st, type: 'default' };
     return <TagBadge type={config.type} text={config.text} />;
   };
 

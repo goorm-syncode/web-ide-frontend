@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin: 0; /* 기존 32px 0 제거하여 중복 여백 문제 해결 */
+  margin: 0;
   user-select: none;
 }
 
@@ -17,7 +17,7 @@
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
-  color: #4b5563;
+  color: var(--text-secondary);
   background-color: transparent;
   border: 1px solid transparent;
   cursor: pointer;
@@ -25,21 +25,20 @@
 }
 
 .pagination-item:hover:not(.active):not(:disabled) {
-  background-color: #EEF2FF;
-  color: #6366F1;
-  border-color: #C7D2FE;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+  background-color: var(--border-soft);
+  color: var(--primary);
+  border-color: var(--border-default);
 }
 
 .pagination-item.active {
-  background-color: #6366f1;
+  background-color: var(--primary);
   color: #ffffff;
 }
 
 .pagination-item:disabled {
-  color: #d1d5db;
+  color: var(--text-muted);
   cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .pagination-ellipsis {
@@ -48,7 +47,7 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  color: #8b95a1;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
@@ -57,3 +56,4 @@
   font-size: 18px;
   line-height: 1;
 }
+

@@ -16,7 +16,7 @@ import Pagination from '../components/common/Pagination';
 import { getMissions } from '../services/missions';
 import { getErrorMessage } from '../services/api';
 
-import '../styles/pages/DevHomePage.css'; // 기존 스타일 재사용
+import '../styles/pages/HomePage.css';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -45,14 +45,12 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false);
 
   // 난이도 필터가 변경될 때마다 데이터를 가져오도록 합니다.
-  // 페이지네이션 값(currentPage)도 백엔드는 0부터 시작하므로 currentPage - 1 처리
   useEffect(() => {
     const fetchMissions = async () => {
       try {
         setLoading(true);
         const data = await getMissions({
           difficulty: selectedDifficulty,
-          // 다른 필터(status, keyword)는 각자 브랜치에서 구현될 예정이지만 함께 넘길 수도 있습니다.
           status: selectedStatus,
           keyword: searchQuery,
           page: currentPage - 1,
@@ -68,7 +66,7 @@ const HomePage = () => {
         }
       } catch (err) {
         console.error('문제 목록 로딩 실패:', err);
-        showModal('서버 오류', getErrorMessage(err), 'error');
+        showModal('Server Error', getErrorMessage(err), 'error');
       } finally {
         setLoading(false);
       }
@@ -79,7 +77,7 @@ const HomePage = () => {
 
   const handleFilterChange = (setter) => (value) => {
     setter(value);
-    setCurrentPage(1); // 필터 변경 시 첫 페이지로 이동
+    setCurrentPage(1); 
   };
 
   const showModal = (title, message, type = 'info') => {
@@ -103,24 +101,24 @@ const HomePage = () => {
   };
 
   return (
-    <div className="dev-home-wrapper">
+    <div className="home-wrapper">
       <Gnb
         title="LearnCode"
         isLoggedIn={isAuthenticated}
-        userName={user?.nickname || '사용자'}
+        userName={user?.nickname || 'User'}
         onLogoutClick={handleLogout}
         onLoginClick={handleLogin}
         onSettingsClick={() => setIsMyPageOpen(true)}
       />
       <div className="home-top-spacer" />
-      <div className="dev-home-content">
+      <div className="home-content">
         <div className="home-header">
-          <h1 className="home-title">문제 목록</h1>
+          <h1 className="home-title">학습 미션</h1>
           <div className="home-progress">
             <ProgressBanner
               progress={65}
               onContinue={() =>
-                showModal('안내', '이전 학습 이어하기 기능을 준비 중입니다.', 'info')
+                showModal('Notice', 'The "Continue Learning" feature is coming soon.', 'info')
               }
             />
           </div>
@@ -139,18 +137,17 @@ const HomePage = () => {
             <SearchFilter
               value={searchQuery}
               onChange={handleFilterChange(setSearchQuery)}
-              placeholder="문제 제목을 검색하세요..."
+              placeholder="미션 검색..."
             />
           </div>
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '50px' }}>데이터를 불러오는 중입니다...</div>
+          <div style={{ textAlign: 'center', padding: '50px' }}>미션을 불러오는 중...</div>
         ) : (
           <ProblemList problems={missions} onProblemClick={handleProblemClick} />
         )}
 
-        {/* 데이터가 있을 때만 페이지네이션 표시 */}
         {!loading && missions.length > 0 && (
           <div className="home-pagination-wrapper">
             <Pagination
@@ -180,5 +177,6 @@ const HomePage = () => {
     </div>
   );
 };
+
 
 export default HomePage;

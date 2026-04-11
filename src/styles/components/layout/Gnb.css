@@ -1,15 +1,42 @@
 .gnb-container {
   width: 100%;
   height: 65px;
-  /* 80px -> 65px로 15px 축소 */
-  background-color: #FFFFFF;
-  font-family: 'Pretendard', sans-serif;
+  background-color: var(--bg-card);
+  font-family: var(--sans);
   box-sizing: border-box;
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  /* 경계 구분을 위해 얇은 선 추가 */
+  border-bottom: 1px solid var(--border-soft);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
+
+.dark-theme .gnb-container {
+  background-color: var(--bg-gnb);
+  border-bottom-color: var(--border-default);
+  color: var(--text-on-page);
+}
+
+.dark-theme .gnb-username,
+.dark-theme .gnb-back-button,
+.dark-theme .gnb-action-button {
+  color: var(--text-muted-on-page);
+}
+
+.dark-theme .gnb-back-button:hover,
+.dark-theme .gnb-action-button:hover {
+  color: var(--text-on-page);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .gnb-theme-toggle,
+.dark-theme .gnb-settings-button {
+  color: var(--text-muted-on-page);
+}
+
+.dark-theme .gnb-theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 
 .gnb-inner {
   display: flex;
@@ -17,7 +44,6 @@
   align-items: center;
   width: 100%;
   max-width: 1660px;
-  /* HomePage의 dev-home-content와 동일한 가로 너비 설정 */
   padding: 0 32px;
   box-sizing: border-box;
 }
@@ -25,13 +51,12 @@
 .gnb-inner.fluid {
   max-width: 100%;
   padding: 0 24px;
-  /* mission panel의 기본 여백 등과 어울리는 최소 여백 */
 }
 
 .gnb-left {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px; /* Spacing: 8 */
 }
 
 .gnb-back-button {
@@ -41,53 +66,76 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #4B5563;
-  /* Text Secondary */
-  padding: 4px;
-  border-radius: 8px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  color: var(--text-secondary);
+  padding: 4px; /* Spacing: 4 */
+  border-radius: 8px; /* Radius: 8px */
+  transition: all 0.2s ease;
 }
 
 .gnb-back-button:hover {
-  background-color: #F3F4F6;
-  color: #22262B;
-  /* Text Primary */
+  background-color: var(--border-soft);
+  color: var(--text-primary);
 }
 
 .gnb-title {
-  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px; /* Typography: 20px */
   font-weight: 800;
-  color: #6366F1;
+  color: var(--primary);
   margin: 0;
   cursor: pointer;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   transition: color 0.2s ease;
-  /* 부드러운 색상 전환 */
+}
+
+.gnb-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
 }
 
 .gnb-title:hover {
-  color: #4F46E5;
-  /* 호버 시 더 진한 인디고 컬러로 강조 */
+  color: var(--primary-hover);
+  transform: scale(1.02);
 }
 
 .gnb-right {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 24px; /* Spacing: 24 */
 }
 
 .gnb-username {
-  font-size: 14px;
-  color: #4B5563;
-  /* Text Secondary */
+  font-size: 14px; /* Typography: 14px */
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
 .gnb-user-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 12px; /* Spacing: 12 */
   padding: 4px 0;
+}
+
+.gnb-theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.gnb-theme-toggle:hover {
+  background-color: var(--border-soft);
+  color: var(--primary);
 }
 
 .gnb-settings-button {
@@ -96,7 +144,7 @@
   justify-content: center;
   background-color: transparent;
   border: none;
-  color: #6B7280;
+  color: var(--text-muted);
   cursor: pointer;
   padding: 6px;
   border-radius: 50%;
@@ -104,9 +152,9 @@
 }
 
 .gnb-settings-button:hover {
-  background-color: #6366F1;
-  color: white;
-  transform: rotate(45deg);
+  background-color: var(--hover-brand);
+  color: var(--primary);
+  transform: rotate(90deg);
 }
 
 .gnb-action-button {
@@ -115,95 +163,64 @@
   gap: 8px;
   background: none;
   border: none;
-  color: #4B5563;
-  /* Text Secondary */
+  color: var(--text-secondary);
   font-size: 14px;
   font-family: inherit;
-  /* 폰트를 명시적으로 상속받아 통일 */
   font-weight: 500;
   cursor: pointer;
-  transition: color 0.2s ease, background-color 0.2s ease;
+  transition: all 0.2s ease;
   padding: 8px 12px;
   border-radius: 8px;
 }
 
 .gnb-action-button:hover {
-  color: #22262B;
-  /* Text Primary */
-  background-color: #F5F5F5;
+  color: var(--text-primary);
+  background-color: var(--border-soft);
 }
 
 .gnb-auth-button {
-  color: #6366F1;
+  color: var(--primary);
   font-weight: 600;
 }
 
 .gnb-auth-button:hover {
-  color: #4F46E5;
-  background-color: #EEF2FF;
+  color: var(--primary-hover);
+  background-color: var(--border-soft);
 }
 
-/* 태블릿 및 모바일 반응형 사이즈 조정 (미디어 쿼리) */
 @media screen and (max-width: 768px) {
   .gnb-inner {
     height: 56px;
     padding: 0 24px;
-    /* 모바일: 콘텐츠 padding-left(24px)와 맞춤 */
   }
 
   .gnb-container {
     height: 56px;
   }
 
-  .gnb-left {
-    gap: 8px;
-  }
-
-  .gnb-left .gnb-title {
-    font-size: 20px;
-  }
-
   .gnb-right {
     gap: 16px;
   }
-
-  .gnb-username {
-    font-size: 12px;
-    /* 토큰: 12px */
-  }
-
-  .gnb-action-button {
-    padding: 4px 12px;
-    /* Spacing 토큰: 4, 12 */
-    font-size: 12px;
-    /* 토큰: 12px */
-  }
 }
 
-/* 아주 작은 모바일 화면용 예외 처리 */
 @media screen and (max-width: 480px) {
   .gnb-inner {
     padding: 0 12px;
-    /* Spacing 토큰: 12 */
   }
 
   .gnb-title {
-    font-size: 14px;
-    /* 토큰: 14px */
+    font-size: 16px;
   }
 
   .gnb-username {
     display: none;
-    /* 디바이스 폭이 너무 좁아지면 닉네임 공간 생략 */
   }
 
   .gnb-action-button span {
     display: none;
-    /* 로그아웃 버튼의 텍스트 숨김 (아이콘만 표시하여 간소화) */
   }
 
   .gnb-action-button {
     padding: 8px;
-    /* Spacing 토큰: 8 */
   }
 }

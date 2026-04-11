@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import '../../styles/components/home/DifficultyFilter.css';
 
 const DIFFICULTY_OPTIONS = [
-  { label: '전체', value: 'all' },
-  { label: '쉬움', value: 'easy' },
-  { label: '보통', value: 'medium' },
-  { label: '어려움', value: 'hard' },
+  { label: 'All', value: 'ALL' },
+  { label: 'Easy', value: 'EASY' },
+  { label: 'Medium', value: 'MEDIUM' },
+  { label: 'Hard', value: 'HARD' },
 ];
 
 /**
@@ -16,7 +16,7 @@ const DIFFICULTY_OPTIONS = [
  * @param {Function} [props.onChange] - 선택 변경 시 호출되는 콜백 (value 전달)
  */
 const DifficultyFilter = ({ value, onChange }) => {
-  const [internalValue, setInternalValue] = useState('all');
+  const [internalValue, setInternalValue] = useState('ALL');
 
   const selected = value !== undefined ? value : internalValue;
 

@@ -31,10 +31,7 @@ const router = createBrowserRouter([
     path: '/dev/test',
     element: <Suspense fallback={<PageLoader />}><Pages.DevTestPage /></Suspense>,
   },
-  {
-    path: '/dev/signup',
-    element: <Suspense fallback={<PageLoader />}><Pages.DevSignupPage /></Suspense>,
-  },
+
   {
     path: '/dev/message-box',
     element: <Suspense fallback={<PageLoader />}><Pages.DevMessageBoxPage /></Suspense>,
@@ -43,10 +40,7 @@ const router = createBrowserRouter([
     path: '/dev/gnb',
     element: <Suspense fallback={<PageLoader />}><Pages.DevGnbPage /></Suspense>,
   },
-  {
-    path: '/dev/mypage',
-    element: <Suspense fallback={<PageLoader />}><Pages.MyPageModalPage /></Suspense>,
-  },
+
   {
     path: '/dev/Input',
     element: <Suspense fallback={<PageLoader />}><Pages.DevInputPage /></Suspense>,

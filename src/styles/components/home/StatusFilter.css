@@ -6,16 +6,21 @@
 
 /* 래퍼 */
 .status-filter {
-  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
+/* 컨트롤 영역 (버튼 + 드롭다운) — 메뉴의 기준점 */
+.status-filter__control {
+  position: relative;
+  display: inline-flex;
+}
+
 /* 외부 레이블 — 버튼과 독립된 텍스트 */
 .status-filter__label {
   font-size: 14px;
-  color: #4b5563;
+  color: var(--text-secondary);
   white-space: nowrap;
   user-select: none;
 }
@@ -25,18 +30,18 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 36px;
+  height: 38px;
   min-width: 100px;
   padding: 0 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-default);
   border-radius: 8px;
-  background-color: #ffffff;
+  background-color: var(--bg-input);
   font-size: 14px;
   font-weight: 400;
-  color: #22262b;
+  color: var(--text-primary);
   cursor: pointer;
   white-space: nowrap;
-  transition: border-color 0.15s ease;
+  transition: all 0.2s ease;
   user-select: none;
 }
 
@@ -50,8 +55,8 @@
 
 /* 트리거 내 선택값 텍스트 */
 .status-filter__trigger-value {
-  color: #22262b;
-  font-weight: 400;
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
 /* 화살표 아이콘 */
@@ -60,7 +65,7 @@
   height: 14px;
   flex-shrink: 0;
   transition: transform 0.2s ease;
-  color: #8b95a1;
+  color: var(--text-muted);
   margin-left: auto;
 }
 
@@ -71,14 +76,14 @@
 /* 드롭다운 패널 */
 .status-filter__dropdown {
   position: absolute;
-  top: calc(100% + 4px);
+  top: 100%;
   left: 0;
   z-index: 100;
-  min-width: 120px;
-  background-color: #ffffff;
-  border: 1px solid #d1d5db;
+  min-width: 140px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow);
   padding: 4px;
   overflow: hidden;
 }
@@ -95,14 +100,14 @@
   background-color: transparent;
   font-size: 14px;
   font-weight: 400;
-  color: #22262b;
+  color: var(--text-primary);
   cursor: pointer;
   text-align: left;
   transition: background-color 0.1s ease;
 }
 
 .status-filter__option:hover {
-  background-color: #f1f4f9;
+  background-color: var(--hover-brand);
 }
 
 .status-filter__option--selected {
@@ -124,15 +129,15 @@
 }
 
 .status-filter__dot--unattempted {
-  background-color: #8b95a1;
+  background-color: var(--stat-notstarted);
 }
 
 .status-filter__dot--in-progress {
-  background-color: #e7c85c;
+  background-color: var(--stat-inprogress);
 }
 
 .status-filter__dot--solved {
-  background-color: #34c759;
+  background-color: var(--stat-completed);
 }
 
 /* 체크마크 */
