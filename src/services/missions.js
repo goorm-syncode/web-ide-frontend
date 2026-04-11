@@ -103,3 +103,11 @@ export const submitCode = async (data) => {
   });
   return response;
 };
+/**
+ * 이어하기 문제 조회
+ * OpenAPI /api/missions/continue 대응
+ */
+export const getContinueMission = async () => {
+  const response = await api.get('/api/missions/continue');
+  return response;
+};

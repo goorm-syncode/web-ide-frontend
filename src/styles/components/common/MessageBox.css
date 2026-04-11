@@ -58,7 +58,8 @@
 }
 
 .message-box-body.with-icon-padding {
-  padding-left: 32px;
+  /* 본문 내용을 제목 시작 위치에 맞추는 대신 아이콘 시작 위치와 맞춰 더 균형 잡힌 레이아웃 제공 */
+  padding-left: 0;
 }
 
 .message-box-actions {
