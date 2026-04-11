@@ -347,18 +347,132 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .mission-page-container {
+    height: 100dvh;
+  }
+  
   .mission-main-content {
     flex-direction: column;
+    border-top: none;
   }
 
-  .panel-left {
+  .panel-left, .panel-right {
     width: 100% !important;
-    height: 40% !important;
-    border-right: none;
-    border-bottom: 1px solid var(--panel-border);
+    height: 100% !important;
+    border: none !important;
   }
 
-  .resizer-horizontal {
-    display: none;
+  .editor-header {
+    padding: 0 16px;
+    height: 48px; /* Standardize with desktop header height for better alignment */
+    gap: var(--space-sm);
   }
+
+  .editor-controls {
+    gap: 8px;
+  }
+
+  .lang-select {
+    padding: 6px 10px;
+    font-size: 13px;
+    min-width: 90px;
+    height: 34px; /* Slightly taller */
+    text-align: center;
+    text-align-last: center;
+  }
+
+  .editor-actions {
+    gap: 10px; /* Increased gap */
+  }
+
+  .save-status {
+    padding: 0;
+    width: 24px;
+    height: 40px; /* Match button height for alignment */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1;
+    margin-right: 2px; /* Slight breathing room */
+  }
+
+  .toolbar-action-btn {
+    padding: 0;
+    width: 40px; /* Increased to 40px for better touch target */
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    border-radius: 10px; /* More rounded for premium feel */
+  }
+
+  .toolbar-action-btn span {
+    display: none !important;
+  }
+
+  .toolbar-action-btn svg {
+    width: 18px; /* Slightly larger icon */
+    height: 18px;
+    display: block;
+    margin: 0;
+  }
+
+  .resizer-horizontal, .resizer-vertical, .toolbar-divider {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .editor-header {
+    padding: 0 12px;
+    gap: 8px;
+  }
+  
+  .lang-select {
+    padding: 4px 8px;
+    font-size: 12px;
+    min-width: 80px;
+    max-width: 90px;
+  }
+
+  .toolbar-action-btn {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+.mobile-tab-nav {
+  display: flex;
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--panel-border);
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.mobile-tab-item {
+  flex: 1;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.mobile-tab-item.active {
+  color: var(--primary);
+}
+
+.mobile-tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--primary);
 }
