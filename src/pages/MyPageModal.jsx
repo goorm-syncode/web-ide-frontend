@@ -128,7 +128,7 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
         </button>
         
         <div className="mypage-header" style={{ textAlign: 'center', marginBottom: '8px' }}>
-          <img src={learncodeIcon} alt="Learn Code" className="auth-logo-icon" style={{ width: '60px', marginBottom: '12px' }} />
+          <img src={learncodeIcon} alt="Learn Code" className="auth-logo-icon" />
           <h2 className="mypage-title">마이페이지</h2>
         </div>
 

@@ -4,6 +4,7 @@ import AuthLayout from '../components/layout/AuthLayout';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import MessageBox from '../components/common/MessageBox';
+import Footer from '../components/layout/Footer';
 
 import authService from '../services/auth';
 import { mapErrorMessage } from '../services/errorMapper';
@@ -48,8 +49,18 @@ const ResetPasswordPage = () => {
   const validatePassword = (value) => {
     if (!value) return '비밀번호를 입력해주세요.';
     if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
-    if (value.length < 8 || value.length > 20)
-      return '비밀번호는 8자 이상 20자 이하로 입력해주세요.';
+    if (value.length < 8 || value.length > 72)
+      return '비밀번호는 8자 이상 72자 이하로 입력해주세요.';
+
+    const missing = [];
+    if (!/[a-z]/.test(value)) missing.push('소문자');
+    if (!/[A-Z]/.test(value)) missing.push('대문자');
+    if (!/\d/.test(value)) missing.push('숫자');
+    if (!/[^a-zA-Z0-9]/.test(value)) missing.push('특수문자');
+
+    if (missing.length > 0) {
+      return `다음 항목이 누락되었습니다: ${missing.join(', ')}`;
+    }
     return '';
   };
 
@@ -165,10 +176,21 @@ const ResetPasswordPage = () => {
     loading || !password || !passwordConfirm || !!errors.password || !!errors.passwordConfirm;
 
   return (
-    <AuthLayout>
+    <div
+      className="reset-password-container"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100svh',
+        overflow: 'hidden',
+      }}
+    >
+      <AuthLayout>
         <div className="auth-header">
           <img src={learncodeIcon} alt="Learn Code" className="auth-logo-icon" />
-          <h1 className="auth-page-title"><em>Learn Code</em> {isResetMode ? '비밀번호 변경' : '비밀번호 찾기'}</h1>
+          <h1 className="auth-page-title">
+            <em>Learn Code</em> {isResetMode ? '비밀번호 변경' : '비밀번호 찾기'}
+          </h1>
           <p className="auth-page-subtitle">
             {isResetMode
               ? '안전한 사용을 위해 새로운 비밀번호를 설정해주세요.'
@@ -188,6 +210,7 @@ const ResetPasswordPage = () => {
               helperText={errors.email}
               disabled={loading}
               required
+              autoFocus
             />
             <div className="auth-submit-btn-wrapper">
               <Button
@@ -213,6 +236,7 @@ const ResetPasswordPage = () => {
               helperText={errors.password}
               disabled={loading}
               required
+              autoFocus
             />
             <Input
               type="password"
@@ -226,7 +250,14 @@ const ResetPasswordPage = () => {
               required
             />
             <div className="auth-submit-btn-wrapper">
-              <Button primary fullWidth type="submit" className="auth-btn-purple" loading={loading} disabled={isResetDisabled}>
+              <Button
+                primary
+                fullWidth
+                type="submit"
+                className="auth-btn-purple"
+                loading={loading}
+                disabled={isResetDisabled}
+              >
                 비밀번호 변경
               </Button>
             </div>
@@ -249,6 +280,9 @@ const ResetPasswordPage = () => {
           {messageBox.message}
         </MessageBox>
       </AuthLayout>
+
+      <Footer />
+    </div>
   );
 };
 

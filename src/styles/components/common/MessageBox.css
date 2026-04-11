@@ -15,7 +15,7 @@
 .message-box-container {
   background-color: var(--bg-card);
   border-radius: 8px;
-  padding: 24px;
+  padding: 16px;
   width: 100%;
   max-width: 400px;
   box-shadow: var(--shadow);
@@ -58,7 +58,7 @@
 }
 
 .message-box-body.with-icon-padding {
-  padding-left: 32px; 
+  padding-left: 32px;
 }
 
 .message-box-actions {
@@ -84,4 +84,3 @@
 .message-box-info .message-box-icon {
   color: var(--info);
 }
-

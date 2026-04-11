@@ -105,17 +105,19 @@ const LoginPage = () => {
   return (
     <div
       className="login-page-container"
-      style={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100svh',
+        overflow: 'hidden',
+      }}
     >
       <AuthLayout>
         <div className="auth-header">
-          <img
-            src={learncodeImg}
-            alt="Learn Code Logo"
-            className="auth-logo-icon"
-            style={{ width: '80px', marginBottom: '16px' }}
-          />
-          <h1 className="auth-page-title"><em>Learn Code</em> 로그인</h1>
+          <img src={learncodeImg} alt="Learn Code Logo" className="auth-logo-icon" />
+          <h1 className="auth-page-title">
+            <em>Learn Code</em> 로그인
+          </h1>
           <p className="auth-page-subtitle">서비스에 로그인하여 모든 기능을 이용하세요.</p>
         </div>
 
@@ -168,6 +170,7 @@ const LoginPage = () => {
           {serverError}
         </MessageBox>
       </AuthLayout>
+
       <Footer />
     </div>
   );
