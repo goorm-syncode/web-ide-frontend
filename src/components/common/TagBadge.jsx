@@ -13,7 +13,7 @@ const TagBadge = ({ type = 'default', text }) => {
 };
 
 TagBadge.propTypes = {
-  type: PropTypes.oneOf(['success', 'warning', 'error', 'default']),
+  type: PropTypes.oneOf(['success', 'warning', 'error', 'default', 'todo', 'inprogress', 'solved']),
   text: PropTypes.string.isRequired,
 };
 
