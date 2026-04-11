@@ -77,7 +77,7 @@ const HomePage = () => {
 
   const handleFilterChange = (setter) => (value) => {
     setter(value);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const showModal = (title, message, type = 'info') => {
@@ -103,7 +103,7 @@ const HomePage = () => {
   return (
     <div className="home-wrapper">
       <Gnb
-        title="LearnCode"
+        title="Learn Code"
         isLoggedIn={isAuthenticated}
         userName={user?.nickname || 'User'}
         onLogoutClick={handleLogout}
@@ -170,13 +170,9 @@ const HomePage = () => {
         {modalState.message}
       </MessageBox>
 
-      <MyPageModal 
-        isOpen={isMyPageOpen} 
-        onClose={() => setIsMyPageOpen(false)} 
-      />
+      <MyPageModal isOpen={isMyPageOpen} onClose={() => setIsMyPageOpen(false)} />
     </div>
   );
 };
-
 
 export default HomePage;
