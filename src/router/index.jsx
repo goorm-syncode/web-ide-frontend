@@ -98,6 +98,10 @@ const router = createBrowserRouter([
     element: <Suspense fallback={<PageLoader />}><Pages.SignupPage /></Suspense>,
   },
   {
+    path: '/forgot-password',
+    element: <Suspense fallback={<PageLoader />}><Pages.ResetPasswordPage /></Suspense>,
+  },
+  {
     path: '/reset-password',
     element: <Suspense fallback={<PageLoader />}><Pages.ResetPasswordPage /></Suspense>,
   },

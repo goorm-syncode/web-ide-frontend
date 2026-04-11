@@ -68,7 +68,7 @@ const authService = {
    * @returns {Promise<void>}
    */
   confirmPasswordReset: async (token, newPassword) => {
-    return await api.post('/api/auth/password-reset-confirm', { token, newPassword });
+    return await api.post('/api/auth/password-reset/confirm', { token, newPassword });
   },
 
   /**

@@ -29,12 +29,10 @@ const SignupPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [messageBox, setMessageBox] = useState({
-    isOpen: false,
-    type: 'info',
-    title: '',
-    message: '',
     onConfirm: null,
   });
+
+  const [serverError, setServerError] = useState('');
 
   const validateEmail = (value) => {
     if (!value) return '이메일을 입력해주세요.';
@@ -99,6 +97,7 @@ const SignupPage = () => {
       
       return newData;
     });
+    if (serverError) setServerError('');
   };
 
   const validateAll = () => {
@@ -133,13 +132,7 @@ const SignupPage = () => {
       });
     } catch (error) {
       const message = mapErrorMessage(error, '회원가입 처리 중 오류가 발생했습니다.');
-      setMessageBox({
-        isOpen: true,
-        type: 'error',
-        title: '회원가입 실패',
-        message: message,
-        onConfirm: null,
-      });
+      setServerError(message);
     } finally {
       setLoading(false);
     }
@@ -214,6 +207,12 @@ const SignupPage = () => {
             helperText={errors.passwordConfirm}
             required
           />
+          {serverError && (
+            <div className="auth-error-message">
+              <span className="auth-error-icon">!</span>
+              {serverError}
+            </div>
+          )}
           <div className="auth-submit-btn-wrapper">
             <Button
               primary

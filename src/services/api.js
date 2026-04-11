@@ -167,11 +167,16 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const errorResponse = error.response;
-    let message = '알 수 없는 오류가 발생했습니다.';
+    let message = null;
 
     if (errorResponse) {
       // 401 Unauthorized: 토큰 만료 또는 인증 실패
-      if (errorResponse.status === 401 && !originalRequest._retry) {
+      const isAuthPath =
+        originalRequest.url.includes('/api/auth/login') ||
+        originalRequest.url.includes('/api/auth/signup') ||
+        originalRequest.url.includes('/api/auth/password-reset');
+
+      if (errorResponse.status === 401 && !originalRequest._retry && !isAuthPath) {
         // 리프레시 토큰 요청 자체가 401이면 세션 만료 처리
         if (originalRequest.url.includes('/api/auth/refresh')) {
           console.warn('[Auth] Refresh request returned 401. Session expired.');
@@ -200,7 +205,7 @@ api.interceptors.response.use(
     }
 
     // 에러 객체에 가공된 메시지를 담아서 전달
-    error.message = message;
+    error.mappedMessage = message; 
     return Promise.reject(error);
   }
 );

@@ -12,7 +12,7 @@ const MoonIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
 );
 
-const AuthLayout = ({ children }) => {
+const AuthLayout = ({ children, shake = false }) => {
   const { isDark, toggleTheme } = useTheme();
 
   return (
@@ -25,7 +25,7 @@ const AuthLayout = ({ children }) => {
         {isDark ? <SunIcon /> : <MoonIcon />}
       </button>
       <div className="auth-layout-card-wrapper">
-        <Card className="auth-card">
+        <Card className={`auth-card ${shake ? 'auth-card-shake' : ''}`}>
           {children}
         </Card>
       </div>
@@ -35,6 +35,7 @@ const AuthLayout = ({ children }) => {
 
 AuthLayout.propTypes = {
   children: PropTypes.node.isRequired,
+  shake: PropTypes.bool,
 };
 
 export default AuthLayout;
