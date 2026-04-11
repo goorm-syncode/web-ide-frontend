@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import AuthLayout from '../components/layout/AuthLayout';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
+import MessageBox from '../components/common/MessageBox';
 import Footer from '../components/layout/Footer';
 import authService from '../services/auth';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
@@ -23,6 +24,13 @@ const LoginPage = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [messageBox, setMessageBox] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'info',
+    onConfirm: null,
+  });
   const [serverError, setServerError] = useState('');
   const [isShaking, setIsShaking] = useState(false);
   const passwordInputRef = useRef(null);
@@ -31,7 +39,9 @@ const LoginPage = () => {
   useEffect(() => {
     if (serverError && passwordInputRef.current) {
       passwordInputRef.current.focus();
-      passwordInputRef.current.select();
+      if (passwordInputRef.current.select) {
+          passwordInputRef.current.select();
+      }
     }
   }, [serverError]);
 
@@ -48,8 +58,8 @@ const LoginPage = () => {
   const validatePassword = (value) => {
     if (!value) return '비밀번호를 입력해주세요.';
     if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
-    if (value.length < 8 || value.length > 20)
-      return '비밀번호는 8자 이상 20자 이하로 입력해주세요.';
+    if (value.length < 8 || value.length > 72)
+      return '비밀번호는 8자 이상 72자 이하로 입력해주세요.';
     return '';
   };
 
@@ -75,6 +85,8 @@ const LoginPage = () => {
 
     if (emailError || passwordError) {
       setErrors({ email: emailError, password: passwordError });
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
       return;
     }
 
@@ -106,12 +118,16 @@ const LoginPage = () => {
       setServerError(message);
       dispatch(loginFailure(message));
 
-      // 프리미엄 UX: 에러 발생 시 폼 흔들기
+      // 에러 발생 시 폼 흔들기
       setIsShaking(true);
-      setTimeout(() => setIsShaking(false), 500); // 애니메이션 시간 후 초기화
+      setTimeout(() => setIsShaking(false), 500);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const closeMessageBox = () => {
+    setMessageBox((prev) => ({ ...prev, isOpen: false }));
   };
 
   // 버튼 비활성화 조건: 로딩 중이거나 값이 비어 있거나 유효하지 않은 에러가 있을 때
@@ -183,7 +199,15 @@ const LoginPage = () => {
           </Link>
         </div>
 
-
+        <MessageBox
+          isOpen={messageBox.isOpen}
+          onClose={closeMessageBox}
+          title={messageBox.title}
+          type={messageBox.type}
+          onConfirm={messageBox.onConfirm || closeMessageBox}
+        >
+          {messageBox.message}
+        </MessageBox>
       </AuthLayout>
 
       <Footer />
@@ -192,3 +216,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
