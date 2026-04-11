@@ -68,14 +68,14 @@
   border-radius: 8px;
   border: 1px solid var(--border-default);
   border-left: 4px solid var(--primary);
-  background-color: #FFFFFF; /* Forced White for Readability as requested */
+  background-color: var(--border-soft); /* Theme-aware background */
 }
 
 .problem-description-wrapper .copy-button {
   position: absolute;
   top: 8px;
   right: 8px;
-  background-color: #FFFFFF !important;
+  background-color: var(--bg-card) !important;
   border: none !important;
   border-radius: 4px;
   padding: 4px 6px;
@@ -84,7 +84,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  color: #0F172A !important;
+  color: var(--text-primary) !important;
   z-index: 10;
 }
 
@@ -147,7 +147,7 @@
 .formatted-code-block {
   background-color: transparent;
   padding: 0;
-  color: #0F172A !important; /* Force Slate 900 for example blocks */
+  color: var(--text-primary);
   font-size: 13px;
   line-height: 1.6;
   display: block;

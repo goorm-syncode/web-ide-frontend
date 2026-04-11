@@ -7,7 +7,7 @@ import MessageBox from '../components/common/MessageBox';
 import authService from '../services/auth';
 import { updateUser } from '../store/slices/authSlice';
 import { mapErrorMessage } from '../services/errorMapper';
-import learncodeIcon from '../assets/learncode-icon.png';
+import learncodeIcon from '../assets/logo-auth.png';
 import '../styles/pages/MyPageModal.css';
 
 const ClearIcon = () => (
@@ -128,7 +128,7 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
         </button>
         
         <div className="mypage-header" style={{ textAlign: 'center', marginBottom: '8px' }}>
-          <img src={learncodeIcon} alt="Learn Code" className="auth-logo-icon" />
+          <img src={learncodeIcon} alt="Learn Code" className="mypage-logo" />
           <h2 className="mypage-title">마이페이지</h2>
         </div>
 

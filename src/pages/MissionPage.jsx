@@ -116,6 +116,20 @@ const MissionPage = () => {
     return saved ? parseFloat(saved) : 30; // Default 30%
   });
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [activeMobileTab, setActiveMobileTab] = useState('description');
+
+  const { isDark } = useTheme();
+
+  // Handle window resize for mobile detection
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [isResizingMain, setIsResizingMain] = useState(false);
   const [isResizingIde, setIsResizingIde] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -144,12 +158,10 @@ const MissionPage = () => {
         const missionData = await getMissionById(missionId);
         setMission(missionData);
 
-        // Update progress to IN_PROGRESS if NOT_STARTED
         if (missionData.userStatus === 'NOT_STARTED') {
           await updateMissionProgress(missionId, 'IN_PROGRESS');
         }
 
-        // Try to load draft for JAVASCRIPT if available, otherwise first available
         const preferredLang =
           missionData.languages?.find((l) => l.language === 'JAVASCRIPT') ||
           missionData.languages?.[0];
@@ -162,13 +174,11 @@ const MissionPage = () => {
         if (draftData.hasSavedCode) {
           code = draftData.code;
         } else {
-          // Use starter code
           code = missionData.languages.find((l) => l.language === initialLang)?.starterCode || '';
         }
         setLastSavedCode(code);
         setCurrentCode(code);
 
-        // Set initial test case input from the first public test case
         if (missionData.publicTestCases && missionData.publicTestCases.length > 0) {
           setTestCaseInput(missionData.publicTestCases[0].inputData || '');
         }
@@ -187,17 +197,6 @@ const MissionPage = () => {
     }
   }, [missionId]);
 
-  const { isDark } = useTheme();
-
-  // Update layout when panels change
-  useEffect(() => {
-    if (editorInstance.current) {
-      editorInstance.current.layout();
-    }
-    localStorage.setItem('mission-panel-left-width', leftWidth);
-    localStorage.setItem('mission-panel-bottom-height', bottomHeight);
-  }, [leftWidth, bottomHeight]);
-
   // Update editor theme when isDark changes
   useEffect(() => {
     if (editorInstance.current) {
@@ -213,11 +212,11 @@ const MissionPage = () => {
         language: language,
         theme: isDark ? 'vs-dark' : 'vs-light',
         automaticLayout: true,
-        minimap: { enabled: true },
-        fontSize: 14,
+        minimap: { enabled: !isMobile }, // Disable minimap on mobile
+        fontSize: isMobile ? 15 : 14, // Slightly larger on mobile
         lineNumbers: 'on',
-        lineNumbersMinChars: 6,
-        lineDecorationsWidth: 20,
+        lineNumbersMinChars: isMobile ? 4 : 6,
+        lineDecorationsWidth: isMobile ? 10 : 20,
         scrollbar: {
           vertical: 'visible',
           verticalScrollbarSize: 8,
@@ -225,6 +224,7 @@ const MissionPage = () => {
           horizontalScrollbarSize: 8,
           useShadows: true,
         },
+        wordWrap: isMobile ? 'on' : 'off', // Enable wordwrap on mobile
         scrollBeyondLastLine: true,
         padding: { top: 16, bottom: 16 },
       });
@@ -243,7 +243,16 @@ const MissionPage = () => {
     return () => {
       // Cleanup if needed
     };
-  }, [isLoaded, language, lastSavedCode, isDark]);
+  }, [isLoaded, language, lastSavedCode, isDark, isMobile]);
+
+  // Update layout when tab changes on mobile
+  useEffect(() => {
+    if (isMobile && editorInstance.current) {
+      setTimeout(() => {
+        editorInstance.current.layout();
+      }, 0);
+    }
+  }, [activeMobileTab, isMobile]);
 
   // Handle Save
   const handleSave = useCallback(async () => {
@@ -310,18 +319,22 @@ const MissionPage = () => {
     if (editorInstance.current) {
       editorInstance.current.layout();
     }
-    localStorage.setItem('mission-panel-left-width', leftWidth);
-    localStorage.setItem('mission-panel-bottom-height', bottomHeight);
-  }, [leftWidth, bottomHeight]);
+    if (!isMobile) {
+      localStorage.setItem('mission-panel-left-width', leftWidth);
+      localStorage.setItem('mission-panel-bottom-height', bottomHeight);
+    }
+  }, [leftWidth, bottomHeight, isMobile]);
 
   // Main Resizer (Horizontal)
   const handleMainMouseDown = (e) => {
+    if (isMobile) return;
     setIsResizingMain(true);
     e.preventDefault();
   };
 
   // IDE Resizer (Vertical)
   const handleIdeMouseDown = (e) => {
+    if (isMobile) return;
     setIsResizingIde(true);
     e.preventDefault();
   };
@@ -416,6 +429,9 @@ const MissionPage = () => {
     setOutput('Running code...\n');
     setErrorTabContent('');
 
+    // On mobile, switch to results tab when running
+    if (isMobile) setActiveMobileTab('results');
+
     try {
       // Execute API will auto-save draft if missionId is provided
       const result = await executeCode({
@@ -446,7 +462,7 @@ const MissionPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [language, missionId, testCaseInput]);
+  }, [language, missionId, testCaseInput, isMobile]);
 
 
   const handleSubmit = useCallback(async () => {
@@ -456,6 +472,9 @@ const MissionPage = () => {
     setIsLoading(true);
     setOutput('Submitting...\n');
     setErrorTabContent('');
+
+    // On mobile, switch to results tab when submitting
+    if (isMobile) setActiveMobileTab('results');
 
     try {
       const result = await submitCode({
@@ -485,14 +504,14 @@ const MissionPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [language, missionId]);
+  }, [language, missionId, isMobile]);
 
   const closeMessageBox = () => {
     setMessageBox((prev) => ({ ...prev, isOpen: false }));
   };
 
   return (
-    <div className="mission-page-container">
+    <div className={`mission-page-container ${isMobile ? 'is-mobile' : ''}`}>
       <Gnb
         title="LearnCode"
         fluid={true}
@@ -504,9 +523,47 @@ const MissionPage = () => {
         onSettingsClick={() => setIsMyPageOpen(true)}
       />
 
+      {isMobile && (
+        <div className="mobile-tab-nav" role="tablist">
+          <button 
+            className={`mobile-tab-item ${activeMobileTab === 'description' ? 'active' : ''}`}
+            onClick={() => setActiveMobileTab('description')}
+            role="tab"
+            aria-selected={activeMobileTab === 'description'}
+            aria-label="문제 설명 보기"
+          >
+            문제 설명
+          </button>
+          <button 
+            className={`mobile-tab-item ${activeMobileTab === 'editor' ? 'active' : ''}`}
+            onClick={() => setActiveMobileTab('editor')}
+            role="tab"
+            aria-selected={activeMobileTab === 'editor'}
+            aria-label="코드 에디터 보기"
+          >
+            에디터
+          </button>
+          <button 
+            className={`mobile-tab-item ${activeMobileTab === 'results' ? 'active' : ''}`}
+            onClick={() => setActiveMobileTab('results')}
+            role="tab"
+            aria-selected={activeMobileTab === 'results'}
+            aria-label="실행 결과 보기"
+          >
+            실행 결과
+          </button>
+        </div>
+      )}
+
       <main className="mission-main-content">
         {/* Left: Problem Description */}
-        <div className="panel-left" style={{ width: `${leftWidth}%` }}>
+        <div 
+          className="panel-left" 
+          style={{ 
+            width: isMobile ? '100%' : `${leftWidth}%`,
+            display: isMobile && activeMobileTab !== 'description' ? 'none' : 'block'
+          }}
+        >
           {mission ? (
             <ProblemDescriptionPanel
               title={mission.title}
@@ -524,14 +581,28 @@ const MissionPage = () => {
         </div>
 
         {/* Horizontal Resizer */}
-        <div
-          className={`resizer-horizontal ${isResizingMain ? 'dragging' : ''}`}
-          onMouseDown={handleMainMouseDown}
-        />
+        {!isMobile && (
+          <div
+            className={`resizer-horizontal ${isResizingMain ? 'dragging' : ''}`}
+            onMouseDown={handleMainMouseDown}
+          />
+        )}
 
         {/* Right: IDE Area */}
-        <div className="panel-right" style={{ width: `${100 - leftWidth}%` }}>
-          <div className="panel-editor-wrapper" style={{ height: `${100 - bottomHeight}%` }}>
+        <div 
+          className="panel-right" 
+          style={{ 
+            width: isMobile ? '100%' : `${100 - leftWidth}%`,
+            display: isMobile && activeMobileTab === 'description' ? 'none' : 'flex'
+          }}
+        >
+          <div 
+            className="panel-editor-wrapper" 
+            style={{ 
+              height: isMobile ? (activeMobileTab === 'editor' ? '100%' : '0') : `${100 - bottomHeight}%`,
+              display: isMobile && activeMobileTab !== 'editor' ? 'none' : 'flex'
+            }}
+          >
             <header className="editor-header">
               <div className="editor-controls">
                 <div className="select-wrapper">
@@ -552,21 +623,6 @@ const MissionPage = () => {
                       </>
                     )}
                   </select>
-                  <svg
-                    className="select-arrow"
-                    width="10"
-                    height="6"
-                    viewBox="0 0 10 6"
-                    fill="none"
-                  >
-                    <path
-                      d="M1 1L5 5L9 1"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
                 </div>
               </div>
 
@@ -575,9 +631,9 @@ const MissionPage = () => {
                   className={`save-status ${isLoading ? 'loading' : isDirty ? 'dirty' : 'saved'}`}
                 >
                   {isLoading ? (
-                    <span className="status-text">저장 중...</span>
+                    <span className="status-text">{isMobile ? '...' : '저장 중...'}</span>
                   ) : isDirty ? (
-                    <span className="status-text">변경됨</span>
+                    <span className="status-text">{isMobile ? '●' : '변경됨'}</span>
                   ) : (
                     <>
                       <svg
@@ -586,53 +642,57 @@ const MissionPage = () => {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="2.5"
+                        strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         className="status-icon"
                       >
-                        <path d="M20 6L9 17l-5-5" />
+                        <polyline points="20 6 9 17 4 12" />
                       </svg>
-                      <span className="status-text">저장됨</span>
+                      {!isMobile && <span className="status-text">저장됨</span>}
                     </>
                   )}
                 </div>
 
-                <div className="toolbar-divider" />
+                {!isMobile && <div className="toolbar-divider" />}
 
-                <button
-                  type="button"
-                  className="toolbar-action-btn"
-                  onClick={handleSave}
-                  disabled={isLoading || !isDirty}
-                  title="코드 저장 (Ctrl+S)"
-                >
-                  <SaveIcon />
-                  <span>저장</span>
-                </button>
-
-                <button
-                  type="button"
-                  className="toolbar-action-btn"
-                  onClick={handleResetCode}
-                  title="코드 초기화"
-                  disabled={isLoading}
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                {!isMobile && (
+                  <button
+                    type="button"
+                    className="toolbar-action-btn"
+                    onClick={handleSave}
+                    disabled={isLoading || !isDirty}
                   >
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                    <path d="M3 3v5h5" />
-                  </svg>
-                  <span>초기화</span>
-                </button>
+                    <SaveIcon />
+                    <span>저장</span>
+                  </button>
+                )}
+
+                {!isMobile && (
+                  <button
+                    type="button"
+                    className="toolbar-action-btn"
+                    onClick={handleResetCode}
+                    title="코드 초기화"
+                    disabled={isLoading}
+                    aria-label="코드 초기화"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                      <path d="M3 3v5h5" />
+                    </svg>
+                    <span>초기화</span>
+                  </button>
+                )}
 
                 <div className="toolbar-divider" />
 
@@ -641,6 +701,7 @@ const MissionPage = () => {
                   className="toolbar-action-btn run-btn"
                   onClick={handleRun}
                   disabled={isLoading}
+                  aria-label="코드 실행 테스트"
                 >
                   <RunIcon />
                   <span>테스트</span>
@@ -650,6 +711,7 @@ const MissionPage = () => {
                   className="toolbar-action-btn submit-btn"
                   onClick={handleSubmit}
                   disabled={isLoading}
+                  aria-label="최종 코드 제출"
                 >
                   <SubmitIcon />
                   <span>제출</span>
@@ -660,13 +722,21 @@ const MissionPage = () => {
           </div>
 
           {/* Vertical Resizer */}
-          <div
-            className={`resizer-vertical ${isResizingIde ? 'dragging' : ''}`}
-            onMouseDown={handleIdeMouseDown}
-          />
+          {!isMobile && (
+            <div
+              className={`resizer-vertical ${isResizingIde ? 'dragging' : ''}`}
+              onMouseDown={handleIdeMouseDown}
+            />
+          )}
 
           {/* Bottom: Execution Results */}
-          <div className="panel-results" style={{ height: `${bottomHeight}%` }}>
+          <div 
+            className="panel-results" 
+            style={{ 
+              height: isMobile ? '100%' : `${bottomHeight}%`,
+              display: isMobile && activeMobileTab !== 'results' ? 'none' : 'flex'
+            }}
+          >
             <ExecutionResultPanel
               output={output}
               testcase={testCaseInput}
@@ -678,8 +748,7 @@ const MissionPage = () => {
         </div>
       </main>
 
-      <Footer />
-
+      {!isMobile && <Footer />}
       <MyPageModal 
         isOpen={isMyPageOpen} 
         onClose={() => setIsMyPageOpen(false)} 

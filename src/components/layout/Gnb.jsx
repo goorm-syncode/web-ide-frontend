@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
-import logo from '../../assets/learncode-icon.png';
+import logo from '../../assets/logo-gnb.png';
 import '../../styles/components/layout/Gnb.css';
 
 const BackArrowIcon = () => (

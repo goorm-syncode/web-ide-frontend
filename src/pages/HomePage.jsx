@@ -13,7 +13,8 @@ import DifficultyFilter from '../components/home/DifficultyFilter';
 import StatusFilter from '../components/home/StatusFilter';
 import Pagination from '../components/common/Pagination';
 
-import { getMissions } from '../services/missions';
+import { getMissions, getContinueMission } from '../services/missions';
+import { getMyProgress } from '../services/userService';
 import { getErrorMessage } from '../services/api';
 
 import '../styles/pages/HomePage.css';
@@ -43,6 +44,9 @@ const HomePage = () => {
   const [missions, setMissions] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [userProgress, setUserProgress] = useState(0);
+  const [continueMission, setContinueMission] = useState(null);
+
 
   // 난이도 필터가 변경될 때마다 데이터를 가져오도록 합니다.
   useEffect(() => {
@@ -75,9 +79,40 @@ const HomePage = () => {
     fetchMissions();
   }, [selectedDifficulty, selectedStatus, searchQuery, currentPage]);
 
+  // 진행률 및 이어하기 데이터 가져오기
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setUserProgress(0);
+      setContinueMission(null);
+      return;
+    }
+
+    const fetchHomeData = async () => {
+      try {
+        const [progressRes, continueRes] = await Promise.all([
+          getMyProgress(),
+          getContinueMission(),
+        ]);
+
+        if (progressRes) {
+          setUserProgress(progressRes.progressPercent || 0);
+        }
+
+        if (continueRes) {
+          setContinueMission(continueRes.mission || null);
+        }
+      } catch (err) {
+        console.error('홈 데이터 로딩 실패:', err);
+      }
+    };
+
+    fetchHomeData();
+  }, [isAuthenticated]);
+
+
   const handleFilterChange = (setter) => (value) => {
     setter(value);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const showModal = (title, message, type = 'info') => {
@@ -100,10 +135,23 @@ const HomePage = () => {
     navigate(`/missions/${id}`);
   };
 
+  const handleContinue = () => {
+    if (!isAuthenticated) {
+      showModal('로그인 필요', '이어하기 기능을 사용하려면 로그인이 필요합니다.', 'info');
+      return;
+    }
+
+    if (continueMission && continueMission.missionId) {
+      navigate(`/missions/${continueMission.missionId}`);
+    } else {
+      showModal('안내', '더 이상 진행할 미션이 없습니다. 모든 미션을 완료하셨나요?', 'info');
+    }
+  };
+
   return (
     <div className="home-wrapper">
       <Gnb
-        title="LearnCode"
+        title="Learn Code"
         isLoggedIn={isAuthenticated}
         userName={user?.nickname || 'User'}
         onLogoutClick={handleLogout}
@@ -116,10 +164,8 @@ const HomePage = () => {
           <h1 className="home-title">학습 미션</h1>
           <div className="home-progress">
             <ProgressBanner
-              progress={65}
-              onContinue={() =>
-                showModal('Notice', 'The "Continue Learning" feature is coming soon.', 'info')
-              }
+              progress={userProgress}
+              onContinue={handleContinue}
             />
           </div>
         </div>
@@ -170,13 +216,9 @@ const HomePage = () => {
         {modalState.message}
       </MessageBox>
 
-      <MyPageModal 
-        isOpen={isMyPageOpen} 
-        onClose={() => setIsMyPageOpen(false)} 
-      />
+      <MyPageModal isOpen={isMyPageOpen} onClose={() => setIsMyPageOpen(false)} />
     </div>
   );
 };
-
 
 export default HomePage;

@@ -9,7 +9,7 @@ import Footer from '../components/layout/Footer';
 import authService from '../services/auth.js';
 import { mapErrorMessage } from '../services/errorMapper.js';
 
-import learncodeIcon from '../assets/learncode-icon.png';
+import learncodeIcon from '../assets/logo-auth.png';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -28,7 +28,9 @@ const SignupPage = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
   const [messageBox, setMessageBox] = useState({
+    isOpen: false,
     onConfirm: null,
   });
 
@@ -75,29 +77,33 @@ const SignupPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => {
-      const newData = { ...prev, [name]: value };
-      
-      // Update errors based on the newly updated data
-      setErrors((prevErrors) => {
-        const newErrors = { ...prevErrors };
-        
-        if (name === 'email') newErrors.email = validateEmail(value);
-        if (name === 'nickname') newErrors.nickname = validateNickname(value);
-        if (name === 'password') {
-          newErrors.password = validatePassword(value);
-          newErrors.passwordConfirm = validatePasswordConfirm(value, newData.passwordConfirm);
-        }
-        if (name === 'passwordConfirm') {
-          newErrors.passwordConfirm = validatePasswordConfirm(newData.password, value);
-        }
-        
-        return newErrors;
-      });
-      
-      return newData;
-    });
+    
+    // 1. Update form data first using a flat structure
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // 2. Clear server error immediately
     if (serverError) setServerError('');
+
+    // 3. Update errors using the latest value and current formData
+    // We use a separate setErrors call to ensure we don't nest them, 
+    // which can lead to stale state issues in some React versions/environments.
+    setErrors((prevErrors) => {
+      const nextErrors = { ...prevErrors };
+      
+      // We calculate the 'next' form state to ensure cross-field validation (like passwordConfirm)
+      // uses the value currently being typed.
+      if (name === 'email') nextErrors.email = validateEmail(value);
+      if (name === 'nickname') nextErrors.nickname = validateNickname(value);
+      if (name === 'password') {
+        nextErrors.password = validatePassword(value);
+        nextErrors.passwordConfirm = validatePasswordConfirm(value, formData.passwordConfirm);
+      }
+      if (name === 'passwordConfirm') {
+        nextErrors.passwordConfirm = validatePasswordConfirm(formData.password, value);
+      }
+      
+      return nextErrors;
+    });
   };
 
   const validateAll = () => {
@@ -114,7 +120,11 @@ const SignupPage = () => {
   const handleSignup = async (e) => {
     if (e) e.preventDefault();
 
-    if (!validateAll()) return;
+    if (!validateAll()) {
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
+      return;
+    }
 
     setLoading(true);
     try {
@@ -133,6 +143,8 @@ const SignupPage = () => {
     } catch (error) {
       const message = mapErrorMessage(error, '회원가입 처리 중 오류가 발생했습니다.');
       setServerError(message);
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
     } finally {
       setLoading(false);
     }
@@ -156,7 +168,7 @@ const SignupPage = () => {
         overflow: 'hidden',
       }}
     >
-      <AuthLayout>
+      <AuthLayout shake={isShaking}>
         <div className="auth-header">
           <img src={learncodeIcon} alt="Learn Code" className="auth-logo-icon" />
           <h1 className="auth-page-title">
@@ -251,5 +263,6 @@ const SignupPage = () => {
     </div>
   );
 };
+
 
 export default SignupPage;

@@ -13,30 +13,7 @@
 .dark-theme .gnb-container {
   background-color: var(--bg-gnb);
   border-bottom-color: var(--border-default);
-  color: var(--text-on-page);
 }
-
-.dark-theme .gnb-username,
-.dark-theme .gnb-back-button,
-.dark-theme .gnb-action-button {
-  color: var(--text-muted-on-page);
-}
-
-.dark-theme .gnb-back-button:hover,
-.dark-theme .gnb-action-button:hover {
-  color: var(--text-on-page);
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.dark-theme .gnb-theme-toggle,
-.dark-theme .gnb-settings-button {
-  color: var(--text-muted-on-page);
-}
-
-.dark-theme .gnb-theme-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
 
 .gnb-inner {
   display: flex;
@@ -44,19 +21,20 @@
   align-items: center;
   width: 100%;
   max-width: 1660px;
-  padding: 0 32px;
+  padding: 0 var(--space-xl);
   box-sizing: border-box;
 }
 
 .gnb-inner.fluid {
   max-width: 100%;
-  padding: 0 24px;
+  padding: 0 var(--space-lg);
 }
 
 .gnb-left {
   display: flex;
   align-items: center;
-  gap: 8px; /* Spacing: 8 */
+  gap: var(--space-sm);
+  margin-top: 3px;
 }
 
 .gnb-back-button {
@@ -67,8 +45,8 @@
   border: none;
   cursor: pointer;
   color: var(--text-secondary);
-  padding: 4px; /* Spacing: 4 */
-  border-radius: 8px; /* Radius: 8px */
+  padding: var(--space-xs);
+  border-radius: 8px;
   transition: all 0.2s ease;
 }
 
@@ -79,14 +57,15 @@
 
 .gnb-title {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 20px; /* Typography: 20px */
-  font-weight: 800;
+  align-items: flex-end;
+  gap: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  /* Adjusted from 800 */
   color: var(--primary);
   margin: 0;
   cursor: pointer;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.02em;
   transition: color 0.2s ease;
 }
 
@@ -94,6 +73,7 @@
   width: 32px;
   height: 32px;
   object-fit: contain;
+  margin-bottom: 1px;
 }
 
 .gnb-title:hover {
@@ -104,11 +84,11 @@
 .gnb-right {
   display: flex;
   align-items: center;
-  gap: 24px; /* Spacing: 24 */
+  gap: var(--space-lg);
 }
 
 .gnb-username {
-  font-size: 14px; /* Typography: 14px */
+  font-size: 14px;
   color: var(--text-secondary);
   font-weight: 500;
 }
@@ -116,8 +96,8 @@
 .gnb-user-group {
   display: flex;
   align-items: center;
-  gap: 12px; /* Spacing: 12 */
-  padding: 4px 0;
+  gap: 12px;
+  padding: var(--space-xs) 0;
 }
 
 .gnb-theme-toggle {
@@ -160,7 +140,7 @@
 .gnb-action-button {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   background: none;
   border: none;
   color: var(--text-secondary);
@@ -191,7 +171,7 @@
 @media screen and (max-width: 768px) {
   .gnb-inner {
     height: 56px;
-    padding: 0 24px;
+    padding: 0 var(--space-lg);
   }
 
   .gnb-container {
@@ -199,7 +179,7 @@
   }
 
   .gnb-right {
-    gap: 16px;
+    gap: var(--space-md);
   }
 }
 
