@@ -9,7 +9,7 @@ import Footer from '../components/layout/Footer';
 import authService from '../services/auth.js';
 import { mapErrorMessage } from '../services/errorMapper.js';
 
-import learncodeIcon from '../assets/learncode-icon.png';
+import learncodeIcon from '../assets/logo-auth.png';
 
 const SignupPage = () => {
   const navigate = useNavigate();

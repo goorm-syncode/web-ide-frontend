@@ -9,7 +9,7 @@ import Footer from '../components/layout/Footer';
 import authService from '../services/auth';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 import { mapErrorMessage } from '../services/errorMapper';
-import learncodeImg from '../assets/learncode-icon.png';
+import learncodeImg from '../assets/logo-auth.png';
 
 const LoginPage = () => {
   const navigate = useNavigate();

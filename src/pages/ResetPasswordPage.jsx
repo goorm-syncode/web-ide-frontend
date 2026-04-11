@@ -8,7 +8,7 @@ import Footer from '../components/layout/Footer';
 
 import authService from '../services/auth';
 import { mapErrorMessage } from '../services/errorMapper';
-import learncodeIcon from '../assets/learncode-icon.png';
+import learncodeIcon from '../assets/logo-auth.png';
 
 const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
