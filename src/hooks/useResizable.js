@@ -1,9 +1,10 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 
 const useResizable = (initialSize = { width: 360, height: 480 }, initialPos = { bottom: 24, right: 24 }) => {
   const [size, setSize] = useState(initialSize);
   const [position, setPosition] = useState(initialPos);
   const [isResizing, setIsResizing] = useState(false);
+  const sizeRef = useRef(initialSize);
   
   const resizeRef = useRef({
     direction: '',
@@ -38,35 +39,39 @@ const useResizable = (initialSize = { width: 360, height: 480 }, initialPos = { 
     if (newHeight > viewportHeight) newHeight = viewportHeight;
 
     if (direction === 'move') {
-      newBottom = Math.max(0, Math.min(viewportHeight - newHeight, startBottom - dy));
-      newRight = Math.max(0, Math.min(viewportWidth - newWidth, startRight - dx));
-      setPosition({ bottom: newBottom, right: newRight });
+      newBottom = Math.max(0, Math.min(viewportHeight - newHeight, (startBottom || 24) - dy));
+      newRight = Math.max(0, Math.min(viewportWidth - newWidth, (startRight || 24) - dx));
+      setPosition({ bottom: Number(newBottom) || 0, right: Number(newRight) || 0 });
       return;
     }
 
     // Horizontal Clamp
     if (direction.includes('e')) {
-      newWidth = Math.min(viewportWidth - startRight, startWidth + dx);
-      newRight = startRight - (newWidth - startWidth); 
+      newWidth = Math.min(viewportWidth - (startRight || 0), (startWidth || 320) + dx);
+      newRight = (startRight || 0) - (newWidth - (startWidth || 0)); 
     } else if (direction.includes('w')) {
-      newWidth = Math.min(viewportWidth - startRight, startWidth - dx);
+      newWidth = Math.min(viewportWidth - (startRight || 0), (startWidth || 320) - dx);
     }
 
     // Vertical Clamp
     if (direction.includes('s')) {
-      newHeight = Math.min(viewportHeight - startBottom, startHeight + dy);
-      newBottom = startBottom - (newHeight - startHeight);
+      newHeight = Math.min(viewportHeight - (startBottom || 0), (startHeight || 400) + dy);
+      newBottom = (startBottom || 0) - (newHeight - (startHeight || 0));
     } else if (direction.includes('n')) {
-      newHeight = Math.min(viewportHeight - startBottom, startHeight - dy);
+      newHeight = Math.min(viewportHeight - (startBottom || 0), (startHeight || 400) - dy);
     }
 
     if (newWidth >= minWidth) {
-      setSize((prev) => ({ ...prev, width: newWidth }));
-      setPosition((prev) => ({ ...prev, right: Math.max(0, newRight) }));
+      const w = Number(newWidth) || minWidth;
+      sizeRef.current = { ...sizeRef.current, width: w };
+      setSize((prev) => ({ ...prev, width: w }));
+      setPosition((prev) => ({ ...prev, right: Math.max(0, Number(newRight) || 0) }));
     }
     if (newHeight >= minHeight) {
-      setSize((prev) => ({ ...prev, height: newHeight }));
-      setPosition((prev) => ({ ...prev, bottom: Math.max(0, newBottom) }));
+      const h = Number(newHeight) || minHeight;
+      sizeRef.current = { ...sizeRef.current, height: h };
+      setSize((prev) => ({ ...prev, height: h }));
+      setPosition((prev) => ({ ...prev, bottom: Math.max(0, Number(newBottom) || 0) }));
     }
   }, []);
 
@@ -95,6 +100,33 @@ const useResizable = (initialSize = { width: 360, height: 480 }, initialPos = { 
     window.addEventListener('mousemove', onResizeMove);
     window.addEventListener('mouseup', onResizeEnd);
   };
+
+  // Clamp position & size when browser is resized
+  useEffect(() => {
+    const handleResize = () => {
+      const curWidth = Number(sizeRef.current.width) || 360;
+      const curHeight = Number(sizeRef.current.height) || 480;
+      const clampedWidth = Math.min(curWidth, window.innerWidth);
+      const clampedHeight = Math.min(curHeight, window.innerHeight);
+
+      if (clampedWidth !== curWidth || clampedHeight !== curHeight) {
+        sizeRef.current = { width: clampedWidth, height: clampedHeight };
+        setSize({ width: clampedWidth, height: clampedHeight });
+      }
+
+      setPosition((prev) => {
+        const safeBottom = Number(prev.bottom) || 24;
+        const safeRight = Number(prev.right) || 24;
+        return {
+          bottom: Math.min(safeBottom, Math.max(0, window.innerHeight - clampedHeight)),
+          right: Math.min(safeRight, Math.max(0, window.innerWidth - clampedWidth)),
+        };
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return {
     size,

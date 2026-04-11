@@ -31,26 +31,20 @@ const useDraggable = () => {
         setDragged(true);
       }
 
-      let newX = localPos.current.x + dx;
-      let newY = localPos.current.y + dy;
+      let newX = Number(localPos.current.x || 0) + dx;
+      let newY = Number(localPos.current.y || 0) + dy;
 
-      // Optional clamping for floating button (56x56 size, 24px bottom/right original offset)
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth || 1024;
+      const viewportHeight = window.innerHeight || 768;
       const btnSize = 56;
       const offset = 24;
 
-      // Max X (Right edge): right: 0 => 24 + x = 0 => x = -24? 
-      // Wait, if it's right: 24, and translate(x), then newRight = 24 - x.
-      // newRight >= 0 => 24 - x >= 0 => x <= 24.
-      // newRight <= viewportWidth - 56 => 24 - x <= viewportWidth - 56 => x >= 24 - viewportWidth + 56.
-      
       newX = Math.max(24 - viewportWidth + btnSize, Math.min(offset, newX));
       newY = Math.max(24 - viewportHeight + btnSize, Math.min(offset, newY));
 
       setPosition({
-        x: newX,
-        y: newY,
+        x: Number(newX) || 0,
+        y: Number(newY) || 0,
       });
     };
 
@@ -80,6 +74,30 @@ const useDraggable = () => {
     setPosition(newPos);
     localPos.current = newPos;
   };
+
+  // Clamp button position when browser is resized
+  useEffect(() => {
+    const handleResize = () => {
+      const btnSize = 56;
+      const vw = window.innerWidth || 1024;
+      const vh = window.innerHeight || 768;
+      // x is a translate offset from right:24, y from bottom:24
+      // x range: [24 - vw + btnSize, 24]  (more negative = more left)
+      // y range: [24 - vh + btnSize, 24]  (more negative = more up)
+      setPosition((prev) => {
+        const safeX = Number(prev.x) || 0;
+        const safeY = Number(prev.y) || 0;
+        const clampedX = Math.max(24 - vw + btnSize, Math.min(24, safeX));
+        const clampedY = Math.max(24 - vh + btnSize, Math.min(24, safeY));
+        const newPos = { x: clampedX, y: clampedY };
+        localPos.current = newPos;
+        return newPos;
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return {
     position,

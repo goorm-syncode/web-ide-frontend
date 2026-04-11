@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import useDraggable from '../../hooks/useDraggable';
 import useResizable from '../../hooks/useResizable';
+import * as chatService from '../../services/chat';
+import * as userService from '../../services/userService';
 import '../../styles/components/chat/ChatWidget.css';
 
 // SVG Icon for floating button
@@ -53,52 +54,167 @@ const SendIcon = () => (
   </svg>
 );
 
-const ChatWidget = ({ initialUnreadCount = 3 }) => {
+const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputText, setInputText] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
+  const [channel, setChannel] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [onlineCount, setOnlineCount] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+
   const maxCharCount = 300;
+  const heartbeatInterval = 30000; // 30 seconds
 
   // hooks
   const btnDrag = useDraggable();
   const { size, position: popupPos, setPosition: setPopupPos, onResizeStart } = useResizable();
   const inputRef = useRef(null);
+  const scrollRef = useRef(null);
 
-  // Focus input when opened
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isOpen]);
 
-  // Mock messages with relative time and Korean "나"
-  const messages = [
-    {
-      id: 1,
-      sender: 'Alice (System)',
-      text: '안녕하세요! 반갑습니다. 공지사항을 확인해 주세요.',
-      time: '10분 전',
-      isMine: false,
-    },
-    {
-      id: 2,
-      sender: 'Bob21',
-      text: '모두 즐거운 공부 되세요! 같이 화이팅해요.',
-      time: '3분 전',
-      isMine: false,
-    },
-    {
-      id: 3,
-      sender: '나',
-      text: '안녕하세요 Bob님, 반갑습니다. 다음에 또 만나요. 어서오세요. 네. 맞습니다. 그렇군요. 알겠습니다.',
-      time: '방금 전',
-      isMine: true,
-    },
-  ];
+  // Auto-scroll to bottom
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages, isOpen]);
+
+  // Initialize: User, Channel, Messages
+  useEffect(() => {
+    const initChat = async () => {
+      try {
+        setIsLoading(true);
+        // 1. Get current user
+        const userData = await userService.getCurrentUser();
+        setCurrentUser(userData);
+
+        // 2. Get joined channels
+        let channels = await chatService.getMyChannels();
+        console.log('Initially joined channels:', channels);
+
+        let targetChannel =
+          channels.find((c) => c.name?.toLowerCase().includes('general')) || channels[0];
+
+        // 3. If no channel joined, try to join global (assume ID 1 for MVP)
+        if (!targetChannel) {
+          console.log('No joined channels found. Attempting to join global channel (ID: 1)...');
+          try {
+            await chatService.joinChannel(1);
+            // Refresh channel list or just try to get this specific channel if ID is known
+            // Since there's no getChannelById, we re-fetch the list
+            channels = await chatService.getMyChannels();
+            targetChannel = channels.find((c) => c.id === 1) || channels[0];
+          } catch (joinError) {
+            console.error('Failed to join channel 1:', joinError);
+          }
+        }
+
+        if (targetChannel) {
+          console.log('Selected channel:', targetChannel);
+          setChannel(targetChannel);
+
+          // 4. Load initial messages
+          const messageData = await chatService.getMessages(targetChannel.id);
+          setMessages(messageData.messages || []);
+        } else {
+          console.warn('Could not identify any chat channel to join.');
+        }
+      } catch (error) {
+        console.error('Failed to initialize chat:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initChat();
+  }, []);
+
+  // SSE Subscription (Service implementation)
+  useEffect(() => {
+    if (!channel) return;
+
+    const unsubscribe = chatService.subscribeToMessages(
+      channel.id,
+      (newMessage) => {
+        setMessages((prev) => {
+          if (prev.some((msg) => msg.id === newMessage.id)) return prev;
+          return [...prev, newMessage];
+        });
+
+        if (!isOpen) {
+          setUnreadCount((prev) => prev + 1);
+        } else {
+          chatService.markRead(channel.id, newMessage.id);
+        }
+      },
+      (_error) => {
+        // Optional: Show status or error in UI
+      },
+    );
+
+    return () => {
+      unsubscribe();
+    };
+  }, [channel, isOpen]);
+
+  // Heartbeat & Online Count Polling
+  useEffect(() => {
+    if (!channel) return;
+
+    const poll = async () => {
+      try {
+        await chatService.heartbeat(channel.id);
+        const data = await chatService.getOnlineCount(channel.id);
+        setOnlineCount(data.onlineCount || 0);
+      } catch (error) {
+        console.error('Polling error:', error);
+      }
+    };
+
+    poll(); // Initial poll
+    const timer = setInterval(poll, heartbeatInterval);
+    return () => clearInterval(timer);
+  }, [channel]);
+
+  // Format relative time helper
+  const formatTime = (dateString) => {
+    if (!dateString) return '';
+
+    // Ensure the date string is interpreted as UTC if no timezone is specified
+    let isoString = dateString;
+    if (!isoString.includes('Z') && !isoString.includes('+')) {
+      isoString += 'Z';
+    }
+
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMin = Math.floor(diffMs / 60000);
+
+    if (diffMin < 1) return '방금 전';
+    if (diffMin < 60) return `${diffMin}분 전`;
+    const diffHours = Math.floor(diffMin / 60);
+    if (diffHours < 24) return `${diffHours}시간 전`;
+    return date.toLocaleDateString();
+  };
 
   const handleToggle = () => {
     // Prevent toggling if it was a drag action
     if (!btnDrag.dragged) {
       if (!isOpen) {
+        // Mark as read when opening
+        if (channel && messages.length > 0) {
+          chatService.markRead(channel.id, messages[messages.length - 1].id);
+          setUnreadCount(0);
+        }
         // Sync popup position to button before opening with viewport clamping
         const targetBottom = 24 - btnDrag.position.y;
         const targetRight = 24 - btnDrag.position.x;
@@ -129,6 +245,29 @@ const ChatWidget = ({ initialUnreadCount = 3 }) => {
     }
   };
 
+  const handleSendMessage = async () => {
+    if (!inputText.trim() || !channel || isSending) return;
+
+    try {
+      setIsSending(true);
+      await chatService.sendMessage(channel.id, inputText.trim());
+      setInputText('');
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      alert('메시지 전송에 실패했습니다.');
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    // Check if it's the Enter key and not during IME composition
+    if (e.key === 'Enter' && !e.shiftKey && e.nativeEvent.isComposing === false) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   return (
     <div className="chat-widget-wrapper">
       {/* Floating Button - Visible only when NOT open */}
@@ -144,10 +283,13 @@ const ChatWidget = ({ initialUnreadCount = 3 }) => {
           title="Open Global Chat"
         >
           <ChatIcon />
-          {initialUnreadCount > 0 && (
-            <div className="chat-unread-badge">
-              {initialUnreadCount > 999 ? '999+' : initialUnreadCount}
+          {!channel && !isLoading && (
+            <div className="chat-error-warn" title="No chat channel found">
+              !
             </div>
+          )}
+          {unreadCount > 0 && (
+            <div className="chat-unread-badge">{unreadCount > 999 ? '999+' : unreadCount}</div>
           )}
         </button>
       )}
@@ -180,18 +322,25 @@ const ChatWidget = ({ initialUnreadCount = 3 }) => {
             style={{ cursor: 'grab' }}
           >
             <div className="chat-header-info">
-              <span className="chat-channel-name">Global Chat</span>
+              <span className="chat-channel-name">실시간 채팅</span>
               <div className="chat-status-indicator">
                 <span className="chat-online-dot" />
-                <span className="chat-online-count">12 online</span>
+                <span className="chat-online-count">{onlineCount} online</span>
               </div>
             </div>
             <div className="chat-header-actions">
               <button
                 type="button"
                 className="chat-minimize-btn"
-                onClick={() => setIsOpen(false)}
-                title="Minimize"
+                onClick={() => {
+                  // Sync button position to popup before closing
+                  btnDrag.setPosition({
+                    x: Number(24 - popupPos.right) || 0,
+                    y: Number(24 - popupPos.bottom) || 0,
+                  });
+                  setIsOpen(false);
+                }}
+                title="최소화"
               >
                 <ChevronDownIcon />
               </button>
@@ -202,17 +351,21 @@ const ChatWidget = ({ initialUnreadCount = 3 }) => {
             <div className="chat-tab">Global</div>
           </div>
 
-          <div className="chat-msg-list">
-            {messages.map((msg) => (
-              <div key={msg.id} className={`chat-msg-row ${msg.isMine ? 'mine' : 'other'}`}>
-                <div className="chat-msg-sender">{msg.sender}</div>
-                <div className="chat-msg-content-wrapper">
-                  {msg.isMine && <span className="chat-msg-time">{msg.time}</span>}
-                  <div className="chat-msg-bubble">{msg.text}</div>
-                  {!msg.isMine && <span className="chat-msg-time">{msg.time}</span>}
+          <div className="chat-msg-list" ref={scrollRef}>
+            {isLoading && <div className="chat-loading">Loading...</div>}
+            {messages.map((msg) => {
+              const isMine = currentUser && msg.senderId === currentUser.id;
+              return (
+                <div key={msg.id} className={`chat-msg-row ${isMine ? 'mine' : 'other'}`}>
+                  <div className="chat-msg-sender">{msg.senderNickname}</div>
+                  <div className="chat-msg-content-wrapper">
+                    {isMine && <span className="chat-msg-time">{formatTime(msg.createdAt)}</span>}
+                    <div className="chat-msg-bubble">{msg.content}</div>
+                    {!isMine && <span className="chat-msg-time">{formatTime(msg.createdAt)}</span>}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="chat-input-area">
@@ -221,15 +374,21 @@ const ChatWidget = ({ initialUnreadCount = 3 }) => {
                 ref={inputRef}
                 type="text"
                 className="chat-input-box"
-                placeholder="메시지를 입력하세요..."
+                placeholder="메시지를 입력하세요"
                 value={inputText}
                 onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
               />
               <span className="chat-char-counter">
                 {inputText.length}/{maxCharCount}
               </span>
             </div>
-            <button type="button" className="chat-send-btn">
+            <button
+              type="button"
+              className="chat-send-btn"
+              onClick={handleSendMessage}
+              disabled={!inputText.trim() || !channel || isSending}
+            >
               <SendIcon />
             </button>
           </div>
@@ -237,10 +396,6 @@ const ChatWidget = ({ initialUnreadCount = 3 }) => {
       )}
     </div>
   );
-};
-
-ChatWidget.propTypes = {
-  initialUnreadCount: PropTypes.number,
 };
 
 export default ChatWidget;
