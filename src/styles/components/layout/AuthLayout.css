@@ -1,13 +1,11 @@
 .auth-layout-container {
   flex: 1;
   width: 100%;
-  padding-top: 65px; /* Offset for GNB if present, or just top padding */
   display: flex;
   flex-direction: column;
   background-color: var(--bg-page);
   box-sizing: border-box;
   transition: background-color 0.3s ease;
-  min-height: 100vh;
 }
 
 .auth-layout-card-wrapper {
@@ -55,7 +53,7 @@
 .auth-logo-icon {
   width: 80px;
   height: auto;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -69,8 +67,10 @@
 
 .auth-page-title {
   font-family: var(--sans);
-  font-size: 32px; /* Increased size */
-  font-weight: 800; /* Extra bold */
+  font-size: 32px;
+  /* Increased size */
+  font-weight: 800;
+  /* Extra bold */
   color: var(--text-primary);
   margin: 0 0 12px 0;
   letter-spacing: -0.04em;
@@ -86,11 +86,12 @@
 .auth-mypage-title {
   font-family: var(--sans);
   font-size: 28px;
-  font-weight: 800;
-  color: var(--primary); /* Use brand color for modal titles */
+  font-weight: 600;
+  color: var(--primary);
+  /* Use brand color for modal titles */
   text-align: center;
   margin: 0;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   transition: color 0.3s ease;
 }
 
@@ -114,7 +115,7 @@
   width: 100%;
 }
 
-.auth-submit-btn-wrapper > button {
+.auth-submit-btn-wrapper>button {
   width: 100%;
 }
 
@@ -141,8 +142,8 @@
 
 /* Auth Specific Primary Button Override (Aligned with UI_RULES.md) */
 .auth-btn-purple {
-  background-color: var(--primary) !important;
-  color: #ffffff !important;
+  background-color: var(--primary);
+  color: #ffffff;
   border-radius: 8px;
   border: none;
   transition: all 0.3s ease;
@@ -150,12 +151,12 @@
 }
 
 .auth-btn-purple:hover:not(:disabled) {
-  background-color: var(--primary-hover) !important;
+  background-color: var(--primary-hover);
   transform: translateY(-2px);
 }
 
 .auth-btn-purple:disabled {
-  opacity: 0.5 !important;
+  opacity: 0.5;
   box-shadow: none;
 }
 
@@ -165,8 +166,8 @@
 }
 
 .auth-link-muted:hover {
-  color: var(--primary) !important;
-  text-decoration: underline !important;
+  color: var(--primary);
+  text-decoration: underline;
 }
 
 .dark-theme .mypage-modal-close:hover {
@@ -175,12 +176,14 @@
 
 /* Enhancing input borders for dynamic feel */
 .auth-form input:focus {
-  border-color: var(--primary) !important;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
-.auth-card {
-  padding: 40px 32px;
+.auth-layout-card-wrapper .auth-card {
+  padding: 24px;
   box-shadow: var(--shadow);
+  height: auto;
+  align-self: center;
+  /* 추가로 수직 축에서 늘어나지 않게 설정 */
 }
-
