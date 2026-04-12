@@ -74,6 +74,22 @@ const SubmitIcon = () => (
   </svg>
 );
 
+const LoadingIcon = () => (
+  <svg
+    className="btn-icon spinner-icon"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="3"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+  </svg>
+);
+
 const LANG_MAP = {
   python: 'PYTHON',
   javascript: 'JAVASCRIPT',
@@ -133,7 +149,8 @@ const MissionPage = () => {
 
   const [isResizingMain, setIsResizingMain] = useState(false);
   const [isResizingIde, setIsResizingIde] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingType, setLoadingType] = useState(null); // 'run', 'submit', or null
+  const isLoading = !!loadingType;
   const [output, setOutput] = useState('');
   const [errorTabContent, setErrorTabContent] = useState('');
   const [testCaseInput, setTestCaseInput] = useState('');
@@ -155,7 +172,7 @@ const MissionPage = () => {
   useEffect(() => {
     const fetchMissionData = async () => {
       try {
-        setIsLoading(true);
+        setLoadingType('load');
         const missionData = await getMissionById(missionId);
         setMission(missionData);
 
@@ -189,7 +206,7 @@ const MissionPage = () => {
         console.error('Failed to fetch mission data:', err);
         setOutput('Error: ' + mapErrorMessage(err));
       } finally {
-        setIsLoading(false);
+        setLoadingType(null);
       }
     };
 
@@ -262,13 +279,13 @@ const MissionPage = () => {
     if (code === lastSavedCode) return;
 
     try {
-      setIsLoading(true);
+      setLoadingType('save');
       await saveDraft(missionId, language.toUpperCase(), code);
       setLastSavedCode(code);
     } catch (err) {
       console.error('Save failed:', err);
     } finally {
-      setIsLoading(false);
+      setLoadingType(null);
     }
   }, [isLoading, lastSavedCode, missionId, language]);
 
@@ -289,7 +306,7 @@ const MissionPage = () => {
       onConfirm: async () => {
         setMessageBox((prev) => ({ ...prev, isOpen: false }));
         try {
-          setIsLoading(true);
+          setLoadingType('load');
 
           // 현재 선택된 언어의 백엔드용 매핑 이름 확인 (예: javascript -> JAVASCRIPT)
           const backendLang = LANG_MAP[language] || language.toUpperCase();
@@ -309,7 +326,7 @@ const MissionPage = () => {
         } catch (err) {
           console.error('Reset failed:', err);
         } finally {
-          setIsLoading(false);
+          setLoadingType(null);
         }
       },
     });
@@ -397,7 +414,7 @@ const MissionPage = () => {
 
     // Load draft or starter code for new language
     try {
-      setIsLoading(true);
+      setLoadingType('load');
       const draftData = await getDraft(missionId, backendLang); // 대문자로 전달
       let code = '';
       if (draftData.hasSavedCode) {
@@ -418,7 +435,7 @@ const MissionPage = () => {
     } catch (err) {
       console.error('Failed to load language draft:', err);
     } finally {
-      setIsLoading(false);
+      setLoadingType(null);
     }
   };
 
@@ -426,8 +443,8 @@ const MissionPage = () => {
     if (!editorInstance.current) return;
     const code = editorInstance.current.getValue();
 
-    setIsLoading(true);
-    setOutput('Running code...\n');
+    setLoadingType('run');
+    setOutput('Running code'); // Dots added by CSS
     setErrorTabContent('');
 
     // On mobile, switch to results tab when running
@@ -461,7 +478,7 @@ const MissionPage = () => {
     } catch (err) {
       setOutput('Error: ' + mapErrorMessage(err));
     } finally {
-      setIsLoading(false);
+      setLoadingType(null);
     }
   }, [language, missionId, testCaseInput, isMobile]);
 
@@ -470,8 +487,8 @@ const MissionPage = () => {
     if (!editorInstance.current) return;
     const code = editorInstance.current.getValue();
 
-    setIsLoading(true);
-    setOutput('Submitting...\n');
+    setLoadingType('submit');
+    setOutput('Submitting'); // Dots added by CSS
     setErrorTabContent('');
 
     // On mobile, switch to results tab when submitting
@@ -503,7 +520,7 @@ const MissionPage = () => {
     } catch (err) {
       setOutput('Error: ' + mapErrorMessage(err));
     } finally {
-      setIsLoading(false);
+      setLoadingType(null);
     }
   }, [language, missionId, isMobile]);
 
@@ -577,7 +594,10 @@ const MissionPage = () => {
               }))}
             />
           ) : (
-            <div className="panel-loading">미션을 불러오는 중...</div>
+            <div className="panel-loading">
+              <LoadingIcon />
+              <span>미션을 불러오는 중...</span>
+            </div>
           )}
         </div>
 
@@ -628,95 +648,98 @@ const MissionPage = () => {
               </div>
 
               <div className="editor-actions">
-                <div
-                  className={`save-status ${isLoading ? 'loading' : isDirty ? 'dirty' : 'saved'}`}
-                >
-                  {isLoading ? (
-                    <span className="status-text">{isMobile ? '...' : '저장 중...'}</span>
-                  ) : isDirty ? (
-                    <span className="status-text">{isMobile ? '●' : '변경됨'}</span>
-                  ) : (
-                    <>
+                <div className="editor-actions-left">
+                  <div
+                    className={`save-status ${loadingType === 'save' ? 'loading' : isDirty ? 'dirty' : 'saved'}`}
+                  >
+                    {loadingType === 'save' ? (
+                      <span className="status-text">저장 중...</span>
+                    ) : isDirty ? (
+                      <span className="status-text">변경됨</span>
+                    ) : (
+                      <>
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="status-icon"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span className="status-text">저장됨</span>
+                      </>
+                    )}
+                  </div>
+
+                  {!isMobile && <div className="toolbar-divider" />}
+
+                  {!isMobile && (
+                    <button
+                      type="button"
+                      className="toolbar-action-btn utility-btn"
+                      onClick={handleSave}
+                      disabled={isLoading || !isDirty}
+                    >
+                      <SaveIcon />
+                      <span>저장</span>
+                    </button>
+                  )}
+
+                  {!isMobile && (
+                    <button
+                      type="button"
+                      className="toolbar-action-btn utility-btn"
+                      onClick={handleResetCode}
+                      title="코드 초기화"
+                      disabled={isLoading}
+                      aria-label="코드 초기화"
+                    >
                       <svg
                         width="14"
                         height="14"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="3"
+                        strokeWidth="2.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="status-icon"
                       >
-                        <polyline points="20 6 9 17 4 12" />
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
                       </svg>
-                      {!isMobile && <span className="status-text">저장됨</span>}
-                    </>
+                      <span>초기화</span>
+                    </button>
                   )}
                 </div>
 
-                {!isMobile && <div className="toolbar-divider" />}
-
-                {!isMobile && (
+                <div className="editor-actions-right">
+                  {!isMobile && <div className="toolbar-divider" />}
                   <button
                     type="button"
-                    className="toolbar-action-btn"
-                    onClick={handleSave}
-                    disabled={isLoading || !isDirty}
-                  >
-                    <SaveIcon />
-                    <span>저장</span>
-                  </button>
-                )}
-
-                {!isMobile && (
-                  <button
-                    type="button"
-                    className="toolbar-action-btn"
-                    onClick={handleResetCode}
-                    title="코드 초기화"
+                    className="toolbar-action-btn run-btn"
+                    onClick={handleRun}
                     disabled={isLoading}
-                    aria-label="코드 초기화"
+                    aria-label="코드 실행 테스트"
                   >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                      <path d="M3 3v5h5" />
-                    </svg>
-                    <span>초기화</span>
+                    {loadingType === 'run' ? <LoadingIcon /> : <RunIcon />}
+                    <span>테스트</span>
                   </button>
-                )}
-
-                <div className="toolbar-divider" />
-
-                <button
-                  type="button"
-                  className="toolbar-action-btn run-btn"
-                  onClick={handleRun}
-                  disabled={isLoading}
-                  aria-label="코드 실행 테스트"
-                >
-                  <RunIcon />
-                  <span>테스트</span>
-                </button>
-                <button
-                  type="button"
-                  className="toolbar-action-btn submit-btn"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                  aria-label="최종 코드 제출"
-                >
-                  <SubmitIcon />
-                  <span>제출</span>
-                </button>
+                  <button
+                    type="button"
+                    className="toolbar-action-btn submit-btn"
+                    onClick={handleSubmit}
+                    disabled={isLoading}
+                    aria-label="최종 코드 제출"
+                  >
+                    {loadingType === 'submit' ? <LoadingIcon /> : <SubmitIcon />}
+                    <span>제출</span>
+                  </button>
+                </div>
               </div>
             </header>
             <div ref={monacoContainerRef} className="monaco-container" />

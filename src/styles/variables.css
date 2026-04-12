@@ -49,7 +49,7 @@
 }
 
 /* Dark Mode Overrides */
-body.dark-theme {
+.dark-theme {
   --primary: #818cf8;       /* Saturated Indigo 400 */
   --primary-hover: #6366f1; 
   

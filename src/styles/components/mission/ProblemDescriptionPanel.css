@@ -33,6 +33,8 @@
   color: var(--text-primary);
   letter-spacing: -0.01em;
   line-height: 1.2;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .problem-description-wrapper .panel-content {

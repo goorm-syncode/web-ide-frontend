@@ -212,7 +212,12 @@ const HomePage = () => {
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '50px' }}>미션을 불러오는 중...</div>
+          <div className="home-loading-state">
+            <svg className="spinner-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}>
+              <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+            </svg>
+            <span>미션을 불러오는 중...</span>
+          </div>
         ) : (
           <ProblemList problems={missions} onProblemClick={handleProblemClick} />
         )}
