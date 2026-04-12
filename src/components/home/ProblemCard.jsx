@@ -70,6 +70,11 @@ const ProblemCard = ({
     );
   };
 
+  const handleButtonClick = (e) => {
+    e.stopPropagation();
+    if (onClickAction) onClickAction();
+  };
+
   const renderButton = () => {
     const buttonTextMap = {
       solved: '코드 리뷰',
@@ -77,7 +82,6 @@ const ProblemCard = ({
       unattempted: '문제 풀기',
     };
 
-    // 상태별 버튼 스타일 설정
     const getButtonStyle = () => {
       switch (status) {
         case 'unattempted':
@@ -99,7 +103,7 @@ const ProblemCard = ({
         primary={primary}
         className={`${className} problem-card-btn`.trim()}
         fullWidth
-        onClick={onClickAction}
+        onClick={handleButtonClick}
       >
         {buttonTextMap[status] || '문제 풀기'}
       </Button>
@@ -107,9 +111,8 @@ const ProblemCard = ({
   };
 
   return (
-    <Card className="problem-card-container">
+    <Card className="problem-card-container" onClick={onClickAction}>
       <div className="problem-card-content">
-        {/* 상단 그룹: 카테고리 헤더 + 제목/설명 */}
         <div className="problem-top-group">
           <div className="problem-card-header">
             <span className="problem-category">{category}</span>
@@ -122,20 +125,16 @@ const ProblemCard = ({
           </div>
         </div>
 
-        {/* 하단 그룹: 태그 + 버튼 */}
         <div className="problem-footer-section">
           <div className="problem-tags">
-            {/* 난이도 뱃지 (맨 앞) */}
             {difficulty && (
               <TagBadge type={getDifficultyType(difficulty)} text={getDifficultyText(difficulty)} />
             )}
-            {/* 부가 태그들 */}
             {tags.map((tag, idx) => (
               <TagBadge key={idx} text={tag} />
             ))}
           </div>
 
-          {/* 하단 버튼 래퍼 */}
           <div className="problem-footer-button">{renderButton()}</div>
         </div>
       </div>

@@ -2,12 +2,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px; /* Slightly smaller for better proportions with more padding */
+  font-weight: 700;
   line-height: 1;
   white-space: nowrap;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
 }
 
 /* Difficulty 컬러 기반 (Solid Badges) */

@@ -154,8 +154,11 @@
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
+  padding: 8px; /* 클릭 영역 확장 */
+  margin: -4px; /* 늘어난 패딩만큼 마진으로 상쇄하여 레이아웃 유지 */
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;

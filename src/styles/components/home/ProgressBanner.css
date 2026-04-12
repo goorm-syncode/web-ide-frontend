@@ -2,11 +2,18 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: transparent;
-  border: none;
-  padding: 0;
+  /* 모든 주요 요소(바, 텍스트, 버튼)를 수직 중앙 정렬 */
+  background-color: rgba(79, 70, 229, 0.02);
+  border: 1px solid rgba(79, 70, 229, 0.06);
+  padding: 16px;
+  /* 콤팩트한 패딩 (상단은 런캣 위해 유지, 나머지는 대폭 축소) */
+  border-radius: 12px;
   gap: 16px;
+  /* 요소 간 간격 축소 */
   width: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 .progress-section {
@@ -18,11 +25,13 @@
 
 .progress-track {
   flex: 1;
-  min-width: 120px; /* 더 길어진 배너에 맞춰 80px -> 120px 확대 */
+  min-width: 120px;
   height: 6px;
-  background-color: #dbeafe;
+  background-color: #e2e8f0;
   border-radius: 100px;
   position: relative;
+  margin-top: 4px;
+  /* 바와 고양이를 세트로 살짝 아래로 내림 */
 }
 
 .progress-fill {
@@ -37,17 +46,93 @@
   font-size: 14px;
   font-weight: 600;
   color: #4f46e5;
+  line-height: 1;
 }
 
-.progress-cat {
+.runcat-container {
   position: absolute;
-  bottom: 0px; /* 바 위에 살짝 걸치게 배치 */
-  height: 32px; /* 고양이 크기 조정 */
-  width: auto;
-  transform: translate(-50%, -4px); /* 중앙 정렬 및 위로 살짝 이동 */
-  transition: left 0.3s ease; /* 진행도 변화에 맞춰 부드럽게 이동 */
+  bottom: 100%;
+  /* 트랙 바로 위에 배치 */
+  width: 24px;
+  height: 24px;
+  transform: translateX(-50%);
+  margin-bottom: -2px;
+  /* 바와 더 가깝게 밀착 */
+  transition: left 0.3s ease;
   z-index: 10;
   pointer-events: none;
+}
+
+.runcat-viewport {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.runcat-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+
+  /* 마스크 기법으로 정확한 컬러 매칭 */
+  background-color: #4f46e5;
+  /* 라이트 모드 기본 Indigo */
+  -webkit-mask-image: var(--mask-image);
+  mask-image: var(--mask-image);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.dark-theme .runcat-frame {
+  background-color: var(--primary);
+  /* 다크 모드에서는 테마 변수 사용 */
+}
+
+/* 프레임 전환 애니메이션 (5프레임 순환) */
+@keyframes run-cycle {
+  0% {
+    visibility: visible;
+  }
+
+  20%,
+  100% {
+    visibility: hidden;
+  }
+}
+
+.frame-1 {
+  animation: run-cycle var(--ani-duration, 0.8s) steps(1) infinite calc(var(--ani-duration, 0.8s) * -0.8);
+}
+
+.frame-2 {
+  animation: run-cycle var(--ani-duration, 0.8s) steps(1) infinite calc(var(--ani-duration, 0.8s) * -0.6);
+}
+
+.frame-3 {
+  animation: run-cycle var(--ani-duration, 0.8s) steps(1) infinite calc(var(--ani-duration, 0.8s) * -0.4);
+}
+
+.frame-4 {
+  animation: run-cycle var(--ani-duration, 0.8s) steps(1) infinite calc(var(--ani-duration, 0.8s) * -0.2);
+}
+
+.frame-5 {
+  animation: run-cycle var(--ani-duration, 0.8s) steps(1) infinite 0s;
+}
+
+.dark-theme .progress-track {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .progress-fill {
+  background-color: var(--primary);
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
 }
 
 .progress-continue-btn {
@@ -78,8 +163,30 @@
 }
 
 @media (max-width: 600px) {
+  .progress-banner {
+    padding: 12px 14px;
+    /* 모바일에서 더 컴팩트하게 */
+    gap: 12px;
+    border-radius: 12px;
+  }
+
+  .progress-section {
+    gap: 8px;
+  }
+
   .progress-track {
     flex-grow: 1;
+    height: 4px;
+    /* 바 두께 살짝 축소 */
+  }
+
+  .progress-text {
+    font-size: 12px;
+  }
+
+  .progress-continue-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 6px;
   }
 }
-

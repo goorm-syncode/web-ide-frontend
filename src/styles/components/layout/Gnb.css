@@ -35,6 +35,7 @@
   align-items: center;
   gap: var(--space-sm);
   margin-top: 3px;
+  margin-left: 6px; /* 왼쪽 벽에서 살짝 띄워 아래 타이틀과 글자 시작점을 맞춤 */
 }
 
 .gnb-back-button {
@@ -85,19 +86,37 @@
   display: flex;
   align-items: center;
   gap: var(--space-lg);
+  margin-right: -4px; /* 벽에 너무 붙어 보이지 않도록 음수 마진 축소 */
+}
+
+.gnb-user-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: var(--space-xs) 0;
+}
+
+.gnb-divider {
+  width: 1px;
+  height: 16px;
+  background-color: var(--border-soft);
+  margin: 0 4px;
+}
+
+.dark-theme .gnb-divider {
+  background-color: var(--border-default);
+}
+
+.gnb-profile-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Tight spacing between name and icon */
 }
 
 .gnb-username {
   font-size: 14px;
   color: var(--text-secondary);
   font-weight: 500;
-}
-
-.gnb-user-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: var(--space-xs) 0;
 }
 
 .gnb-theme-toggle {
@@ -108,8 +127,8 @@
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 6px;
-  border-radius: 8px;
+  padding: 8px;
+  border-radius: 50%;
   transition: all 0.2s ease;
 }
 
@@ -126,7 +145,7 @@
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 6px;
+  padding: 4px;
   border-radius: 50%;
   transition: all 0.3s ease;
 }

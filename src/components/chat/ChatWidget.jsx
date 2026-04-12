@@ -300,7 +300,22 @@ const ChatWidget = () => {
     }
   };
 
+  const handleClose = () => {
+    // Sync button position to popup before closing
+    btnDrag.setPosition({
+      x: Number(24 - (popupPos.right || 0)) || 0,
+      y: Number(24 - (popupPos.bottom || 0)) || 0,
+    });
+    setIsOpen(false);
+  };
+
   const handleKeyDown = (e) => {
+    // Check for Esc key
+    if (e.key === 'Escape') {
+      handleClose();
+      return;
+    }
+
     // Check if it's the Enter key and not during IME composition
     if (e.key === 'Enter' && !e.shiftKey && e.nativeEvent.isComposing === false) {
       e.preventDefault();
@@ -377,14 +392,7 @@ const ChatWidget = () => {
               <button
                 type="button"
                 className="chat-minimize-btn"
-                onClick={() => {
-                  // Sync button position to popup before closing
-                  btnDrag.setPosition({
-                    x: Number(24 - (popupPos.right || 0)) || 0,
-                    y: Number(24 - (popupPos.bottom || 0)) || 0,
-                  });
-                  setIsOpen(false);
-                }}
+                onClick={handleClose}
                 title="최소화"
               >
                 <ChevronDownIcon />

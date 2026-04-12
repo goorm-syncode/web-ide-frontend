@@ -136,21 +136,25 @@ const Gnb = ({
                 >
                   {isDark ? <SunIcon /> : <MoonIcon />}
                 </button>
-                <span className="gnb-username">{userName}</span>
-                <button
-                  className="gnb-settings-button"
-                  onClick={onSettingsClick}
-                  aria-label="마이페이지 설정"
-                >
-                  <SettingsIcon />
-                </button>
+                <div className="gnb-divider" />
+                <div className="gnb-profile-wrapper">
+                  <span className="gnb-username">{userName}</span>
+                  <button
+                    className="gnb-settings-button"
+                    onClick={onSettingsClick}
+                    aria-label="마이페이지 설정"
+                  >
+                    <SettingsIcon />
+                  </button>
+                </div>
+                <div className="gnb-divider" />
               </div>
               <button
                 className="gnb-action-button gnb-auth-button"
                 onClick={onLogoutClick}
                 aria-label="로그아웃"
               >
-                <span>Logout</span>
+                <span>로그아웃</span>
                 <LogoutIcon />
               </button>
             </>

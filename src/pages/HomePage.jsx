@@ -48,7 +48,6 @@ const HomePage = () => {
   const [userProgress, setUserProgress] = useState(0);
   const [continueMission, setContinueMission] = useState(null);
 
-
   // 난이도 필터가 변경될 때마다 데이터를 가져오도록 합니다.
   useEffect(() => {
     const fetchMissions = async () => {
@@ -80,6 +79,8 @@ const HomePage = () => {
     fetchMissions();
   }, [selectedDifficulty, selectedStatus, searchQuery, currentPage]);
 
+  const searchInputRef = React.useRef(null);
+
   // 진행률 및 이어하기 데이터 가져오기
   useEffect(() => {
     if (!isAuthenticated) {
@@ -110,6 +111,29 @@ const HomePage = () => {
     fetchHomeData();
   }, [isAuthenticated]);
 
+  // 단축키 핸들러
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      const activeElement = document.activeElement;
+      const isInputFocused = activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA' || activeElement.isContentEditable;
+
+      // 'T' 단축키 (한글 모드 ㅅ 포함)
+      if (e.code === 'KeyT' && !isInputFocused) {
+        e.preventDefault();
+        if (searchInputRef.current) {
+          searchInputRef.current.focus();
+        }
+      }
+
+      // 검색창 포커스 중 Esc 누르면 포커스 해제
+      if (e.key === 'Escape' && activeElement === searchInputRef.current) {
+        searchInputRef.current.blur();
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, []);
 
   const handleFilterChange = (setter) => (value) => {
     setter(value);
@@ -164,10 +188,7 @@ const HomePage = () => {
         <div className="home-header">
           <h1 className="home-title">학습 미션</h1>
           <div className="home-progress">
-            <ProgressBanner
-              progress={userProgress}
-              onContinue={handleContinue}
-            />
+            <ProgressBanner progress={userProgress} onContinue={handleContinue} />
           </div>
         </div>
 
@@ -182,9 +203,10 @@ const HomePage = () => {
           </div>
           <div className="home-filters-right">
             <SearchFilter
+              ref={searchInputRef}
               value={searchQuery}
               onChange={handleFilterChange(setSearchQuery)}
-              placeholder="미션 검색..."
+              placeholder="검색"
             />
           </div>
         </div>
