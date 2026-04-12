@@ -304,14 +304,20 @@ const MissionPage = () => {
       });
 
       // Add Submit Command (Ctrl+Shift+Enter / Cmd+Shift+Enter)
-      editorInstance.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
-        handleSubmitRef.current?.();
-      });
+      editorInstance.current.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter,
+        () => {
+          handleSubmitRef.current?.();
+        },
+      );
 
       // Add Reset Command (Ctrl+Shift+R / Cmd+Shift+R)
-      editorInstance.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyR, () => {
-        handleResetRef.current?.();
-      });
+      editorInstance.current.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyR,
+        () => {
+          handleResetRef.current?.();
+        },
+      );
     }
 
     return () => {
@@ -449,7 +455,7 @@ const MissionPage = () => {
 
   const handleLanguageChange = async (value) => {
     const newLang = typeof value === 'string' ? value : value.target.value; // Support both direct value and event
-    const backendLang = LANG_MAP[newLang] || newLang.toUpperCase(); 
+    const backendLang = LANG_MAP[newLang] || newLang.toUpperCase();
     const prevBackendLang = LANG_MAP[language] || language.toUpperCase();
 
     // Auto save previous language code before switching
@@ -652,7 +658,7 @@ const MissionPage = () => {
   return (
     <div className={`mission-page-container ${isMobile ? 'is-mobile' : ''}`}>
       <Gnb
-        title="LearnCode"
+        title="Learn Code"
         fluid={true}
         isLoggedIn={isAuthenticated}
         userName={user?.nickname || '사용자'}
@@ -767,7 +773,12 @@ const MissionPage = () => {
                     {loadingType === 'save' ? (
                       <span className="status-text">저장 중...</span>
                     ) : isDirty ? (
-                      <span className="status-text">변경됨</span>
+                      <>
+                        <svg width="6" height="6" viewBox="0 0 6 6" className="status-dot">
+                          <circle cx="3" cy="3" r="3" fill="currentColor" />
+                        </svg>
+                        <span className="status-text">변경됨</span>
+                      </>
                     ) : (
                       <>
                         <svg
@@ -903,19 +914,34 @@ const MissionPage = () => {
 
       {showConfetti && (
         <div className="confetti-container">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="confetti-piece"
-              style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                backgroundColor: ['#fce18a', '#ff726d', '#b48def', '#f48380', '#8edcda'][
-                  Math.floor(Math.random() * 5)
-                ],
-              }}
-            />
-          ))}
+          {[...Array(150)].map((_, i) => {
+            const size = Math.random() * 8 + 6;
+            const duration = Math.random() * 3 + 3; // 3s ~ 6s (더 여유로운 낙하)
+            const delay = Math.random() * 4; // 0s ~ 4s (더 넓은 분포)
+            return (
+              <div
+                key={i}
+                className="confetti-piece"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  width: `${size}px`,
+                  height: `${size * 1.2}px`,
+                  animationDelay: `${delay}s`,
+                  animationDuration: `${duration}s`,
+                  backgroundColor: [
+                    '#fce18a',
+                    '#ff726d',
+                    '#b48def',
+                    '#f48380',
+                    '#8edcda',
+                    '#5db3f3',
+                    '#4ade80',
+                  ][Math.floor(Math.random() * 7)],
+                  opacity: Math.random() * 0.5 + 0.5,
+                }}
+              />
+            );
+          })}
         </div>
       )}
     </div>

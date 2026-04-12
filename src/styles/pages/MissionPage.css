@@ -287,7 +287,7 @@
 .editor-actions-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .save-status {
@@ -296,8 +296,7 @@
   gap: 6px;
   font-size: 12px;
   font-weight: 500;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 0;
   transition: all 0.3s ease;
 }
 
@@ -316,15 +315,20 @@
   /* Indigo */
 }
 
-.status-icon {
+.status-icon,
+.status-dot {
   flex-shrink: 0;
+}
+
+.status-dot {
+  margin-right: 2px;
 }
 
 .toolbar-divider {
   width: 1px;
   height: 16px;
   background-color: var(--border-default);
-  margin: 0 4px;
+  margin: 0;
 }
 
 .toolbar-action-btn {

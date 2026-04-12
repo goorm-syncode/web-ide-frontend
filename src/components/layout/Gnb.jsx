@@ -111,7 +111,7 @@ const Gnb = ({
   const { isDark, toggleTheme } = useTheme();
   const [isThemeHovered, setIsThemeHovered] = useState(false);
 
-  // Hybrid Theme Icon UX: 
+  // Hybrid Theme Icon UX:
   // - Normally shows current state (isDark ? Moon : Sun)  -> STATUS
   // - Hover shows target state (isDark ? Sun : Moon)    -> ACTION
   const getThemeIcon = () => {
@@ -151,7 +151,9 @@ const Gnb = ({
                 </button>
                 <div className="gnb-divider" />
                 <div className="gnb-profile-wrapper">
-                  <span className="gnb-username" onClick={onSettingsClick}>{userName}</span>
+                  <span className="gnb-username" onClick={onSettingsClick}>
+                    {userName}
+                  </span>
                   <button
                     className="gnb-settings-button"
                     onClick={onSettingsClick}

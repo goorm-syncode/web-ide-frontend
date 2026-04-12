@@ -2,11 +2,20 @@
 
 @keyframes confetti-fall {
   0% {
-    transform: translateY(-100vh) rotate(0deg);
+    transform: translateY(-20px) translateX(0) rotate(0deg);
     opacity: 1;
   }
+  25% {
+    transform: translateY(25vh) translateX(20px) rotate(90deg);
+  }
+  50% {
+    transform: translateY(50vh) translateX(-20px) rotate(180deg);
+  }
+  75% {
+    transform: translateY(75vh) translateX(20px) rotate(270deg);
+  }
   100% {
-    transform: translateY(100vh) rotate(720deg);
+    transform: translateY(105vh) translateX(0) rotate(360deg);
     opacity: 0;
   }
 }
