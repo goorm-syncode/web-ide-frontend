@@ -1,25 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import useDraggable from '../../hooks/useDraggable';
 import useResizable from '../../hooks/useResizable';
 import * as chatService from '../../services/chat';
 import * as userService from '../../services/userService';
 import '../../styles/components/chat/ChatWidget.css';
 
-// SVG Icon for floating button
-const ChatIcon = () => (
+// SVG Icon for floating button (후보 14: 대형 원형 말풍선)
+const ChatIcon = ({ size = 24, dotColor = 'var(--primary)' }) => (
   <svg
-    width="24"
-    height="24"
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
   >
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5.003L2 22l5.134-1.334A9.953 9.953 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" />
+    <circle cx="8" cy="12" r="1.5" fill={dotColor} />
+    <circle cx="12" cy="12" r="1.5" fill={dotColor} />
+    <circle cx="16" cy="12" r="1.5" fill={dotColor} />
   </svg>
 );
+
+ChatIcon.propTypes = {
+  size: PropTypes.number,
+  dotColor: PropTypes.string,
+};
 
 // Chevron Down Icon for minimize
 const ChevronDownIcon = () => (
@@ -137,9 +143,35 @@ const ChatWidget = () => {
     initChat();
   }, []);
 
+  // Ref to access latest messages without triggering useEffect re-runs
+  const messagesRef = useRef(messages);
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
   // SSE Subscription (Service implementation)
   useEffect(() => {
     if (!channel) return;
+
+    // Reconnection Catch-up logic
+    const handleCatchUp = async () => {
+      try {
+        // Since we don't know exactly when it dropped, 
+        // fetching the latest page and merging is the safest way.
+        const data = await chatService.getMessages(channel.id);
+        if (data && data.messages) {
+          setMessages((prev) => {
+            const newMsgs = data.messages.filter(
+              (m) => !prev.some((p) => p.id === m.id)
+            );
+            if (newMsgs.length === 0) return prev;
+            return [...prev, ...newMsgs].sort((a, b) => a.id - b.id);
+          });
+        }
+      } catch (error) {
+        console.error('[Chat] Catch-up failed:', error);
+      }
+    };
 
     const unsubscribe = chatService.subscribeToMessages(
       channel.id,
@@ -158,6 +190,14 @@ const ChatWidget = () => {
       (_error) => {
         // Optional: Show status or error in UI
       },
+      () => {
+        // onConnected: Triggered on initial connect AND every successful reconnect
+        console.log(`[SSE] Connected to channel ${channel.id}`);
+        // If we already have messages, it might be a reconnection catch-up
+        if (messagesRef.current.length > 0) {
+          handleCatchUp();
+        }
+      }
     );
 
     return () => {
@@ -282,7 +322,7 @@ const ChatWidget = () => {
           onClick={handleToggle}
           title="Open Global Chat"
         >
-          <ChatIcon />
+          <ChatIcon size={28} />
           {!channel && !isLoading && (
             <div className="chat-error-warn" title="No chat channel found">
               !
@@ -322,10 +362,15 @@ const ChatWidget = () => {
             style={{ cursor: 'grab' }}
           >
             <div className="chat-header-info">
-              <span className="chat-channel-name">실시간 채팅</span>
-              <div className="chat-status-indicator">
-                <span className="chat-online-dot" />
-                <span className="chat-online-count">{onlineCount} online</span>
+              <div className="chat-header-icon-wrapper">
+                <ChatIcon size={34} dotColor="#FFFFFF" />
+              </div>
+              <div className="chat-header-text">
+                <span className="chat-channel-name">실시간 채팅</span>
+                <div className="chat-status-indicator">
+                  <span className="chat-online-dot" />
+                  <span className="chat-online-count">{onlineCount} online</span>
+                </div>
               </div>
             </div>
             <div className="chat-header-actions">
@@ -335,8 +380,8 @@ const ChatWidget = () => {
                 onClick={() => {
                   // Sync button position to popup before closing
                   btnDrag.setPosition({
-                    x: Number(24 - popupPos.right) || 0,
-                    y: Number(24 - popupPos.bottom) || 0,
+                    x: Number(24 - (popupPos.right || 0)) || 0,
+                    y: Number(24 - (popupPos.bottom || 0)) || 0,
                   });
                   setIsOpen(false);
                 }}
@@ -357,7 +402,7 @@ const ChatWidget = () => {
               const isMine = currentUser && msg.senderId === currentUser.id;
               return (
                 <div key={msg.id} className={`chat-msg-row ${isMine ? 'mine' : 'other'}`}>
-                  <div className="chat-msg-sender">{msg.senderNickname}</div>
+                  <div className="chat-msg-sender">{isMine ? '나' : msg.senderNickname}</div>
                   <div className="chat-msg-content-wrapper">
                     {isMine && <span className="chat-msg-time">{formatTime(msg.createdAt)}</span>}
                     <div className="chat-msg-bubble">{msg.content}</div>

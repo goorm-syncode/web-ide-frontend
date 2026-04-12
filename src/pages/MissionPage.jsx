@@ -9,6 +9,7 @@ import Gnb from '../components/layout/Gnb';
 import Footer from '../components/layout/Footer';
 import ProblemDescriptionPanel from '../components/mission/ProblemDescriptionPanel';
 import ExecutionResultPanel from '../components/mission/ExecutionResultPanel';
+import ChatWidget from '../components/chat/ChatWidget';
 import MessageBox from '../components/common/MessageBox';
 import {
   getMissionById,
@@ -763,6 +764,7 @@ const MissionPage = () => {
       >
         {messageBox.message}
       </MessageBox>
+      {isAuthenticated && <ChatWidget />}
     </div>
   );
 };
