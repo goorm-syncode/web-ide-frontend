@@ -2,12 +2,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px; /* Slightly smaller for better proportions with more padding */
+  font-weight: 700;
   line-height: 1;
   white-space: nowrap;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
 }
 
 /* Difficulty 컬러 기반 (Solid Badges) */
@@ -40,15 +42,17 @@
 }
 
 .tag-badge-solved {
-  background-color: rgba(99, 102, 241, 0.05); /* Soft Indigo background */
-  color: var(--stat-completed);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  background-color: var(--stat-completed);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
 }
 
 .dark-theme .tag-badge-solved {
-  background-color: rgba(129, 140, 248, 0.15); /* var(--primary) at 15% opacity */
-  border-color: rgba(129, 140, 248, 0.3);
-  color: var(--stat-completed);
+  background-color: var(--stat-completed);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .dark-theme .tag-badge-inprogress { 

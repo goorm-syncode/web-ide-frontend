@@ -1,0 +1,254 @@
+/* src/styles/components/modals/MyPageModal.css */
+.mypage-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Slightly darker for contrast without blur */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-xl);
+  box-sizing: border-box;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.mypage-modal-card {
+  position: relative;
+  background-color: var(--bg-card);
+  width: 100%;
+  max-width: 440px;
+  border-radius: 12px; /* Rule 84: max 12px */
+  box-shadow: var(--shadow-lg); /* Modal exception for depth */
+  padding: var(--space-xl); /* Rule 76 & 139: Using 32px */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg); /* Rule 76: Using 24px */
+  box-sizing: border-box;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid var(--border-default);
+}
+
+.mypage-modal-close {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: var(--space-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.mypage-modal-close:hover {
+  background-color: var(--border-soft);
+  color: var(--primary);
+  transform: rotate(90deg);
+}
+
+/* Auth-Style Header Sync */
+.auth-header {
+  margin-bottom: var(--space-sm);
+  text-align: center;
+}
+
+.auth-logo-icon {
+  width: 64px;
+  height: auto;
+  margin-bottom: var(--space-sm);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.2));
+}
+
+.auth-page-title {
+  font-family: var(--sans);
+  font-size: 28px; /* Rule 109: Page Title */
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-xs) 0;
+  letter-spacing: -0.04em;
+}
+
+.auth-page-title em {
+  font-style: normal;
+  color: var(--primary);
+}
+
+.auth-page-subtitle {
+  font-size: 14px; /* Rule 112: Body */
+  color: var(--text-muted);
+  margin: 0;
+  word-break: keep-all;
+}
+
+.mypage-field-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm); /* Rule 76: Using 8px */
+}
+
+.mypage-field-label {
+  font-size: 12px; /* Rule 113: Caption */
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-left: var(--space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: left;
+}
+
+.mypage-email-static {
+  padding: 12px 14px;
+  background-color: var(--border-soft);
+  border-radius: 8px; /* Rule 84 */
+  color: var(--text-secondary);
+  font-size: 14px; /* Rule 112 */
+  font-family: var(--sans);
+  border: 1px solid var(--border-soft);
+  cursor: default;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+/* Dark Mode Visibility Fix */
+.dark-theme .mypage-email-static {
+  background-color: rgba(0, 0, 0, 0.2); /* Deeper than card bg for field look */
+  border-color: var(--border-default); /* More distinct boundary */
+  color: var(--text-muted); /* Subdued feel for read-only */
+}
+
+.mypage-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.mypage-input-group .input-wrapper {
+  flex: 1;
+}
+
+.mypage-clear-btn {
+  position: absolute;
+  right: var(--space-sm);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: var(--space-xs);
+  transition: color 0.2s;
+}
+
+.mypage-clear-btn:hover {
+  color: var(--primary);
+}
+
+.mypage-save-btn-wrapper {
+  margin-top: var(--space-xs);
+}
+
+.mypage-divider {
+  height: 1px;
+  background-color: var(--border-soft);
+  margin: var(--space-xs) 0;
+}
+
+/* Password Section */
+.mypage-password-toggle-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.mypage-password-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 8px;
+  transition: all 0.2s;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.mypage-password-toggle-btn:hover {
+  background-color: var(--hover-brand);
+  color: var(--primary-hover);
+}
+
+.mypage-password-section-active {
+  animation: slideDown 0.3s ease-out;
+}
+
+.mypage-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.mypage-section-cancel-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.mypage-section-cancel-btn:hover {
+  color: var(--error);
+}
+
+.mypage-password-box {
+  background-color: var(--bg-page);
+  border: 1px solid var(--border-default);
+  border-radius: 8px; /* Rule 84 */
+  padding: var(--space-md); /* Rule 76: 16px */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md); /* Rule 76: 16px */
+}
+
+@keyframes slideUp {
+  from { transform: translateY(var(--space-md)); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(calc(var(--space-sm) * -1)); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .mypage-modal-overlay {
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .mypage-modal-card {
+    max-width: none;
+    min-height: 100svh;
+    border-radius: 0;
+    padding: var(--space-xl) var(--space-md);
+  }
+}

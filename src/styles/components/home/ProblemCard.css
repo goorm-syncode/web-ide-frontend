@@ -3,33 +3,23 @@
 .problem-card-container {
   width: 100%;
   height: 100%;
-  max-width: 420px;
-  margin: 0 auto;
-  min-height: 240px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth spring-like transition */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 .problem-card-container:hover {
-  transform: translateY(-6px);
-  border-color: #6d28d9; /* Deep Purple (Violet 700) */
-  box-shadow: 0 12px 24px -8px rgba(109, 40, 217, 0.2); /* Soft Violet Glow Shadow */
+  transform: scale(1.02); /* More stable and premium focus effect vs translateY */
+  border-color: var(--primary); /* Rule 23: Primary Indigo */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Rule 101: Minimal shadow */
 }
 
 /* Ensure the underlying Common Card also transitions smoothly */
 .problem-card-container .card-content {
+  padding: 16px; /* Base Card (16px) + Inner (16px) = Total 32px padding (Rule 80) */
   transition: border-color 0.3s ease;
-}
-
-.problem-card-container:hover .card-content {
-  border-color: #6d28d9;
-}
-
-.problem-card-container .card-content {
-  padding: 24px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -109,7 +99,7 @@ h3.problem-title {
   font-weight: 800;
   color: var(--text-primary);
   line-height: 1.25;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em; /* Optimized for 16px readability */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -147,6 +137,42 @@ h3.problem-title {
   overflow: hidden;
 }
 
+.problem-card-container.is-solved {
+  background-color: rgba(99, 102, 241, 0.035); /* More subtle than var(--hover-brand) */
+  border-color: rgba(99, 102, 241, 0.15);
+}
+
+.dark-theme .problem-card-container.is-solved {
+  background-color: rgba(99, 102, 241, 0.05);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.problem-card-container.is-solved:hover {
+  border-color: var(--primary);
+  background-color: rgba(99, 102, 241, 0.06);
+}
+
+.dark-theme .problem-card-container.is-solved:hover {
+  background-color: rgba(99, 102, 241, 0.08);
+}
+
+.problem-card-container.is-solved h3.problem-title {
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.problem-card-container.is-solved .solved-icon {
+  color: var(--stat-completed);
+  flex-shrink: 0;
+}
+
+.problem-card-container.is-solved .problem-description {
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
 .problem-footer-button {
   width: 100%;
 }
@@ -159,17 +185,18 @@ h3.problem-title {
   transition: all 0.2s ease;
 }
 
-/* Code Review Button - Soft Action Style */
+/* Code Review Button - Completed state (Secondary/Light) */
 .problem-card-container .problem-footer-button .btn.problem-btn-light {
   background-color: var(--hover-brand);
   color: var(--primary); /* Standard Primary Indigo */
   border: 1px solid rgba(99, 102, 241, 0.2);
-  font-weight: 700; /* Increased weight for visibility */
+  font-weight: 700;
 }
 
-/* Dark Mode Text Contrast Fix */
+/* Dark Mode Text Contrast Fix for Completed button */
 .dark-theme .problem-card-container .problem-footer-button .btn.problem-btn-light {
-  color: #c7d2fe; /* Indigo 200 - Much brighter and readable in Dark Mode */
+  background-color: rgba(99, 102, 241, 0.1);
+  color: #c7d2fe; /* Indigo 200 */
 }
 
 .problem-card-container .problem-footer-button .btn.problem-btn-light:hover {
@@ -177,15 +204,17 @@ h3.problem-title {
   border-color: var(--primary);
 }
 
-/* Solve Problem Button - Bold Action Style */
-.problem-card-container .problem-footer-button .btn.problem-btn-soft {
-  background-color: var(--primary);
-  color: #ffffff;
+/* Solve Problem Button - New state (Outline/Action) */
+.problem-card-container .problem-footer-button .btn.problem-btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
   font-weight: 700;
-  box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
 }
 
-.problem-card-container .problem-footer-button .btn.problem-btn-soft:hover {
-  background-color: var(--primary-hover);
-  transform: none; /* Removed the jump */
+.problem-card-container .problem-footer-button .btn.problem-btn-outline:hover {
+  background-color: var(--hover-brand);
+  border-color: var(--primary);
 }
+
+/* Base Primary Button (Continue Solving) stays default solid indigo */

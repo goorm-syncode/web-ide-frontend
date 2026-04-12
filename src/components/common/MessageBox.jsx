@@ -72,14 +72,50 @@ const MessageBox = ({
   onCancel,
   cancelText = '취소',
 }) => {
+  // ESC key support
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        // Stop propagation to prevent closing parent modals (like MyPageModal)
+        e.stopPropagation();
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
+
+  // success나 info 타입일 경우에만 바깥 클릭으로 닫기 허용
+  const canCloseOnOverlayClick = type === 'success' || type === 'info';
+
+  const handleOverlayClick = (e) => {
+    // 이벤트가 상위(MyPageModal)로 전달되지 않도록 차단
+    e.stopPropagation();
+    if (canCloseOnOverlayClick) {
+      onClose();
+    }
+  };
+
+  const handleContainerClick = (e) => {
+    // 박스 내부 클릭 시에는 아무 일도 일어나지 않도록 차단
+    e.stopPropagation();
+  };
 
   // error 타입일 경우 사용자의 요청에 따라 다시 위험(danger) 색상(#EF4444)을 사용합니다.
   const confirmBtnType = type === 'error' ? 'danger' : 'primary';
 
   return (
-    <div className="message-box-overlay">
-      <div className={`message-box-container message-box-${type}`} role="dialog" aria-modal="true">
+    <div className="message-box-overlay" onClick={handleOverlayClick}>
+      <div 
+        className={`message-box-container message-box-${type}`} 
+        role="dialog" 
+        aria-modal="true"
+        onClick={handleContainerClick}
+      >
         <div className="message-box-header">
           {showIcon && (
             <span className="message-box-icon">
@@ -90,7 +126,14 @@ const MessageBox = ({
         </div>
         
         <div className={`message-box-body ${showIcon && title ? 'with-icon-padding' : ''}`}>
-          {children}
+          {typeof children === 'string'
+            ? children.split('\n').map((line, i) => (
+                <React.Fragment key={i}>
+                  {line}
+                  {i < children.split('\n').length - 1 && <br />}
+                </React.Fragment>
+              ))
+            : children}
         </div>
         
         <div className="message-box-actions">

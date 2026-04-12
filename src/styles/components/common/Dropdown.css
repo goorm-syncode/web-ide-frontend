@@ -1,0 +1,144 @@
+/* =====================================================
+   Dropdown.css — 공용 프리미엄 드롭다운 스타일
+   Floating Popover, Beak, Glassmorphism, Animation 포함
+   ===================================================== */
+
+/* 드롭다운 컨테이너 (앵커) */
+.common-dropdown {
+  position: relative;
+  display: inline-flex;
+}
+
+/* 드롭다운 패널 */
+.common-dropdown__panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  min-width: 140px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 6px;
+  animation: commonDropdownShow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: visible; /* 비크(꼬리)를 위해 */
+}
+
+/* 다크 모드 Glassmorphism */
+.dark-theme .common-dropdown__panel {
+  background-color: rgba(30, 41, 59, 0.85);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 말풍선 꼬리 (Beak) */
+.common-dropdown__panel::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background-color: inherit;
+  border-left: 1px solid var(--border-default);
+  border-top: 1px solid var(--border-default);
+  z-index: -1;
+}
+
+.dark-theme .common-dropdown__panel::before {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 리스트 스타일 */
+.common-dropdown__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 옵션 항목 */
+.common-dropdown__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: transparent;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.common-dropdown__option:hover {
+  background-color: var(--hover-brand);
+}
+
+.common-dropdown__option--selected {
+  color: var(--primary);
+  font-weight: 600;
+  background-color: rgba(99, 102, 241, 0.05); /* 살짝 강조 */
+}
+
+.dark-theme .common-dropdown__option--selected {
+  background-color: rgba(129, 140, 248, 0.1);
+}
+
+/* 체크마크 */
+.common-dropdown__check {
+  margin-left: auto;
+  width: 14px;
+  height: 14px;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+/* 공용 도트 인디케이터 */
+.dropdown-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 컴팩트 테마 (IDE 등 좁은 공간용) */
+.common-dropdown__panel--compact {
+  min-width: 120px;
+  padding: 4px;
+}
+
+.common-dropdown__panel--compact .common-dropdown__option {
+  padding: 6px 12px;
+  font-size: 13px;
+  gap: 8px;
+}
+
+.common-dropdown__panel--compact .common-dropdown__check {
+  width: 12px;
+  height: 12px;
+}
+
+/* 애니메이션 */
+@keyframes commonDropdownShow {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}

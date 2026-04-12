@@ -135,7 +135,7 @@ const SignupPage = () => {
         isOpen: true,
         type: 'success',
         title: '회원가입 완료',
-        message: '회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동합니다.',
+        message: '회원가입이 성공적으로 완료되었습니다.\n로그인 페이지로 이동합니다.',
         onConfirm: () => {
           navigate('/login');
         },
@@ -208,6 +208,7 @@ const SignupPage = () => {
             error={!!errors.password}
             helperText={errors.password || '8~72자, 대/소문자, 숫자, 특수문자 포함'}
             required
+            forceEnglish={true}
           />
           <Input
             type="password"
@@ -218,6 +219,7 @@ const SignupPage = () => {
             error={!!errors.passwordConfirm}
             helperText={errors.passwordConfirm}
             required
+            forceEnglish={true}
           />
           {serverError && (
             <div className="auth-error-message">

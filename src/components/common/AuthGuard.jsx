@@ -68,7 +68,7 @@ const AuthGuard = ({ children }) => {
         title="로그인 만료"
         confirmText="로그인하기"
       >
-        로그인이 만료되었습니다. 다시 로그인해주세요.
+        로그인이 만료되었습니다.\n다시 로그인해주세요.
       </MessageBox>
     </>
   );

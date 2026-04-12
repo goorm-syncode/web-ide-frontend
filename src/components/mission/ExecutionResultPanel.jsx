@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import '../../styles/components/mission/ExecutionResultPanel.css';
 
-
-
 const CopyIcon = () => (
   <svg
     viewBox="0 0 24 24"
@@ -17,8 +15,6 @@ const CopyIcon = () => (
     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
   </svg>
 );
-
-
 
 const RenderFormattedCode = ({ text }) => {
   const lines = text.split('\n');
@@ -66,6 +62,7 @@ const ExecutionResultPanel = ({
   testcase = '',
   error = '',
   onTestcaseChange,
+  isLoading = false,
 }) => {
   const [activeTab, setActiveTab] = useState('output');
   const [copyStatus, setCopyStatus] = useState(false);
@@ -157,12 +154,14 @@ const ExecutionResultPanel = ({
               className="testcase-textarea"
               value={testcase}
               onChange={(e) => onTestcaseChange?.(e.target.value)}
-              placeholder="Enter test input here..."
+              placeholder="테스트 데이터를 입력하세요"
               spellCheck="false"
             />
           ) : (
             <div className="result-container">
-              <pre className="panel-output">
+              <pre
+                className={`panel-output ${isLoading && (currentContent === 'Running code' || currentContent === 'Submitting') ? 'loading-text' : ''}`}
+              >
                 <RenderFormattedCode text={currentContent} />
               </pre>
             </div>
@@ -176,8 +175,9 @@ const ExecutionResultPanel = ({
 ExecutionResultPanel.propTypes = {
   output: PropTypes.string,
   testcase: PropTypes.string,
+  onTestcaseChange: PropTypes.func,
   error: PropTypes.string,
-  onTestcaseChange: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
 };
 
 export default ExecutionResultPanel;

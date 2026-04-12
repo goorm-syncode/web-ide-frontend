@@ -140,7 +140,7 @@ const ResetPasswordPage = () => {
         isOpen: true,
         type: 'success',
         title: '재설정 완료',
-        message: '비밀번호가 성공적으로 변경되었습니다. 다시 로그인해주세요.',
+        message: '비밀번호가 성공적으로 변경되었습니다.\n다시 로그인해주세요.',
         onConfirm: () => {
           closeMessageBox();
           navigate('/login');
@@ -235,6 +235,7 @@ const ResetPasswordPage = () => {
               disabled={loading}
               required
               autoFocus
+              forceEnglish={true}
             />
             <Input
               type="password"
@@ -246,6 +247,7 @@ const ResetPasswordPage = () => {
               helperText={errors.passwordConfirm}
               disabled={loading}
               required
+              forceEnglish={true}
             />
             {serverError && (
               <div className="auth-error-message">

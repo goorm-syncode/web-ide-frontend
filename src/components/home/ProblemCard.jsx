@@ -70,6 +70,11 @@ const ProblemCard = ({
     );
   };
 
+  const handleButtonClick = (e) => {
+    e.stopPropagation();
+    if (onClickAction) onClickAction();
+  };
+
   const renderButton = () => {
     const buttonTextMap = {
       solved: '코드 리뷰',
@@ -77,39 +82,45 @@ const ProblemCard = ({
       unattempted: '문제 풀기',
     };
 
-    // 상태별 버튼 스타일 설정
     const getButtonStyle = () => {
       switch (status) {
         case 'unattempted':
-          return { primary: false, className: 'problem-btn-soft' };
+          // "문제 풀기": New challenge, but less prominent than ongoing
+          return { primary: false, type: 'secondary', className: 'problem-btn-outline' };
         case 'in_progress':
-          return { primary: true, className: '' };
+          // "이어서 풀기": Active ongoing mission (high priority)
+          return { primary: true, type: 'primary', className: '' };
         case 'solved':
-          return { primary: false, className: 'problem-btn-light' };
+          // "코드 리뷰": Completed, secondary action
+          return { primary: false, type: 'secondary', className: 'problem-btn-light' };
         default:
-          return { primary: true, className: '' };
+          return { primary: true, type: 'primary', className: '' };
       }
     };
 
-    const { primary, className } = getButtonStyle();
+    const { primary, type, className } = getButtonStyle();
 
     return (
       <Button
-        type="button"
+        type={type}
         primary={primary}
         className={`${className} problem-card-btn`.trim()}
         fullWidth
-        onClick={onClickAction}
+        onClick={handleButtonClick}
       >
         {buttonTextMap[status] || '문제 풀기'}
       </Button>
     );
   };
 
+  const isSolved = status === 'solved';
+
   return (
-    <Card className="problem-card-container">
+    <Card 
+      className={`problem-card-container ${isSolved ? 'is-solved' : ''}`} 
+      onClick={onClickAction}
+    >
       <div className="problem-card-content">
-        {/* 상단 그룹: 카테고리 헤더 + 제목/설명 */}
         <div className="problem-top-group">
           <div className="problem-card-header">
             <span className="problem-category">{category}</span>
@@ -117,25 +128,38 @@ const ProblemCard = ({
           </div>
 
           <div className="problem-body">
-            <h3 className="problem-title">{title}</h3>
+            <h3 className="problem-title">
+              {isSolved && (
+                <svg
+                  className="solved-icon"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+              {title}
+            </h3>
             <p className="problem-description">{description}</p>
           </div>
         </div>
 
-        {/* 하단 그룹: 태그 + 버튼 */}
         <div className="problem-footer-section">
           <div className="problem-tags">
-            {/* 난이도 뱃지 (맨 앞) */}
             {difficulty && (
               <TagBadge type={getDifficultyType(difficulty)} text={getDifficultyText(difficulty)} />
             )}
-            {/* 부가 태그들 */}
             {tags.map((tag, idx) => (
               <TagBadge key={idx} text={tag} />
             ))}
           </div>
 
-          {/* 하단 버튼 래퍼 */}
           <div className="problem-footer-button">{renderButton()}</div>
         </div>
       </div>

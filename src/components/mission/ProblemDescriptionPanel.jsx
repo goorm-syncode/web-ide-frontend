@@ -66,6 +66,7 @@ const ProblemDescriptionPanel = ({
   examples = [],
 }) => {
   const [copyStatus, setCopyStatus] = useState({});
+  const isSolved = status === 'COMPLETED';
 
   const handleCopy = (text, id) => {
     const copyToClipboard = (str) => {
@@ -155,7 +156,24 @@ const ProblemDescriptionPanel = ({
   return (
     <div className="problem-description-wrapper">
       <div className="panel-header">
-        <h1 className="problem-title">{title}</h1>
+        <h1 className={`problem-title ${isSolved ? 'is-solved' : ''}`}>
+          {isSolved && (
+            <svg
+              className="solved-icon"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          )}
+          {title}
+        </h1>
         <div className="header-tags">
           {difficulty && renderDifficultyTag(difficulty)}
           {status && renderStatusTag(status)}

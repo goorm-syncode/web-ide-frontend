@@ -15,7 +15,7 @@
 .message-box-container {
   background-color: var(--bg-card);
   border-radius: 8px;
-  padding: 16px;
+  padding: 24px;
   width: 100%;
   max-width: 400px;
   box-shadow: var(--shadow);
@@ -55,6 +55,8 @@
   line-height: 1.5;
   margin: 0;
   text-align: left;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .message-box-body.with-icon-padding {

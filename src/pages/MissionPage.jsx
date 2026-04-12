@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import MyPageModal from './MyPageModal';
+import MyPageModal from '../components/modals/MyPageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '../hooks/useTheme';
@@ -9,6 +9,7 @@ import Gnb from '../components/layout/Gnb';
 import Footer from '../components/layout/Footer';
 import ProblemDescriptionPanel from '../components/mission/ProblemDescriptionPanel';
 import ExecutionResultPanel from '../components/mission/ExecutionResultPanel';
+import LanguageSelect from '../components/mission/LanguageSelect';
 import ChatWidget from '../components/chat/ChatWidget';
 import MessageBox from '../components/common/MessageBox';
 import {
@@ -21,6 +22,7 @@ import {
 } from '../services/missions';
 import { mapErrorMessage } from '../services/errorMapper';
 import '../styles/pages/MissionPage.css';
+import '../styles/pages/MissionCompletionEffect.css';
 
 const RunIcon = () => (
   <svg
@@ -74,6 +76,22 @@ const SubmitIcon = () => (
   </svg>
 );
 
+const LoadingIcon = () => (
+  <svg
+    className="btn-icon spinner-icon"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="3"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+  </svg>
+);
+
 const LANG_MAP = {
   python: 'PYTHON',
   javascript: 'JAVASCRIPT',
@@ -121,6 +139,8 @@ const MissionPage = () => {
   const [activeMobileTab, setActiveMobileTab] = useState('description');
 
   const { isDark } = useTheme();
+  const isMac = typeof window !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+  const modKey = isMac ? '⌘' : 'Ctrl';
 
   // Handle window resize for mobile detection
   useEffect(() => {
@@ -133,7 +153,8 @@ const MissionPage = () => {
 
   const [isResizingMain, setIsResizingMain] = useState(false);
   const [isResizingIde, setIsResizingIde] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingType, setLoadingType] = useState(null); // 'run', 'submit', or null
+  const isLoading = !!loadingType;
   const [output, setOutput] = useState('');
   const [errorTabContent, setErrorTabContent] = useState('');
   const [testCaseInput, setTestCaseInput] = useState('');
@@ -144,10 +165,14 @@ const MissionPage = () => {
     type: 'info',
     onConfirm: null,
   });
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const monacoContainerRef = useRef(null);
   const editorInstance = useRef(null);
   const handleSaveRef = useRef(null);
+  const handleRunRef = useRef(null);
+  const handleSubmitRef = useRef(null);
+  const handleResetRef = useRef(null);
 
   const isDirty = currentCode !== lastSavedCode;
 
@@ -155,7 +180,7 @@ const MissionPage = () => {
   useEffect(() => {
     const fetchMissionData = async () => {
       try {
-        setIsLoading(true);
+        setLoadingType('load');
         const missionData = await getMissionById(missionId);
         setMission(missionData);
 
@@ -189,7 +214,7 @@ const MissionPage = () => {
         console.error('Failed to fetch mission data:', err);
         setOutput('Error: ' + mapErrorMessage(err));
       } finally {
-        setIsLoading(false);
+        setLoadingType(null);
       }
     };
 
@@ -201,17 +226,48 @@ const MissionPage = () => {
   // Update editor theme when isDark changes
   useEffect(() => {
     if (editorInstance.current) {
-      monaco.editor.setTheme(isDark ? 'vs-dark' : 'vs-light');
+      monaco.editor.setTheme(isDark ? 'learn-code-dark' : 'learn-code-light');
     }
   }, [isDark]);
 
   // Initialize Monaco Editor
   useEffect(() => {
     if (monacoContainerRef.current && isLoaded && !editorInstance.current) {
+      // Define custom themes
+      monaco.editor.defineTheme('learn-code-dark', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': '#1e293b',
+          'editor.lineHighlightBackground': '#2d374830',
+          'editorCursor.foreground': '#818cf8',
+          'editorIndentGuide.background': '#334155',
+          'editorIndentGuide.activeBackground': '#475569',
+          'editorLineNumber.foreground': '#475569',
+          'editorLineNumber.activeForeground': '#94a3b8',
+        },
+      });
+
+      monaco.editor.defineTheme('learn-code-light', {
+        base: 'vs',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': '#ffffff',
+          'editor.lineHighlightBackground': '#f1f5f9',
+          'editorCursor.foreground': '#6366f1',
+          'editorIndentGuide.background': '#e2e8f0',
+          'editorIndentGuide.activeBackground': '#cbd5e1',
+          'editorLineNumber.foreground': '#94a3b8',
+          'editorLineNumber.activeForeground': '#475569',
+        },
+      });
+
       editorInstance.current = monaco.editor.create(monacoContainerRef.current, {
-        value: lastSavedCode,
+        value: currentCode,
         language: language,
-        theme: isDark ? 'vs-dark' : 'vs-light',
+        theme: isDark ? 'learn-code-dark' : 'learn-code-light',
         automaticLayout: true,
         minimap: { enabled: !isMobile }, // Disable minimap on mobile
         fontSize: isMobile ? 15 : 14, // Slightly larger on mobile
@@ -230,6 +286,8 @@ const MissionPage = () => {
         padding: { top: 16, bottom: 16 },
       });
 
+      editorInstance.current.focus();
+
       // Track code changes
       editorInstance.current.onDidChangeModelContent(() => {
         setCurrentCode(editorInstance.current.getValue());
@@ -239,12 +297,33 @@ const MissionPage = () => {
       editorInstance.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
         handleSaveRef.current?.();
       });
+
+      // Add Run Command (Ctrl+Enter / Cmd+Enter)
+      editorInstance.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+        handleRunRef.current?.();
+      });
+
+      // Add Submit Command (Ctrl+Shift+Enter / Cmd+Shift+Enter)
+      editorInstance.current.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter,
+        () => {
+          handleSubmitRef.current?.();
+        },
+      );
+
+      // Add Reset Command (Ctrl+Shift+R / Cmd+Shift+R)
+      editorInstance.current.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyR,
+        () => {
+          handleResetRef.current?.();
+        },
+      );
     }
 
     return () => {
       // Cleanup if needed
     };
-  }, [isLoaded, language, lastSavedCode, isDark, isMobile]);
+  }, [isLoaded, language, lastSavedCode, isDark, isMobile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update layout when tab changes on mobile
   useEffect(() => {
@@ -262,20 +341,15 @@ const MissionPage = () => {
     if (code === lastSavedCode) return;
 
     try {
-      setIsLoading(true);
+      setLoadingType('save');
       await saveDraft(missionId, language.toUpperCase(), code);
       setLastSavedCode(code);
     } catch (err) {
       console.error('Save failed:', err);
     } finally {
-      setIsLoading(false);
+      setLoadingType(null);
     }
   }, [isLoading, lastSavedCode, missionId, language]);
-
-  // Keep handleSaveRef updated
-  useEffect(() => {
-    handleSaveRef.current = handleSave;
-  }, [handleSave]);
 
   // 코드 초기화 (Reset)
   const handleResetCode = useCallback(async () => {
@@ -284,12 +358,12 @@ const MissionPage = () => {
     setMessageBox({
       isOpen: true,
       title: '코드 초기화',
-      message: '코드를 초기 상태로 되돌리시겠습니까? 현재 작성 중인 내용은 사라집니다.',
+      message: '코드를 초기 상태로 되돌리시겠습니까?\n현재 작성 중인 내용은 사라집니다.',
       type: 'warning',
       onConfirm: async () => {
         setMessageBox((prev) => ({ ...prev, isOpen: false }));
         try {
-          setIsLoading(true);
+          setLoadingType('load');
 
           // 현재 선택된 언어의 백엔드용 매핑 이름 확인 (예: javascript -> JAVASCRIPT)
           const backendLang = LANG_MAP[language] || language.toUpperCase();
@@ -309,7 +383,7 @@ const MissionPage = () => {
         } catch (err) {
           console.error('Reset failed:', err);
         } finally {
-          setIsLoading(false);
+          setLoadingType(null);
         }
       },
     });
@@ -379,9 +453,9 @@ const MissionPage = () => {
     };
   }, [isResizingMain, isResizingIde]);
 
-  const handleLanguageChange = async (e) => {
-    const newLang = e.target.value; // 표시용 소문자 (e.g. 'javascript')
-    const backendLang = LANG_MAP[newLang] || newLang.toUpperCase(); // API용 대문자 (e.g. 'JAVASCRIPT')
+  const handleLanguageChange = async (value) => {
+    const newLang = typeof value === 'string' ? value : value.target.value; // Support both direct value and event
+    const backendLang = LANG_MAP[newLang] || newLang.toUpperCase();
     const prevBackendLang = LANG_MAP[language] || language.toUpperCase();
 
     // Auto save previous language code before switching
@@ -397,7 +471,7 @@ const MissionPage = () => {
 
     // Load draft or starter code for new language
     try {
-      setIsLoading(true);
+      setLoadingType('load');
       const draftData = await getDraft(missionId, backendLang); // 대문자로 전달
       let code = '';
       if (draftData.hasSavedCode) {
@@ -414,11 +488,12 @@ const MissionPage = () => {
         editorInstance.current.setValue(code);
         const model = editorInstance.current.getModel();
         monaco.editor.setModelLanguage(model, newLang); // Monaco에는 소문자로 전달
+        editorInstance.current.focus();
       }
     } catch (err) {
       console.error('Failed to load language draft:', err);
     } finally {
-      setIsLoading(false);
+      setLoadingType(null);
     }
   };
 
@@ -426,8 +501,8 @@ const MissionPage = () => {
     if (!editorInstance.current) return;
     const code = editorInstance.current.getValue();
 
-    setIsLoading(true);
-    setOutput('Running code...\n');
+    setLoadingType('run');
+    setOutput('Running code'); // Dots added by CSS
     setErrorTabContent('');
 
     // On mobile, switch to results tab when running
@@ -461,17 +536,16 @@ const MissionPage = () => {
     } catch (err) {
       setOutput('Error: ' + mapErrorMessage(err));
     } finally {
-      setIsLoading(false);
+      setLoadingType(null);
     }
   }, [language, missionId, testCaseInput, isMobile]);
-
 
   const handleSubmit = useCallback(async () => {
     if (!editorInstance.current) return;
     const code = editorInstance.current.getValue();
 
-    setIsLoading(true);
-    setOutput('Submitting...\n');
+    setLoadingType('submit');
+    setOutput('Submitting'); // Dots added by CSS
     setErrorTabContent('');
 
     // On mobile, switch to results tab when submitting
@@ -483,6 +557,8 @@ const MissionPage = () => {
         sourceCode: code,
         language,
       });
+
+      editorInstance.current.focus();
 
       const { overallStatus, passedCount = 0, totalCount = 0, results = [] } = result;
 
@@ -497,15 +573,83 @@ const MissionPage = () => {
       setLastSavedCode(code); // submitCode auto-saves draft
 
       if (overallStatus === 'ACCEPTED') {
-        await updateMissionProgress(missionId, 'COMPLETED');
+        // [수정] 시각적 연출 및 메시지 박스를 최우선으로 실행하여 지연 체감을 없앰
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 5000); // 5초 후 종료
+
+        setMessageBox({
+          isOpen: true,
+          title: '미션 해결 완료!',
+          message:
+            '🎊 축하합니다!\n모든 테스트 케이스를 성공적으로 통과했습니다.\n당신의 코드가 완벽하게 동작합니다!',
+          type: 'success',
+          confirmText: '홈 화면으로',
+          showCancel: true,
+          cancelText: '코드 더 보기',
+          onConfirm: () => {
+            setMessageBox((prev) => ({ ...prev, isOpen: false }));
+            navigate('/home');
+          },
+          onCancel: () => {
+            setMessageBox((prev) => ({ ...prev, isOpen: false }));
+          },
+        });
+
+        // 서버 상태 업데이트 및 로컬 상태 변경은 백그라운드에서 처리
+        updateMissionProgress(missionId, 'COMPLETED').catch((err) =>
+          console.error('Progress update failed:', err),
+        );
         setMission((prev) => (prev ? { ...prev, userStatus: 'COMPLETED' } : prev));
       }
     } catch (err) {
       setOutput('Error: ' + mapErrorMessage(err));
     } finally {
-      setIsLoading(false);
+      setLoadingType(null);
     }
-  }, [language, missionId, isMobile]);
+  }, [language, missionId, isMobile, navigate]);
+
+  // Keep refs updated (Moved here to avoid ReferenceError)
+  useEffect(() => {
+    handleSaveRef.current = handleSave;
+    handleRunRef.current = handleRun;
+    handleSubmitRef.current = handleSubmit;
+    handleResetRef.current = handleResetCode;
+  }, [handleSave, handleRun, handleSubmit, handleResetCode]);
+
+  // Global Keyboard Shortcuts (Moved here to avoid ReferenceError)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const isMod = isMac ? e.metaKey : e.ctrlKey;
+      if (!isMod) return;
+
+      const key = e.key.toLowerCase();
+      const shift = e.shiftKey;
+
+      // S: Save
+      if (key === 's' && !shift) {
+        e.preventDefault();
+        handleSaveRef.current?.();
+      }
+      // Enter: Run (Ctrl+Enter) or Submit (Ctrl+Shift+Enter)
+      else if (e.code === 'Enter') {
+        if (shift) {
+          e.preventDefault();
+          handleSubmitRef.current?.();
+        } else {
+          e.preventDefault();
+          handleRunRef.current?.();
+        }
+      }
+      // R: Reset (Ctrl+Shift+R)
+      else if (key === 'r' && shift) {
+        e.preventDefault();
+        handleResetRef.current?.();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMac]);
 
   const closeMessageBox = () => {
     setMessageBox((prev) => ({ ...prev, isOpen: false }));
@@ -514,7 +658,7 @@ const MissionPage = () => {
   return (
     <div className={`mission-page-container ${isMobile ? 'is-mobile' : ''}`}>
       <Gnb
-        title="LearnCode"
+        title="Learn Code"
         fluid={true}
         isLoggedIn={isAuthenticated}
         userName={user?.nickname || '사용자'}
@@ -526,7 +670,7 @@ const MissionPage = () => {
 
       {isMobile && (
         <div className="mobile-tab-nav" role="tablist">
-          <button 
+          <button
             className={`mobile-tab-item ${activeMobileTab === 'description' ? 'active' : ''}`}
             onClick={() => setActiveMobileTab('description')}
             role="tab"
@@ -535,7 +679,7 @@ const MissionPage = () => {
           >
             문제 설명
           </button>
-          <button 
+          <button
             className={`mobile-tab-item ${activeMobileTab === 'editor' ? 'active' : ''}`}
             onClick={() => setActiveMobileTab('editor')}
             role="tab"
@@ -544,7 +688,7 @@ const MissionPage = () => {
           >
             에디터
           </button>
-          <button 
+          <button
             className={`mobile-tab-item ${activeMobileTab === 'results' ? 'active' : ''}`}
             onClick={() => setActiveMobileTab('results')}
             role="tab"
@@ -558,11 +702,11 @@ const MissionPage = () => {
 
       <main className="mission-main-content">
         {/* Left: Problem Description */}
-        <div 
-          className="panel-left" 
-          style={{ 
+        <div
+          className="panel-left"
+          style={{
             width: isMobile ? '100%' : `${leftWidth}%`,
-            display: isMobile && activeMobileTab !== 'description' ? 'none' : 'block'
+            display: isMobile && activeMobileTab !== 'description' ? 'none' : 'block',
           }}
         >
           {mission ? (
@@ -577,7 +721,10 @@ const MissionPage = () => {
               }))}
             />
           ) : (
-            <div className="panel-loading">미션을 불러오는 중...</div>
+            <div className="panel-loading">
+              <LoadingIcon />
+              <span>미션을 불러오는 중...</span>
+            </div>
           )}
         </div>
 
@@ -590,133 +737,135 @@ const MissionPage = () => {
         )}
 
         {/* Right: IDE Area */}
-        <div 
-          className="panel-right" 
-          style={{ 
+        <div
+          className="panel-right"
+          style={{
             width: isMobile ? '100%' : `${100 - leftWidth}%`,
-            display: isMobile && activeMobileTab === 'description' ? 'none' : 'flex'
+            display: isMobile && activeMobileTab === 'description' ? 'none' : 'flex',
           }}
         >
-          <div 
-            className="panel-editor-wrapper" 
-            style={{ 
-              height: isMobile ? (activeMobileTab === 'editor' ? '100%' : '0') : `${100 - bottomHeight}%`,
-              display: isMobile && activeMobileTab !== 'editor' ? 'none' : 'flex'
+          <div
+            className="panel-editor-wrapper"
+            style={{
+              height: isMobile
+                ? activeMobileTab === 'editor'
+                  ? '100%'
+                  : '0'
+                : `${100 - bottomHeight}%`,
+              display: isMobile && activeMobileTab !== 'editor' ? 'none' : 'flex',
             }}
           >
             <header className="editor-header">
               <div className="editor-controls">
-                <div className="select-wrapper">
-                  <select className="lang-select" value={language} onChange={handleLanguageChange}>
-                    {mission?.languages?.map((lang) => (
-                      <option
-                        key={lang.language}
-                        value={LANG_REVERSE_MAP[lang.language] || lang.language.toLowerCase()}
-                      >
-                        {lang.displayName}
-                      </option>
-                    )) || (
-                      <>
-                        <option value="python">Python</option>
-                        <option value="javascript">JavaScript</option>
-                        <option value="java">Java</option>
-                        <option value="c">C</option>
-                      </>
-                    )}
-                  </select>
-                </div>
+                <LanguageSelect
+                  value={language}
+                  options={mission?.languages || []}
+                  onChange={handleLanguageChange}
+                  missionId={missionId}
+                />
               </div>
 
               <div className="editor-actions">
-                <div
-                  className={`save-status ${isLoading ? 'loading' : isDirty ? 'dirty' : 'saved'}`}
-                >
-                  {isLoading ? (
-                    <span className="status-text">{isMobile ? '...' : '저장 중...'}</span>
-                  ) : isDirty ? (
-                    <span className="status-text">{isMobile ? '●' : '변경됨'}</span>
-                  ) : (
-                    <>
+                <div className="editor-actions-left">
+                  <div
+                    className={`save-status ${loadingType === 'save' ? 'loading' : isDirty ? 'dirty' : 'saved'}`}
+                  >
+                    {loadingType === 'save' ? (
+                      <span className="status-text">저장 중...</span>
+                    ) : isDirty ? (
+                      <>
+                        <svg width="6" height="6" viewBox="0 0 6 6" className="status-dot">
+                          <circle cx="3" cy="3" r="3" fill="currentColor" />
+                        </svg>
+                        <span className="status-text">변경됨</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="status-icon"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span className="status-text">저장됨</span>
+                      </>
+                    )}
+                  </div>
+
+                  {!isMobile && <div className="toolbar-divider" />}
+
+                  {!isMobile && (
+                    <button
+                      type="button"
+                      className="toolbar-action-btn utility-btn"
+                      onClick={handleSave}
+                      disabled={isLoading || !isDirty}
+                      title={`코드 저장 (${modKey}+S)`}
+                    >
+                      <SaveIcon />
+                      <span>저장</span>
+                    </button>
+                  )}
+
+                  {!isMobile && (
+                    <button
+                      type="button"
+                      className="toolbar-action-btn utility-btn"
+                      onClick={handleResetCode}
+                      title={`코드 초기화 (${modKey}+Shift+R)`}
+                      disabled={isLoading}
+                      aria-label="코드 초기화"
+                    >
                       <svg
                         width="14"
                         height="14"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="3"
+                        strokeWidth="2.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="status-icon"
                       >
-                        <polyline points="20 6 9 17 4 12" />
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
                       </svg>
-                      {!isMobile && <span className="status-text">저장됨</span>}
-                    </>
+                      <span>초기화</span>
+                    </button>
                   )}
                 </div>
 
-                {!isMobile && <div className="toolbar-divider" />}
-
-                {!isMobile && (
+                <div className="editor-actions-right">
+                  {!isMobile && <div className="toolbar-divider" />}
                   <button
                     type="button"
-                    className="toolbar-action-btn"
-                    onClick={handleSave}
-                    disabled={isLoading || !isDirty}
-                  >
-                    <SaveIcon />
-                    <span>저장</span>
-                  </button>
-                )}
-
-                {!isMobile && (
-                  <button
-                    type="button"
-                    className="toolbar-action-btn"
-                    onClick={handleResetCode}
-                    title="코드 초기화"
+                    className="toolbar-action-btn run-btn"
+                    onClick={handleRun}
                     disabled={isLoading}
-                    aria-label="코드 초기화"
+                    title={`코드 실행 테스트 (${modKey}+Enter)`}
+                    aria-label="코드 실행 테스트"
                   >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                      <path d="M3 3v5h5" />
-                    </svg>
-                    <span>초기화</span>
+                    {loadingType === 'run' ? <LoadingIcon /> : <RunIcon />}
+                    <span>테스트</span>
                   </button>
-                )}
-
-                <div className="toolbar-divider" />
-
-                <button
-                  type="button"
-                  className="toolbar-action-btn run-btn"
-                  onClick={handleRun}
-                  disabled={isLoading}
-                  aria-label="코드 실행 테스트"
-                >
-                  <RunIcon />
-                  <span>테스트</span>
-                </button>
-                <button
-                  type="button"
-                  className="toolbar-action-btn submit-btn"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                  aria-label="최종 코드 제출"
-                >
-                  <SubmitIcon />
-                  <span>제출</span>
-                </button>
+                  <button
+                    type="button"
+                    className="toolbar-action-btn submit-btn"
+                    onClick={handleSubmit}
+                    disabled={isLoading}
+                    title={`최종 코드 제출 (${modKey}+Shift+Enter)`}
+                    aria-label="최종 코드 제출"
+                  >
+                    {loadingType === 'submit' ? <LoadingIcon /> : <SubmitIcon />}
+                    <span>제출</span>
+                  </button>
+                </div>
               </div>
             </header>
             <div ref={monacoContainerRef} className="monaco-container" />
@@ -731,11 +880,11 @@ const MissionPage = () => {
           )}
 
           {/* Bottom: Execution Results */}
-          <div 
-            className="panel-results" 
-            style={{ 
+          <div
+            className="panel-results"
+            style={{
               height: isMobile ? '100%' : `${bottomHeight}%`,
-              display: isMobile && activeMobileTab !== 'results' ? 'none' : 'flex'
+              display: isMobile && activeMobileTab !== 'results' ? 'none' : 'flex',
             }}
           >
             <ExecutionResultPanel
@@ -750,10 +899,7 @@ const MissionPage = () => {
       </main>
 
       {!isMobile && <Footer />}
-      <MyPageModal 
-        isOpen={isMyPageOpen} 
-        onClose={() => setIsMyPageOpen(false)} 
-      />
+      <MyPageModal isOpen={isMyPageOpen} onClose={() => setIsMyPageOpen(false)} />
 
       <MessageBox
         isOpen={messageBox.isOpen}
@@ -765,6 +911,39 @@ const MissionPage = () => {
         {messageBox.message}
       </MessageBox>
       {isAuthenticated && <ChatWidget />}
+
+      {showConfetti && (
+        <div className="confetti-container">
+          {[...Array(150)].map((_, i) => {
+            const size = Math.random() * 8 + 6;
+            const duration = Math.random() * 3 + 3; // 3s ~ 6s (더 여유로운 낙하)
+            const delay = Math.random() * 4; // 0s ~ 4s (더 넓은 분포)
+            return (
+              <div
+                key={i}
+                className="confetti-piece"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  width: `${size}px`,
+                  height: `${size * 1.2}px`,
+                  animationDelay: `${delay}s`,
+                  animationDuration: `${duration}s`,
+                  backgroundColor: [
+                    '#fce18a',
+                    '#ff726d',
+                    '#b48def',
+                    '#f48380',
+                    '#8edcda',
+                    '#5db3f3',
+                    '#4ade80',
+                  ][Math.floor(Math.random() * 7)],
+                  opacity: Math.random() * 0.5 + 0.5,
+                }}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

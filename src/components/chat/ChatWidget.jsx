@@ -80,6 +80,30 @@ const ChatWidget = () => {
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
 
+  const isMac = typeof window !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+  const modKey = isMac ? '⌘' : 'Ctrl';
+
+  // Global Toggle Shortcut (Cmd/Ctrl + K)
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      const isMod = isMac ? e.metaKey : e.ctrlKey;
+      if (isMod && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        // We can't directly call handleToggle because it depends on internal state logic
+        // But we can trigger a click on the button or just simplify the logic here
+        setIsOpen((prev) => {
+          const next = !prev;
+          // If closing, we'd normally sync position, but via shortcut we can skip sync for now
+          // or trigger handleToggle logic manually without the "dragged" check
+          return next;
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [isMac]);
+
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
@@ -300,7 +324,23 @@ const ChatWidget = () => {
     }
   };
 
+  const handleClose = () => {
+    // Sync button position to popup before closing
+    btnDrag.setPosition({
+      x: Number(24 - (popupPos.right || 0)) || 0,
+      y: Number(24 - (popupPos.bottom || 0)) || 0,
+    });
+    setIsOpen(false);
+  };
+
   const handleKeyDown = (e) => {
+    // Check for Esc key
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      handleClose();
+      return;
+    }
+
     // Check if it's the Enter key and not during IME composition
     if (e.key === 'Enter' && !e.shiftKey && e.nativeEvent.isComposing === false) {
       e.preventDefault();
@@ -314,13 +354,13 @@ const ChatWidget = () => {
       {!isOpen && (
         <button
           type="button"
-          className="chat-floating-btn"
+          className={`chat-floating-btn ${btnDrag.isDragging ? 'dragging' : ''}`}
           style={{
             transform: `translate(${btnDrag.position.x}px, ${btnDrag.position.y}px)`,
           }}
           onMouseDown={btnDrag.handleMouseDown}
           onClick={handleToggle}
-          title="Open Global Chat"
+          title={`실시간 채팅 (${modKey}+K)`}
         >
           <ChatIcon size={28} />
           {!channel && !isLoading && (
@@ -377,14 +417,7 @@ const ChatWidget = () => {
               <button
                 type="button"
                 className="chat-minimize-btn"
-                onClick={() => {
-                  // Sync button position to popup before closing
-                  btnDrag.setPosition({
-                    x: Number(24 - (popupPos.right || 0)) || 0,
-                    y: Number(24 - (popupPos.bottom || 0)) || 0,
-                  });
-                  setIsOpen(false);
-                }}
+                onClick={handleClose}
                 title="최소화"
               >
                 <ChevronDownIcon />

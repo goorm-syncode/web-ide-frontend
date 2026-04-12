@@ -12,7 +12,7 @@ import '../../styles/components/home/SearchFilter.css';
  * @param {string} [props.placeholder='Search problems...'] - 플레이스홀더 (기본값 설정)
  * @param {string} [props.className=''] - 추가 클래스명
  */
-const SearchFilter = ({ value, onChange, placeholder = 'Search problems...', className = '', ...props }) => {
+const SearchFilter = React.forwardRef(({ value, onChange, placeholder = 'Search problems...', className = '', ...props }, ref) => {
   const handleChange = (e) => {
     if (onChange) {
       onChange(e.target.value);
@@ -21,18 +21,26 @@ const SearchFilter = ({ value, onChange, placeholder = 'Search problems...', cla
 
   return (
     <div className={`search-filter ${className}`.trim()}>
-      <Input
-        type="text"
-        value={value}
-        onChange={handleChange}
-        placeholder={placeholder}
-        icon="search"
-        className="search-filter__input"
-        {...props}
-      />
+      <div className="search-filter-wrapper">
+        <Input
+          ref={ref}
+          type="text"
+          value={value}
+          onChange={handleChange}
+          placeholder={placeholder}
+          icon="search"
+          className="search-filter__input"
+          {...props}
+        />
+        <div className="search-shortcut-hint">
+          <kbd>t</kbd>
+        </div>
+      </div>
     </div>
   );
-};
+});
+
+SearchFilter.displayName = 'SearchFilter';
 
 SearchFilter.propTypes = {
   value: PropTypes.string.isRequired,
