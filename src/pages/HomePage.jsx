@@ -12,6 +12,7 @@ import SearchFilter from '../components/home/SearchFilter';
 import DifficultyFilter from '../components/home/DifficultyFilter';
 import StatusFilter from '../components/home/StatusFilter';
 import Pagination from '../components/common/Pagination';
+import ChatWidget from '../components/chat/ChatWidget';
 
 import { getMissions, getContinueMission } from '../services/missions';
 import { getMyProgress } from '../services/userService';
@@ -217,6 +218,7 @@ const HomePage = () => {
       </MessageBox>
 
       <MyPageModal isOpen={isMyPageOpen} onClose={() => setIsMyPageOpen(false)} />
+      {isAuthenticated && <ChatWidget />}
     </div>
   );
 };

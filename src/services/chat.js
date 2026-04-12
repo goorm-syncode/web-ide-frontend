@@ -74,17 +74,19 @@ export const markRead = async (channelId, lastReadMessageId) => {
  * 채널 SSE 구독 및 메시지 수신 핸들러
  * 
  * @param {number} channelId - 채널 ID
- * @param {function} onMessage - 메시 수신 시 실행할 콜백
+ * @param {function} onMessage - 메시지 수신 시 실행할 콜백
  * @param {function} onError - 에러 발생 시 실행할 콜백
+ * @param {function} onConnected - 연결 성공 시 실행할 콜백 (재연결 포함)
  * @returns {function} 구독 중단(Abort) 함수
  */
-export const subscribeToMessages = (channelId, onMessage, onError) => {
+export const subscribeToMessages = (channelId, onMessage, onError, onConnected) => {
   const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://d1jum4zzr45u1b.cloudfront.net';
   const url = `${baseURL}/api/chat/channels/${channelId}/subscribe`;
   const abortController = new AbortController();
   
   let reconnectTimeout;
   let isAborted = false;
+  let retryCount = 0;
 
   const subscribe = async () => {
     if (isAborted) return;
@@ -122,7 +124,6 @@ export const subscribeToMessages = (channelId, onMessage, onError) => {
           console.warn('[SSE] Unauthorized, attempting token refresh...');
           try {
             await handleTokenRefresh();
-            // Try again immediately with new token
             return subscribe();
           } catch {
             throw new Error('SSE Auth refresh failed');
@@ -130,6 +131,10 @@ export const subscribeToMessages = (channelId, onMessage, onError) => {
         }
         throw new Error(`SSE Connection failed: ${response.status}`);
       }
+
+      // 연결 성공 알림 및 재시도 횟수 초기화
+      onConnected && onConnected();
+      retryCount = 0;
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -149,7 +154,7 @@ export const subscribeToMessages = (channelId, onMessage, onError) => {
 
           const dataStr = trimmedLine.replace('data:', '').trim();
           if (dataStr === 'connected' || dataStr === 'ping') {
-            console.log('SSE status:', dataStr);
+            // console.log('SSE status:', dataStr);
             continue;
           }
 
@@ -165,10 +170,13 @@ export const subscribeToMessages = (channelId, onMessage, onError) => {
       }
     } catch (error) {
       if (error.name !== 'AbortError' && !isAborted) {
-        console.warn('[SSE] Subscription interrupted:', error.message || error);
+        retryCount++;
+        // Exponential backoff: min 2s, max 30s
+        const delay = Math.min(Math.pow(2, retryCount) * 1000, 30000);
+        console.warn(`[SSE] Connection interrupted (${error.message || error}). Retrying in ${delay / 1000}s...`);
+        
         onError && onError(error);
-        // Retry after 3 seconds
-        reconnectTimeout = setTimeout(subscribe, 3000);
+        reconnectTimeout = setTimeout(subscribe, delay);
       }
     }
   };
