@@ -7,8 +7,13 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .spinner-icon {
@@ -36,14 +41,29 @@
 }
 
 @keyframes dots {
-  0%, 20% { content: ''; }
-  40% { content: '.'; }
-  60% { content: '..'; }
-  80%, 100% { content: '...'; }
+
+  0%,
+  20% {
+    content: '';
+  }
+
+  40% {
+    content: '.';
+  }
+
+  60% {
+    content: '..';
+  }
+
+  80%,
+  100% {
+    content: '...';
+  }
 }
 
 .dark-theme {
-  --panel-border: var(--border-default); /* Ensure dynamic update in dark theme */
+  --panel-border: var(--border-default);
+  /* Ensure dynamic update in dark theme */
 }
 
 .mission-page-container {
@@ -58,15 +78,18 @@
 
 /* Mission-specific GNB alignment */
 .mission-page-container .gnb-left {
-  margin-left: 0; /* Align perfectly with 32px content start (24px GNB padding + 0) */
+  margin-left: 0;
+  /* Align perfectly with 32px content start (24px GNB padding + 0) */
 }
 
 .mission-page-container .gnb-right {
-  margin-right: 0; /* Standardize right alignment */
+  margin-right: 0;
+  /* Standardize right alignment */
 }
 
 .mission-page-container .gnb-auth-button {
-  padding-right: 0; /* Push Logout icon further to the right */
+  padding-right: 0;
+  /* Push Logout icon further to the right */
 }
 
 .mission-page-container footer {
@@ -90,10 +113,12 @@
 .panel-left {
   background-color: var(--panel-bg);
   height: 100%;
-  overflow: hidden; /* Fix nested scrolling */
+  overflow: hidden;
+  /* Fix nested scrolling */
   border-right: 1px solid var(--panel-border);
   min-width: 200px;
-  padding-bottom: 0; /* Removing padding as it might interfere with hidden overflow */
+  padding-bottom: 0;
+  /* Removing padding as it might interfere with hidden overflow */
 }
 
 .panel-right {
@@ -142,7 +167,7 @@
   flex-direction: column;
 }
 
-.panel-results > :first-child {
+.panel-results> :first-child {
   flex: 1;
   height: 100%;
   margin: 0 !important;
@@ -164,7 +189,8 @@
 /* Dark mode resizers: darker color to avoid white-ish appearance */
 .dark-theme .resizer-horizontal,
 .dark-theme .resizer-vertical {
-  background-color: var(--bg-page); /* Deep Slate 900 */
+  background-color: var(--bg-page);
+  /* Deep Slate 900 */
 }
 
 .resizer-horizontal:hover,
@@ -215,9 +241,9 @@
   border-radius: 6px;
   border: 1px solid var(--border-default);
   background-color: var(--bg-card);
-  color: var(--text-primary);
+  color: var(--text-secondary);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   outline: none;
   cursor: pointer;
   appearance: none;
@@ -275,15 +301,18 @@
 }
 
 .save-status.saved {
-  color: #10b981; /* Green */
+  color: #10b981;
+  /* Green */
 }
 
 .save-status.dirty {
-  color: #f59e0b; /* Amber */
+  color: #f59e0b;
+  /* Amber */
 }
 
 .save-status.loading {
-  color: #6366f1; /* Indigo */
+  color: #6366f1;
+  /* Indigo */
 }
 
 .status-icon {
@@ -319,7 +348,8 @@
 
 .toolbar-action-btn:not(:disabled):hover {
   background-color: var(--border-soft);
-  color: var(--primary); /* Use primary color instead of black for better feel */
+  color: var(--primary);
+  /* Use primary color instead of black for better feel */
 }
 
 /* Utility buttons specific styling (Save, Reset) */
@@ -469,13 +499,14 @@
   .mission-page-container {
     height: 100dvh;
   }
-  
+
   .mission-main-content {
     flex-direction: column;
     border-top: none;
   }
 
-  .panel-left, .panel-right {
+  .panel-left,
+  .panel-right {
     width: 100% !important;
     height: 100% !important;
     border: none !important;
@@ -544,7 +575,9 @@
     margin: 0;
   }
 
-  .resizer-horizontal, .resizer-vertical, .toolbar-divider {
+  .resizer-horizontal,
+  .resizer-vertical,
+  .toolbar-divider {
     display: none !important;
   }
 }
@@ -554,7 +587,7 @@
     padding: 0 12px;
     gap: 8px;
   }
-  
+
   .lang-select {
     padding: 4px 8px;
     font-size: 12px;

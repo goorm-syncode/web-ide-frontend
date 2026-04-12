@@ -113,8 +113,13 @@ const ProblemCard = ({
     );
   };
 
+  const isSolved = status === 'solved';
+
   return (
-    <Card className="problem-card-container" onClick={onClickAction}>
+    <Card 
+      className={`problem-card-container ${isSolved ? 'is-solved' : ''}`} 
+      onClick={onClickAction}
+    >
       <div className="problem-card-content">
         <div className="problem-top-group">
           <div className="problem-card-header">
@@ -123,7 +128,24 @@ const ProblemCard = ({
           </div>
 
           <div className="problem-body">
-            <h3 className="problem-title">{title}</h3>
+            <h3 className="problem-title">
+              {isSolved && (
+                <svg
+                  className="solved-icon"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+              {title}
+            </h3>
             <p className="problem-description">{description}</p>
           </div>
         </div>

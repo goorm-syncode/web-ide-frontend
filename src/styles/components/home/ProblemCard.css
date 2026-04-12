@@ -137,6 +137,42 @@ h3.problem-title {
   overflow: hidden;
 }
 
+.problem-card-container.is-solved {
+  background-color: rgba(99, 102, 241, 0.035); /* More subtle than var(--hover-brand) */
+  border-color: rgba(99, 102, 241, 0.15);
+}
+
+.dark-theme .problem-card-container.is-solved {
+  background-color: rgba(99, 102, 241, 0.05);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.problem-card-container.is-solved:hover {
+  border-color: var(--primary);
+  background-color: rgba(99, 102, 241, 0.06);
+}
+
+.dark-theme .problem-card-container.is-solved:hover {
+  background-color: rgba(99, 102, 241, 0.08);
+}
+
+.problem-card-container.is-solved h3.problem-title {
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.problem-card-container.is-solved .solved-icon {
+  color: var(--stat-completed);
+  flex-shrink: 0;
+}
+
+.problem-card-container.is-solved .problem-description {
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
 .problem-footer-button {
   width: 100%;
 }
