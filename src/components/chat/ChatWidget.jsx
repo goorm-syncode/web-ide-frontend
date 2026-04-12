@@ -80,6 +80,30 @@ const ChatWidget = () => {
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
 
+  const isMac = typeof window !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+  const modKey = isMac ? '⌘' : 'Ctrl';
+
+  // Global Toggle Shortcut (Cmd/Ctrl + K)
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      const isMod = isMac ? e.metaKey : e.ctrlKey;
+      if (isMod && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        // We can't directly call handleToggle because it depends on internal state logic
+        // But we can trigger a click on the button or just simplify the logic here
+        setIsOpen((prev) => {
+          const next = !prev;
+          // If closing, we'd normally sync position, but via shortcut we can skip sync for now
+          // or trigger handleToggle logic manually without the "dragged" check
+          return next;
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [isMac]);
+
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
@@ -336,7 +360,7 @@ const ChatWidget = () => {
           }}
           onMouseDown={btnDrag.handleMouseDown}
           onClick={handleToggle}
-          title="Open Global Chat"
+          title={`실시간 채팅 (${modKey}+K)`}
         >
           <ChatIcon size={28} />
           {!channel && !isLoading && (
