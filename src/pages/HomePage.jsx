@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MyPageModal from './MyPageModal';
+import MyPageModal from '../components/modals/MyPageModal';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout as logoutAction } from '../store/slices/authSlice';

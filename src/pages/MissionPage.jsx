@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import MyPageModal from './MyPageModal';
+import MyPageModal from '../components/modals/MyPageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '../hooks/useTheme';

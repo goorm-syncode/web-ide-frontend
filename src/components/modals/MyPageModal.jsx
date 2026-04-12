@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import Input from '../components/common/Input';
-import Button from '../components/common/Button';
-import MessageBox from '../components/common/MessageBox';
-import authService from '../services/auth';
-import { updateUser } from '../store/slices/authSlice';
-import { mapErrorMessage } from '../services/errorMapper';
-import learncodeIcon from '../assets/logo-auth.png';
-import '../styles/pages/MyPageModal.css';
+import Input from '../common/Input';
+import Button from '../common/Button';
+import MessageBox from '../common/MessageBox';
+import authService from '../../services/auth';
+import { updateUser } from '../../store/slices/authSlice';
+import { mapErrorMessage } from '../../services/errorMapper';
+import learncodeIcon from '../../assets/logo-auth.png';
+import '../../styles/components/modals/MyPageModal.css';
 
 const ClearIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -19,6 +19,7 @@ const ClearIcon = () => (
 const MyPageModal = ({ isOpen = true, onClose }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const currentPasswordRef = useRef(null);
 
   const [newNickname, setNewNickname] = useState(user?.nickname || '');
   const [nicknameError, setNicknameError] = useState('');
@@ -38,17 +39,19 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
     title: '',
     message: '',
   });
+  const [passwordServerError, setPasswordServerError] = useState('');
 
   // ESC key support
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && isOpen) {
+      // Close MyPageModal ONLY if no child MessageBox is open
+      if (e.key === 'Escape' && isOpen && !localMessageBox.isOpen) {
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, localMessageBox.isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -60,8 +63,21 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
       setPasswordErrors({});
       setNicknameError('');
+      setPasswordServerError('');
+      setLocalMessageBox((prev) => ({ ...prev, isOpen: false }));
     }
-  }, [isOpen, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]); // Removed 'user' to prevent success messages from closing immediately after update
+
+  // Auto focus/select on server-side password error
+  useEffect(() => {
+    if (passwordServerError && currentPasswordRef.current) {
+      currentPasswordRef.current.focus();
+      if (currentPasswordRef.current.select) {
+        currentPasswordRef.current.select();
+      }
+    }
+  }, [passwordServerError]);
 
   if (!isOpen) return null;
 
@@ -93,26 +109,66 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
     }
   };
 
-  const handlePasswordChange = async (e) => {
-    e.preventDefault();
 
-    // Validation
-    const errors = {};
-    if (!passwordData.currentPassword) errors.currentPassword = '현재 비밀번호를 입력해주세요.';
-    if (!passwordData.newPassword) errors.newPassword = '새 비밀번호를 입력해주세요.';
-    if (passwordData.newPassword.length < 8)
-      errors.newPassword = '8자 이상의 비밀번호를 입력해주세요.';
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      errors.confirmPassword = '비밀번호가 일치하지 않습니다.';
+  const validateNickname = (value) => {
+    if (!value) return '닉네임은 2자 이상 12자 이하로 입력해주세요.';
+    if (value.includes(' ')) return '공백은 입력할 수 없습니다.';
+    if (value.length < 2 || value.length > 12) return '닉네임은 2자 이상 12자 이하로 입력해주세요.';
+    return '';
+  };
+
+  const validateCurrentPassword = (value) => {
+    if (!value) return '현재 비밀번호를 입력해주세요.';
+    return '';
+  };
+
+  const validateNewPassword = (value) => {
+    if (!value) return '새 비밀번호를 입력해주세요.';
+    if (value.length < 8) return '8자 이상의 비밀번호를 입력해주세요.';
+    return '';
+  };
+
+  const validateConfirmPassword = (newPwd, confirmPwd) => {
+    if (!confirmPwd) return '비밀번호 확인을 입력해주세요.';
+    if (newPwd !== confirmPwd) return '비밀번호가 일치하지 않습니다.';
+    return '';
+  };
+
+  const handlePasswordDataChange = (name, value) => {
+    if (passwordServerError) setPasswordServerError('');
+    const nextData = { ...passwordData, [name]: value };
+    setPasswordData(nextData);
+
+    const nextErrors = { ...passwordErrors };
+    if (name === 'currentPassword') nextErrors.currentPassword = validateCurrentPassword(value);
+    if (name === 'newPassword') {
+      nextErrors.newPassword = validateNewPassword(value);
+      nextErrors.confirmPassword = validateConfirmPassword(value, nextData.confirmPassword);
     }
+    if (name === 'confirmPassword') {
+      nextErrors.confirmPassword = validateConfirmPassword(nextData.newPassword, value);
+    }
+    setPasswordErrors(nextErrors);
+  };
 
-    if (Object.keys(errors).length > 0) {
-      setPasswordErrors(errors);
+  const handlePasswordChange = async (e) => {
+    if (e) e.preventDefault();
+
+    // Final validation before sumbit
+    const finalErrors = {
+      currentPassword: validateCurrentPassword(passwordData.currentPassword),
+      newPassword: validateNewPassword(passwordData.newPassword),
+      confirmPassword: validateConfirmPassword(passwordData.newPassword, passwordData.confirmPassword),
+    };
+
+    if (Object.values(finalErrors).some(err => err !== '')) {
+      setPasswordErrors(finalErrors);
       return;
     }
 
     setLoading(true);
     try {
+      setPasswordServerError('');
       await authService.changePassword({
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
@@ -126,12 +182,22 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
       setPasswordErrors({});
     } catch (error) {
-      setLocalMessageBox({
-        isOpen: true,
-        type: 'error',
-        title: '변경 실패',
-        message: mapErrorMessage(error, '비밀번호 변경에 실패했습니다.'),
-      });
+      // Handle Specific Error for Password Change Context
+      const errorCode = error.response?.data?.error?.code || error.response?.data?.message;
+      let errorMessage = mapErrorMessage(error, '비밀번호 변경에 실패했습니다.');
+      
+      if (errorCode === 'INVALID_PASSWORD' || errorCode === 'INVALID_CREDENTIALS') {
+        const msg = '현재 비밀번호가 올바르지 않습니다.';
+        setPasswordErrors(prev => ({ ...prev, currentPassword: msg }));
+        setPasswordServerError(msg);
+      } else {
+        setLocalMessageBox({
+          isOpen: true,
+          type: 'error',
+          title: '변경 실패',
+          message: errorMessage,
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -175,15 +241,22 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
             <Input
               value={newNickname}
               onChange={(e) => {
-                setNewNickname(e.target.value);
-                setNicknameError('');
+                const val = e.target.value;
+                setNewNickname(val);
+                setNicknameError(validateNickname(val));
               }}
               placeholder="새 닉네임 입력"
               error={!!nicknameError}
               helperText={nicknameError}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && hasNicknameChanged && !loading) {
+                  handleUpdateNickname();
+                }
+              }}
+              autoFocus
               disabled={loading}
             />
-            {newNickname && (
+            {newNickname && !nicknameError && (
               <button
                 className="mypage-clear-btn"
                 onClick={() => setNewNickname('')}
@@ -212,8 +285,8 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
         <div className="mypage-field-section">
           {!isChangingPassword ? (
             <div className="mypage-password-toggle-wrapper">
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="mypage-password-toggle-btn"
                 onClick={() => setIsChangingPassword(true)}
               >
@@ -224,8 +297,8 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
             <div className="mypage-password-section-active">
               <div className="mypage-section-header">
                 <label className="mypage-field-label">비밀번호 변경</label>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="mypage-section-cancel-btn"
                   onClick={() => {
                     setIsChangingPassword(false);
@@ -239,36 +312,58 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
               <div className="mypage-password-box">
                 <Input
                   type="password"
+                  name="currentPassword"
+                  ref={currentPasswordRef}
                   placeholder="현재 비밀번호 입력"
                   value={passwordData.currentPassword}
-                  onChange={(e) =>
-                    setPasswordData({ ...passwordData, currentPassword: e.target.value })
-                  }
+                  onChange={(e) => handlePasswordDataChange('currentPassword', e.target.value)}
                   error={!!passwordErrors.currentPassword}
                   helperText={passwordErrors.currentPassword}
+                  autoFocus
                   disabled={loading}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handlePasswordChange(e);
+                  }}
                 />
                 <Input
                   type="password"
+                  name="newPassword"
                   placeholder="새 비밀번호 (8자 이상)"
                   value={passwordData.newPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                  onChange={(e) => handlePasswordDataChange('newPassword', e.target.value)}
                   error={!!passwordErrors.newPassword}
-                  helperText={passwordErrors.newPassword}
+                  helperText={passwordErrors.newPassword || '8~72자, 대/소문자, 숫자, 특수문자 포함'}
                   disabled={loading}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handlePasswordChange(e);
+                  }}
                 />
                 <Input
                   type="password"
+                  name="confirmPassword"
                   placeholder="새 비밀번호 확인"
                   value={passwordData.confirmPassword}
-                  onChange={(e) =>
-                    setPasswordData({ ...passwordData, confirmPassword: e.target.value })
-                  }
+                  onChange={(e) => handlePasswordDataChange('confirmPassword', e.target.value)}
                   error={!!passwordErrors.confirmPassword}
                   helperText={passwordErrors.confirmPassword}
                   disabled={loading}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handlePasswordChange(e);
+                  }}
                 />
-                <Button primary fullWidth onClick={handlePasswordChange} loading={loading}>
+                <Button 
+                  primary 
+                  fullWidth 
+                  onClick={handlePasswordChange} 
+                  loading={loading}
+                  disabled={
+                    loading || 
+                    !passwordData.currentPassword || 
+                    !passwordData.newPassword || 
+                    !passwordData.confirmPassword ||
+                    Object.values(passwordErrors).some(err => err !== '')
+                  }
+                >
                   비밀번호 저장
                 </Button>
               </div>

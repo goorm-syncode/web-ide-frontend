@@ -25,4 +25,4 @@ export const DevExecutionResultPage = lazy(() => import('../pages/dev/DevExecuti
 export const DevPaginationPage = lazy(() => import('../pages/dev/DevPaginationPage'));
 export const DevChatWidgetPage = lazy(() => import('../pages/dev/DevChatWidgetPage'));
 export const DevGnbPage = lazy(() => import('../pages/dev/DevGnbPage'));
-export const MyPageModalPage = lazy(() => import('../pages/MyPageModal'));
+export const MyPageModalPage = lazy(() => import('../components/modals/MyPageModal'));

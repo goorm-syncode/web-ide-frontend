@@ -312,6 +312,7 @@ const ChatWidget = () => {
   const handleKeyDown = (e) => {
     // Check for Esc key
     if (e.key === 'Escape') {
+      e.stopPropagation();
       handleClose();
       return;
     }

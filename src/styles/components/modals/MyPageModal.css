@@ -1,16 +1,15 @@
-/* src/styles/pages/MyPageModal.css */
+/* src/styles/components/modals/MyPageModal.css */
 .mypage-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px); /* Blur increased for premium feel */
+  background-color: rgba(0, 0, 0, 0.5); /* Slightly darker for contrast without blur */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  padding: var(--space-xl);
   box-sizing: border-box;
   z-index: 1000;
   animation: fadeIn 0.2s ease-out;
@@ -21,12 +20,12 @@
   background-color: var(--bg-card);
   width: 100%;
   max-width: 440px;
-  border-radius: 20px;
-  box-shadow: var(--shadow-xl);
-  padding: 40px 32px; /* Increased padding */
+  border-radius: 12px; /* Rule 84: max 12px */
+  box-shadow: var(--shadow-lg); /* Modal exception for depth */
+  padding: var(--space-xl); /* Rule 76 & 139: Using 32px */
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: var(--space-lg); /* Rule 76: Using 24px */
   box-sizing: border-box;
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid var(--border-default);
@@ -34,13 +33,13 @@
 
 .mypage-modal-close {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: var(--space-md);
+  right: var(--space-md);
   background: none;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 8px;
+  padding: var(--space-xs);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,14 +56,14 @@
 
 /* Auth-Style Header Sync */
 .auth-header {
-  margin-bottom: 8px;
+  margin-bottom: var(--space-sm);
   text-align: center;
 }
 
 .auth-logo-icon {
   width: 64px;
   height: auto;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-sm);
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -73,10 +72,10 @@
 
 .auth-page-title {
   font-family: var(--sans);
-  font-size: 26px;
+  font-size: 28px; /* Rule 109: Page Title */
   font-weight: 700;
   color: var(--text-primary);
-  margin: 0 0 8px 0;
+  margin: 0 0 var(--space-xs) 0;
   letter-spacing: -0.04em;
 }
 
@@ -86,7 +85,7 @@
 }
 
 .auth-page-subtitle {
-  font-size: 14px;
+  font-size: 14px; /* Rule 112: Body */
   color: var(--text-muted);
   margin: 0;
   word-break: keep-all;
@@ -95,29 +94,29 @@
 .mypage-field-section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-sm); /* Rule 76: Using 8px */
 }
 
 .mypage-field-label {
-  font-size: 13px;
+  font-size: 12px; /* Rule 113: Caption */
   font-weight: 600;
   color: var(--text-muted);
-  margin-left: 2px;
+  margin-left: var(--space-xs);
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  text-align: left; /* Ensure left alignment */
+  text-align: left;
 }
 
 .mypage-email-static {
   padding: 12px 14px;
   background-color: var(--border-soft);
-  border-radius: 10px;
+  border-radius: 8px; /* Rule 84 */
   color: var(--text-secondary);
-  font-size: 15px;
+  font-size: 14px; /* Rule 112 */
   font-family: var(--sans);
   border: 1px solid var(--border-soft);
   cursor: default;
-  text-align: left; /* Ensure left alignment */
+  text-align: left;
 }
 
 .mypage-input-group {
@@ -132,14 +131,14 @@
 
 .mypage-clear-btn {
   position: absolute;
-  right: 12px;
+  right: var(--space-sm);
   background: none;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
-  padding: 4px;
+  padding: var(--space-xs);
   transition: color 0.2s;
 }
 
@@ -148,13 +147,13 @@
 }
 
 .mypage-save-btn-wrapper {
-  margin-top: 4px;
+  margin-top: var(--space-xs);
 }
 
 .mypage-divider {
   height: 1px;
   background-color: var(--border-soft);
-  margin: 4px 0;
+  margin: var(--space-xs) 0;
 }
 
 /* Password Section */
@@ -170,7 +169,7 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  padding: 8px 16px;
+  padding: var(--space-sm) var(--space-md);
   border-radius: 8px;
   transition: all 0.2s;
   text-decoration: underline;
@@ -190,7 +189,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-sm);
 }
 
 .mypage-section-cancel-btn {
@@ -210,20 +209,20 @@
 .mypage-password-box {
   background-color: var(--bg-page);
   border: 1px solid var(--border-default);
-  border-radius: 14px;
-  padding: 20px;
+  border-radius: 8px; /* Rule 84 */
+  padding: var(--space-md); /* Rule 76: 16px */
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: var(--space-md); /* Rule 76: 16px */
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
+  from { transform: translateY(var(--space-md)); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes slideDown {
-  from { transform: translateY(-10px); opacity: 0; }
+  from { transform: translateY(calc(var(--space-sm) * -1)); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
@@ -242,6 +241,6 @@
     max-width: none;
     min-height: 100svh;
     border-radius: 0;
-    padding: 32px 20px;
+    padding: var(--space-xl) var(--space-md);
   }
 }
