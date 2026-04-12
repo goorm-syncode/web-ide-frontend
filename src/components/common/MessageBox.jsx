@@ -126,7 +126,14 @@ const MessageBox = ({
         </div>
         
         <div className={`message-box-body ${showIcon && title ? 'with-icon-padding' : ''}`}>
-          {children}
+          {typeof children === 'string'
+            ? children.split('\n').map((line, i) => (
+                <React.Fragment key={i}>
+                  {line}
+                  {i < children.split('\n').length - 1 && <br />}
+                </React.Fragment>
+              ))
+            : children}
         </div>
         
         <div className="message-box-actions">

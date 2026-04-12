@@ -55,6 +55,8 @@
   line-height: 1.5;
   margin: 0;
   text-align: left;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .message-box-body.with-icon-padding {
