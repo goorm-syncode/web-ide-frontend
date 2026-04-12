@@ -138,11 +138,11 @@ const Gnb = ({
                 </button>
                 <div className="gnb-divider" />
                 <div className="gnb-profile-wrapper">
-                  <span className="gnb-username">{userName}</span>
+                  <span className="gnb-username" onClick={onSettingsClick}>{userName}</span>
                   <button
                     className="gnb-settings-button"
                     onClick={onSettingsClick}
-                    aria-label="마이페이지 설정"
+                    aria-label="내 정보 설정"
                   >
                     <SettingsIcon />
                   </button>

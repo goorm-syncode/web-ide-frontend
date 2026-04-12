@@ -6,7 +6,7 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px); /* Blur increased for premium feel */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,11 +22,11 @@
   width: 100%;
   max-width: 440px;
   border-radius: 20px;
-  box-shadow: var(--shadow);
-  padding: 40px 28px;
+  box-shadow: var(--shadow-xl);
+  padding: 40px 32px; /* Increased padding */
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 28px;
   box-sizing: border-box;
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid var(--border-default);
@@ -46,6 +46,7 @@
   justify-content: center;
   border-radius: 50%;
   transition: all 0.2s;
+  z-index: 10;
 }
 
 .mypage-modal-close:hover {
@@ -54,59 +55,91 @@
   transform: rotate(90deg);
 }
 
-.mypage-title {
-  font-family: var(--sans);
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text-primary);
+/* Auth-Style Header Sync */
+.auth-header {
+  margin-bottom: 8px;
   text-align: center;
-  margin: 0;
-  letter-spacing: -0.04em;
 }
 
-.mypage-logo {
+.auth-logo-icon {
   width: 64px;
   height: auto;
   margin-bottom: 12px;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.15));
+  filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.2));
+}
+
+.auth-page-title {
+  font-family: var(--sans);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.04em;
+}
+
+.auth-page-title em {
+  font-style: normal;
+  color: var(--primary);
+}
+
+.auth-page-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+  word-break: keep-all;
 }
 
 .mypage-field-section {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .mypage-field-label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
+  color: var(--text-muted);
+  margin-left: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: left; /* Ensure left alignment */
+}
+
+.mypage-email-static {
+  padding: 12px 14px;
+  background-color: var(--border-soft);
+  border-radius: 10px;
   color: var(--text-secondary);
-  margin-left: 4px;
-  text-align: left;
-  align-self: flex-start;
-  width: 100%;
+  font-size: 15px;
+  font-family: var(--sans);
+  border: 1px solid var(--border-soft);
+  cursor: default;
+  text-align: left; /* Ensure left alignment */
 }
 
-/* For disabled input (Email) */
-.mypage-input-readonly input {
-  background-color: var(--border-soft) !important;
-  color: var(--text-muted) !important;
-  cursor: not-allowed;
-  opacity: 0.7;
+.mypage-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-/* Clear icon button for Nickname */
+.mypage-input-group .input-wrapper {
+  flex: 1;
+}
+
 .mypage-clear-btn {
+  position: absolute;
+  right: 12px;
   background: none;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
-  padding: 0 8px;
+  padding: 4px;
   transition: color 0.2s;
 }
 
@@ -114,60 +147,89 @@
   color: var(--primary);
 }
 
-/* Save Button animation */
 .mypage-save-btn-wrapper {
-  margin-top: 8px;
-  animation: slideDown 0.2s ease-out;
+  margin-top: 4px;
 }
 
-/* Password accordion animation */
-.mypage-password-content {
+.mypage-divider {
+  height: 1px;
+  background-color: var(--border-soft);
+  margin: 4px 0;
+}
+
+/* Password Section */
+.mypage-password-toggle-wrapper {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 8px;
+  justify-content: center;
+}
+
+.mypage-password-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.mypage-password-toggle-btn:hover {
+  background-color: var(--hover-brand);
+  color: var(--primary-hover);
+}
+
+.mypage-password-section-active {
   animation: slideDown 0.3s ease-out;
 }
 
+.mypage-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.mypage-section-cancel-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.mypage-section-cancel-btn:hover {
+  color: var(--error);
+}
+
 .mypage-password-box {
-  background-color: var(--bg-card);
+  background-color: var(--bg-page);
   border: 1px solid var(--border-default);
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 @keyframes slideUp {
-  from {
-    transform: translateY(10px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes slideDown {
-  from {
-    transform: translateY(-10px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (max-width: 480px) {
@@ -180,6 +242,6 @@
     max-width: none;
     min-height: 100svh;
     border-radius: 0;
-    padding: 24px 16px;
+    padding: 32px 20px;
   }
 }

@@ -12,7 +12,7 @@ import '../styles/pages/MyPageModal.css';
 
 const ClearIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/>
+    <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z" />
   </svg>
 );
 
@@ -31,6 +31,7 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
   const [passwordErrors, setPasswordErrors] = useState({});
 
   const [loading, setLoading] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [localMessageBox, setLocalMessageBox] = useState({
     isOpen: false,
     type: 'info',
@@ -38,11 +39,29 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
     message: '',
   });
 
+  // ESC key support
   useEffect(() => {
-    if (user) {
-      setNewNickname(user.nickname);
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (user) {
+        setNewNickname(user.nickname);
+      }
+      // Reset password section when opening
+      setIsChangingPassword(false);
+      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setPasswordErrors({});
+      setNicknameError('');
     }
-  }, [user]);
+  }, [isOpen, user]);
 
   if (!isOpen) return null;
 
@@ -76,12 +95,13 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
-    
+
     // Validation
     const errors = {};
     if (!passwordData.currentPassword) errors.currentPassword = '현재 비밀번호를 입력해주세요.';
     if (!passwordData.newPassword) errors.newPassword = '새 비밀번호를 입력해주세요.';
-    if (passwordData.newPassword.length < 8) errors.newPassword = '8자 이상의 비밀번호를 입력해주세요.';
+    if (passwordData.newPassword.length < 8)
+      errors.newPassword = '8자 이상의 비밀번호를 입력해주세요.';
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       errors.confirmPassword = '비밀번호가 일치하지 않습니다.';
     }
@@ -121,29 +141,37 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
     <div className="mypage-modal-overlay" onClick={onClose}>
       <div className="mypage-modal-card" onClick={(e) => e.stopPropagation()}>
         <button className="mypage-modal-close" onClick={onClose} aria-label="닫기">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
-        
-        <div className="mypage-header" style={{ textAlign: 'center', marginBottom: '8px' }}>
-          <img src={learncodeIcon} alt="Learn Code" className="mypage-logo" />
-          <h2 className="mypage-title">마이페이지</h2>
+
+        <div className="auth-header">
+          <img src={learncodeIcon} alt="Learn Code Logo" className="auth-logo-icon" />
+          <h1 className="auth-page-title">
+            <em>Learn Code</em> 프로필 수정
+          </h1>
+          <p className="auth-page-subtitle">회원님의 정보를 확인하고 안전하게 관리하세요.</p>
         </div>
 
         <div className="mypage-field-section">
-          <label className="mypage-field-label">이메일</label>
-          <Input 
-            className="mypage-input-readonly" 
-            value={user?.email || ''} 
-            disabled 
-          />
+          <label className="mypage-field-label">이메일 계정</label>
+          <div className="mypage-email-static">{user?.email || ''}</div>
         </div>
 
         <div className="mypage-field-section">
           <label className="mypage-field-label">닉네임</label>
-          <div style={{ position: 'relative' }}>
+          <div className="mypage-input-group">
             <Input
               value={newNickname}
               onChange={(e) => {
@@ -154,62 +182,98 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
               error={!!nicknameError}
               helperText={nicknameError}
               disabled={loading}
-              style={{ paddingRight: '40px' }}
             />
             {newNickname && (
-              <button 
-                className="mypage-clear-btn" 
+              <button
+                className="mypage-clear-btn"
                 onClick={() => setNewNickname('')}
-                style={{ position: 'absolute', right: '12px', top: '10px' }}
                 disabled={loading}
               >
                 <ClearIcon />
               </button>
             )}
           </div>
-          {hasNicknameChanged && (
-            <div className="mypage-save-btn-wrapper">
-              <Button primary fullWidth size="medium" onClick={handleUpdateNickname} loading={loading}>
-                변경사항 저장
-              </Button>
-            </div>
-          )}
-        </div>
-
-        <div className="mypage-field-section">
-          <label className="mypage-field-label">비밀번호 변경</label>
-          <div className="mypage-password-box">
-            <Input
-              type="password"
-              placeholder="현재 비밀번호 입력"
-              value={passwordData.currentPassword}
-              onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-              error={!!passwordErrors.currentPassword}
-              helperText={passwordErrors.currentPassword}
-              disabled={loading}
-            />
-            <Input
-              type="password"
-              placeholder="새 비밀번호 원칙(8자 이상)"
-              value={passwordData.newPassword}
-              onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-              error={!!passwordErrors.newPassword}
-              helperText={passwordErrors.newPassword}
-              disabled={loading}
-            />
-            <Input
-              type="password"
-              placeholder="새 비밀번호 다시 입력"
-              value={passwordData.confirmPassword}
-              onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-              error={!!passwordErrors.confirmPassword}
-              helperText={passwordErrors.confirmPassword}
-              disabled={loading}
-            />
-            <Button primary fullWidth onClick={handlePasswordChange} loading={loading}>
-              비밀번호 변경확인
+          <div className="mypage-save-btn-wrapper">
+            <Button
+              primary
+              fullWidth
+              size="medium"
+              onClick={handleUpdateNickname}
+              loading={loading}
+              disabled={!hasNicknameChanged || loading}
+            >
+              닉네임 업데이트
             </Button>
           </div>
+        </div>
+
+        <div className="mypage-divider" />
+
+        <div className="mypage-field-section">
+          {!isChangingPassword ? (
+            <div className="mypage-password-toggle-wrapper">
+              <button 
+                type="button" 
+                className="mypage-password-toggle-btn"
+                onClick={() => setIsChangingPassword(true)}
+              >
+                비밀번호를 변경하시겠습니까?
+              </button>
+            </div>
+          ) : (
+            <div className="mypage-password-section-active">
+              <div className="mypage-section-header">
+                <label className="mypage-field-label">비밀번호 변경</label>
+                <button 
+                  type="button" 
+                  className="mypage-section-cancel-btn"
+                  onClick={() => {
+                    setIsChangingPassword(false);
+                    setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                    setPasswordErrors({});
+                  }}
+                >
+                  취소
+                </button>
+              </div>
+              <div className="mypage-password-box">
+                <Input
+                  type="password"
+                  placeholder="현재 비밀번호 입력"
+                  value={passwordData.currentPassword}
+                  onChange={(e) =>
+                    setPasswordData({ ...passwordData, currentPassword: e.target.value })
+                  }
+                  error={!!passwordErrors.currentPassword}
+                  helperText={passwordErrors.currentPassword}
+                  disabled={loading}
+                />
+                <Input
+                  type="password"
+                  placeholder="새 비밀번호 (8자 이상)"
+                  value={passwordData.newPassword}
+                  onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                  error={!!passwordErrors.newPassword}
+                  helperText={passwordErrors.newPassword}
+                  disabled={loading}
+                />
+                <Input
+                  type="password"
+                  placeholder="새 비밀번호 확인"
+                  value={passwordData.confirmPassword}
+                  onChange={(e) =>
+                    setPasswordData({ ...passwordData, confirmPassword: e.target.value })
+                  }
+                  error={!!passwordErrors.confirmPassword}
+                  helperText={passwordErrors.confirmPassword}
+                  disabled={loading}
+                />
+                <Button primary fullWidth onClick={handlePasswordChange} loading={loading}>
+                  비밀번호 저장
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

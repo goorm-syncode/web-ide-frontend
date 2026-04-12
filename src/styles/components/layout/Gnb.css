@@ -117,6 +117,12 @@
   font-size: 14px;
   color: var(--text-secondary);
   font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.gnb-username:hover {
+  color: var(--primary);
 }
 
 .gnb-theme-toggle {
