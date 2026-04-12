@@ -79,7 +79,7 @@ function writeChunk(type, data) {
   return Buffer.concat([lengthBuf, typeBuf, data, crcBuf]);
 }
 
-chunks.forEach((chunk, i) => {
+chunks.forEach((chunk) => {
   if (chunk.type === 'fcTL') {
     // Save previous frame
     if (currentFrameData.length > 0) {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Dropdown from '../common/Dropdown';
 import '../../styles/pages/MissionPage.css'; // 미션 페이지 버튼 스타일을 위해
 
-const LanguageSelect = ({ value, options, onChange, missionId }) => {
+const LanguageSelect = ({ value, options, onChange }) => {
   // 미션의 언어 목록을 드롭다운 형식으로 변환
   const dropdownOptions = options.map((lang) => ({
     label: lang.displayName,
@@ -67,7 +67,6 @@ LanguageSelect.propTypes = {
     })
   ).isRequired,
   onChange: PropTypes.func.isRequired,
-  missionId: PropTypes.string,
 };
 
 export default LanguageSelect;

@@ -45,5 +45,13 @@ export default [
       'react/react-in-jsx-scope': 'off',
     },
   },
+  {
+    files: ['src/scripts/**/*.{js,jsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
   eslintConfigPrettier,
 ];
