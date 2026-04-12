@@ -17,9 +17,6 @@
       const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
         document.documentElement.classList.add('dark-theme');
-        document.addEventListener('DOMContentLoaded', () => {
-          document.body.classList.add('dark-theme');
-        });
       }
     })();
   </script>

@@ -8,8 +8,8 @@
   --text-muted: #94a3b8;     /* Slate 400 */
   
   --bg-page: #f8fafc;  /* Slate 50 */
-  --bg-card: #ffffff;  /* Strictly white */
-  --bg-input: #ffffff;
+  --bg-card: #fcfcfd;  /* Softened White */
+  --bg-input: #f8fafc; /* Slate 50 */
   
   --border-default: #e2e8f0; /* Slate 200 */
   --border-soft: #f1f5f9;    /* Slate 100 */
@@ -53,8 +53,8 @@
   --primary: #818cf8;       /* Saturated Indigo 400 */
   --primary-hover: #6366f1; 
   
-  --text-primary: #f8fafc;  /* Slate 50 */
-  --text-secondary: #e2e8f0; /* Slate 200 */
+  --text-primary: #e2e8f0;  /* Slate 200 (Softer White) */
+  --text-secondary: #cbd5e1; /* Slate 300 */
   --text-muted: #94a3b8;     /* Slate 400 */
   
   --bg-page: #0f172a;  /* Deep Slate 900 */

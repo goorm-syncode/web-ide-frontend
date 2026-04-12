@@ -6,7 +6,7 @@
 - **Primary**: `#6366F1` (Indigo 500)
 - **Primary Hover**: `#4F46E5` (Indigo 600)
 - **Background (Page)**: `#F8FAFC` (Slate 50) - *Subtle gray for depth*
-- **Background (Card/GNB)**: `#FFFFFF` (Pure White) - *Raised elements*
+- **Background (Card/GNB)**: `#FCFCFD` (Softened White) - *Raised elements*
 - **Text (Primary)**: `#0F172A` (Slate 900)
 - **Text (Muted)**: `#94A3B8` (Slate 400)
 - **Border**: `#E2E8F0` (Slate 200)
@@ -17,7 +17,7 @@
 - **Background (Page)**: `#0F172A` (Deep Slate 900)
 - **Background (Card/GNB)**: `#1E293B` (Slate 800)
 - **Background (Global Input)**: `#0F172A` (Standard Dark)
-- **Text (Primary)**: `#F8FAFC` (Slate 50)
+- **Text (Primary)**: `#E2E8F0` (Slate 200)
 - **Text (Muted)**: `#94A3B8` (Slate 400)
 
 ---
@@ -50,7 +50,7 @@
   - Dark Mode: `Indigo 900` BG + `Indigo 200` Text.
 
 ### Specialized Inputs
-- **Home Search Bar**: **Forced White (`#FFFFFF`) Background** with **Forced Dark Text (`#0F172A`)** even in Dark Mode for maximum visibility.
+- **Home Search Bar**: **Muted White (`#F8FAFC`) Background** with **Forced Dark Text (`#0F172A`)** even in Dark Mode for maximum visibility without glare.
 - **Global Form Inputs**: Follow standard theme background (Dark in dark mode).
 
 ### IDE Toolbar (Mission Page)
