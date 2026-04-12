@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import useDraggable from '../../hooks/useDraggable';
 import useResizable from '../../hooks/useResizable';
 import * as chatService from '../../services/chat';
@@ -20,6 +21,11 @@ const ChatIcon = ({ size = 24, dotColor = 'var(--primary)' }) => (
     <circle cx="16" cy="12" r="1.5" fill={dotColor} />
   </svg>
 );
+
+ChatIcon.propTypes = {
+  size: PropTypes.number,
+  dotColor: PropTypes.string,
+};
 
 // Chevron Down Icon for minimize
 const ChevronDownIcon = () => (
@@ -137,6 +143,12 @@ const ChatWidget = () => {
     initChat();
   }, []);
 
+  // Ref to access latest messages without triggering useEffect re-runs
+  const messagesRef = useRef(messages);
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
   // SSE Subscription (Service implementation)
   useEffect(() => {
     if (!channel) return;
@@ -182,7 +194,7 @@ const ChatWidget = () => {
         // onConnected: Triggered on initial connect AND every successful reconnect
         console.log(`[SSE] Connected to channel ${channel.id}`);
         // If we already have messages, it might be a reconnection catch-up
-        if (messages.length > 0) {
+        if (messagesRef.current.length > 0) {
           handleCatchUp();
         }
       }
