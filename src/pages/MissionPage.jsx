@@ -9,6 +9,7 @@ import Gnb from '../components/layout/Gnb';
 import Footer from '../components/layout/Footer';
 import ProblemDescriptionPanel from '../components/mission/ProblemDescriptionPanel';
 import ExecutionResultPanel from '../components/mission/ExecutionResultPanel';
+import LanguageSelect from '../components/mission/LanguageSelect';
 import ChatWidget from '../components/chat/ChatWidget';
 import MessageBox from '../components/common/MessageBox';
 import {
@@ -446,9 +447,9 @@ const MissionPage = () => {
     };
   }, [isResizingMain, isResizingIde]);
 
-  const handleLanguageChange = async (e) => {
-    const newLang = e.target.value; // 표시용 소문자 (e.g. 'javascript')
-    const backendLang = LANG_MAP[newLang] || newLang.toUpperCase(); // API용 대문자 (e.g. 'JAVASCRIPT')
+  const handleLanguageChange = async (value) => {
+    const newLang = typeof value === 'string' ? value : value.target.value; // Support both direct value and event
+    const backendLang = LANG_MAP[newLang] || newLang.toUpperCase(); 
     const prevBackendLang = LANG_MAP[language] || language.toUpperCase();
 
     // Auto save previous language code before switching
@@ -566,14 +567,10 @@ const MissionPage = () => {
       setLastSavedCode(code); // submitCode auto-saves draft
 
       if (overallStatus === 'ACCEPTED') {
-        await updateMissionProgress(missionId, 'COMPLETED');
-        setMission((prev) => (prev ? { ...prev, userStatus: 'COMPLETED' } : prev));
-
-        // Show celebration effect
+        // [수정] 시각적 연출 및 메시지 박스를 최우선으로 실행하여 지연 체감을 없앰
         setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 5000); // Stop after 5s
+        setTimeout(() => setShowConfetti(false), 5000); // 5초 후 종료
 
-        // Success message box
         setMessageBox({
           isOpen: true,
           title: '미션 해결 완료!',
@@ -591,6 +588,12 @@ const MissionPage = () => {
             setMessageBox((prev) => ({ ...prev, isOpen: false }));
           },
         });
+
+        // 서버 상태 업데이트 및 로컬 상태 변경은 백그라운드에서 처리
+        updateMissionProgress(missionId, 'COMPLETED').catch((err) =>
+          console.error('Progress update failed:', err),
+        );
+        setMission((prev) => (prev ? { ...prev, userStatus: 'COMPLETED' } : prev));
       }
     } catch (err) {
       setOutput('Error: ' + mapErrorMessage(err));
@@ -748,25 +751,12 @@ const MissionPage = () => {
           >
             <header className="editor-header">
               <div className="editor-controls">
-                <div className="select-wrapper">
-                  <select className="lang-select" value={language} onChange={handleLanguageChange}>
-                    {mission?.languages?.map((lang) => (
-                      <option
-                        key={lang.language}
-                        value={LANG_REVERSE_MAP[lang.language] || lang.language.toLowerCase()}
-                      >
-                        {lang.displayName}
-                      </option>
-                    )) || (
-                      <>
-                        <option value="python">Python</option>
-                        <option value="javascript">JavaScript</option>
-                        <option value="java">Java</option>
-                        <option value="c">C</option>
-                      </>
-                    )}
-                  </select>
-                </div>
+                <LanguageSelect
+                  value={language}
+                  options={mission?.languages || []}
+                  onChange={handleLanguageChange}
+                  missionId={missionId}
+                />
               </div>
 
               <div className="editor-actions">

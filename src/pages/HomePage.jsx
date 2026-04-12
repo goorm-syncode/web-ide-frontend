@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MyPageModal from '../components/modals/MyPageModal';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout as logoutAction } from '../store/slices/authSlice';
 import Gnb from '../components/layout/Gnb';
@@ -33,13 +33,21 @@ const HomePage = () => {
   });
 
   const [isMyPageOpen, setIsMyPageOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const ITEMS_PER_PAGE = 12;
+  const searchInputRef = React.useRef(null);
+
+  // URL에서 초기 상태 로드
+  const initialSearch = searchParams.get('q') || '';
+  const initialDifficulty = searchParams.get('difficulty') || 'ALL';
+  const initialStatus = searchParams.get('status') || 'ALL';
+  const initialPage = parseInt(searchParams.get('page')) || 1;
 
   // 필터 및 페이지네이션 상태
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('ALL');
-  const [selectedStatus, setSelectedStatus] = useState('ALL');
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 12;
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [selectedDifficulty, setSelectedDifficulty] = useState(initialDifficulty);
+  const [selectedStatus, setSelectedStatus] = useState(initialStatus);
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
   // 서버로부터 받아올 데이터 상태
   const [missions, setMissions] = useState([]);
@@ -79,7 +87,60 @@ const HomePage = () => {
     fetchMissions();
   }, [selectedDifficulty, selectedStatus, searchQuery, currentPage]);
 
-  const searchInputRef = React.useRef(null);
+
+  // 상태 변경 시 URL 파라미터 동기화
+  useEffect(() => {
+    const params = {};
+    if (searchQuery) params.q = searchQuery;
+    if (selectedDifficulty !== 'ALL') params.difficulty = selectedDifficulty;
+    if (selectedStatus !== 'ALL') params.status = selectedStatus;
+    if (currentPage > 1) params.page = currentPage;
+
+    setSearchParams(params, { replace: true });
+  }, [searchQuery, selectedDifficulty, selectedStatus, currentPage, setSearchParams]);
+
+  // 최초 진입 시 이어하기 미션 페이지로 자동 점프
+  useEffect(() => {
+    // URL에 아무런 필터나 페이지 정보가 없을 때만 동작
+    const hasAnyFilter = searchParams.get('q') || 
+                         searchParams.get('difficulty') || 
+                         searchParams.get('status') || 
+                         searchParams.get('page');
+
+    if (isAuthenticated && !hasAnyFilter) {
+      const jumpToContinueMission = async () => {
+        try {
+          // 1. 이어하기 미션 정보 가져오기
+          const continueRes = await getContinueMission();
+          if (!continueRes || !continueRes.mission) return;
+
+          const targetId = continueRes.mission.missionId;
+          
+          // 2. 해당 미션이 몇 페이지에 있는지 탐색 (최대 10페이지)
+          const MAX_SEARCH_PAGES = 10;
+          for (let p = 0; p < MAX_SEARCH_PAGES; p++) {
+            const data = await getMissions({ page: p, size: ITEMS_PER_PAGE });
+            if (data && data.content) {
+              const foundIdx = data.content.findIndex(m => m.id === targetId);
+              if (foundIdx !== -1) {
+                const targetPage = p + 1;
+                if (targetPage !== 1) { // 1페이지가 아니면 해당 페이지로 이동
+                  setCurrentPage(targetPage);
+                }
+                break;
+              }
+              if (data.last) break;
+            }
+          }
+        } catch (err) {
+          console.warn('[Jump] Failed to jump to continue mission:', err);
+        }
+      };
+
+      jumpToContinueMission();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, setSearchParams]); // 초기 로드 및 인증 상태 변경 시에만 체크
 
   // 진행률 및 이어하기 데이터 가져오기
   useEffect(() => {
