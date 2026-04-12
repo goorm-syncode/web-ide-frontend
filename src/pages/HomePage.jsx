@@ -94,7 +94,9 @@ const HomePage = () => {
     if (searchQuery) params.q = searchQuery;
     if (selectedDifficulty !== 'ALL') params.difficulty = selectedDifficulty;
     if (selectedStatus !== 'ALL') params.status = selectedStatus;
-    if (currentPage > 1) params.page = currentPage;
+    if (currentPage > 1 || searchParams.has('page')) {
+      params.page = currentPage;
+    }
 
     setSearchParams(params, { replace: true });
   }, [searchQuery, selectedDifficulty, selectedStatus, currentPage, setSearchParams]);
