@@ -218,17 +218,48 @@ const MissionPage = () => {
   // Update editor theme when isDark changes
   useEffect(() => {
     if (editorInstance.current) {
-      monaco.editor.setTheme(isDark ? 'vs-dark' : 'vs-light');
+      monaco.editor.setTheme(isDark ? 'learn-code-dark' : 'learn-code-light');
     }
   }, [isDark]);
 
   // Initialize Monaco Editor
   useEffect(() => {
     if (monacoContainerRef.current && isLoaded && !editorInstance.current) {
+      // Define custom themes
+      monaco.editor.defineTheme('learn-code-dark', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': '#1e293b',
+          'editor.lineHighlightBackground': '#2d374830',
+          'editorCursor.foreground': '#818cf8',
+          'editorIndentGuide.background': '#334155',
+          'editorIndentGuide.activeBackground': '#475569',
+          'editorLineNumber.foreground': '#475569',
+          'editorLineNumber.activeForeground': '#94a3b8',
+        },
+      });
+
+      monaco.editor.defineTheme('learn-code-light', {
+        base: 'vs',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': '#ffffff',
+          'editor.lineHighlightBackground': '#f1f5f9',
+          'editorCursor.foreground': '#6366f1',
+          'editorIndentGuide.background': '#e2e8f0',
+          'editorIndentGuide.activeBackground': '#cbd5e1',
+          'editorLineNumber.foreground': '#94a3b8',
+          'editorLineNumber.activeForeground': '#475569',
+        },
+      });
+
       editorInstance.current = monaco.editor.create(monacoContainerRef.current, {
-        value: lastSavedCode,
+        value: currentCode,
         language: language,
-        theme: isDark ? 'vs-dark' : 'vs-light',
+        theme: isDark ? 'learn-code-dark' : 'learn-code-light',
         automaticLayout: true,
         minimap: { enabled: !isMobile }, // Disable minimap on mobile
         fontSize: isMobile ? 15 : 14, // Slightly larger on mobile
@@ -246,6 +277,8 @@ const MissionPage = () => {
         scrollBeyondLastLine: true,
         padding: { top: 16, bottom: 16 },
       });
+
+      editorInstance.current.focus();
 
       // Track code changes
       editorInstance.current.onDidChangeModelContent(() => {
@@ -431,6 +464,7 @@ const MissionPage = () => {
         editorInstance.current.setValue(code);
         const model = editorInstance.current.getModel();
         monaco.editor.setModelLanguage(model, newLang); // Monaco에는 소문자로 전달
+        editorInstance.current.focus();
       }
     } catch (err) {
       console.error('Failed to load language draft:', err);
@@ -500,6 +534,8 @@ const MissionPage = () => {
         sourceCode: code,
         language,
       });
+
+      editorInstance.current.focus();
 
       const { overallStatus, passedCount = 0, totalCount = 0, results = [] } = result;
 
