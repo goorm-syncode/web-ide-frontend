@@ -170,8 +170,8 @@
 }
 
 .auth-layout-card-wrapper .auth-card {
-  padding: var(--space-xl) var(--space-lg);
-  box-shadow: var(--shadow);
+  padding: 32px; /* Rule 80: Premium Spacing 32px */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Rule 101: Minimal shadow */
   height: auto;
   align-self: center;
 }

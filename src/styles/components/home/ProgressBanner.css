@@ -3,8 +3,8 @@
   flex-direction: row;
   align-items: center;
   /* 모든 주요 요소(바, 텍스트, 버튼)를 수직 중앙 정렬 */
-  background-color: rgba(79, 70, 229, 0.02);
-  border: 1px solid rgba(79, 70, 229, 0.06);
+  background-color: rgba(99, 102, 241, 0.04); /* Subtle Premium Tint */
+  border: 1px solid var(--border-default);
   padding: 16px;
   /* 콤팩트한 패딩 (상단은 런캣 위해 유지, 나머지는 대폭 축소) */
   border-radius: 12px;
@@ -27,25 +27,26 @@
   flex: 1;
   min-width: 120px;
   height: 6px;
-  background-color: #e2e8f0;
+  background-color: var(--border-default); /* Higher contrast for track */
   border-radius: 100px;
   position: relative;
   margin-top: 4px;
   /* 바와 고양이를 세트로 살짝 아래로 내림 */
+  transition: background-color 0.3s ease;
 }
 
 .progress-fill {
   height: 100%;
-  background-color: #4f46e5;
+  background-color: var(--primary);
   border-radius: 100px;
   transition: width 0.3s ease;
 }
 
 .progress-text {
-  font-family: Pretendard, sans-serif;
+  font-family: var(--sans);
   font-size: 14px;
   font-weight: 600;
-  color: #4f46e5;
+  color: var(--primary);
   line-height: 1;
 }
 
@@ -79,7 +80,7 @@
   visibility: hidden;
 
   /* 마스크 기법으로 정확한 컬러 매칭 */
-  background-color: #4f46e5;
+  background-color: var(--primary);
   /* 라이트 모드 기본 Indigo */
   -webkit-mask-image: var(--mask-image);
   mask-image: var(--mask-image);
@@ -126,9 +127,6 @@
   animation: run-cycle var(--ani-duration, 0.8s) steps(1) infinite 0s;
 }
 
-.dark-theme .progress-track {
-  background-color: rgba(255, 255, 255, 0.1);
-}
 
 .dark-theme .progress-fill {
   background-color: var(--primary);
@@ -139,9 +137,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #4f46e5;
+  background-color: var(--primary);
   color: #ffffff;
-  font-family: Pretendard, sans-serif;
+  font-family: var(--sans);
   font-size: 14px;
   font-weight: 600;
   padding: 8px 20px;
@@ -153,7 +151,7 @@
 }
 
 .progress-continue-btn:hover {
-  background-color: #4338ca;
+  background-color: var(--primary-hover);
 }
 
 .progress-continue-icon {

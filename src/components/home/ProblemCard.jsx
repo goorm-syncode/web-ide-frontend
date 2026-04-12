@@ -85,21 +85,24 @@ const ProblemCard = ({
     const getButtonStyle = () => {
       switch (status) {
         case 'unattempted':
-          return { primary: false, className: 'problem-btn-soft' };
+          // "문제 풀기": New challenge, but less prominent than ongoing
+          return { primary: false, type: 'secondary', className: 'problem-btn-outline' };
         case 'in_progress':
-          return { primary: true, className: '' };
+          // "이어서 풀기": Active ongoing mission (high priority)
+          return { primary: true, type: 'primary', className: '' };
         case 'solved':
-          return { primary: false, className: 'problem-btn-light' };
+          // "코드 리뷰": Completed, secondary action
+          return { primary: false, type: 'secondary', className: 'problem-btn-light' };
         default:
-          return { primary: true, className: '' };
+          return { primary: true, type: 'primary', className: '' };
       }
     };
 
-    const { primary, className } = getButtonStyle();
+    const { primary, type, className } = getButtonStyle();
 
     return (
       <Button
-        type="button"
+        type={type}
         primary={primary}
         className={`${className} problem-card-btn`.trim()}
         fullWidth

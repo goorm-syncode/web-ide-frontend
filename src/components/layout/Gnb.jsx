@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
@@ -109,6 +109,17 @@ const Gnb = ({
 }) => {
   const navigate = useNavigate();
   const { isDark, toggleTheme } = useTheme();
+  const [isThemeHovered, setIsThemeHovered] = useState(false);
+
+  // Hybrid Theme Icon UX: 
+  // - Normally shows current state (isDark ? Moon : Sun)  -> STATUS
+  // - Hover shows target state (isDark ? Sun : Moon)    -> ACTION
+  const getThemeIcon = () => {
+    if (isThemeHovered) {
+      return isDark ? <SunIcon /> : <MoonIcon />; // Target Action on Hover
+    }
+    return isDark ? <MoonIcon /> : <SunIcon />; // Current Status Normally
+  };
 
   return (
     <header className="gnb-container">
@@ -132,9 +143,11 @@ const Gnb = ({
                 <button
                   className="gnb-theme-toggle"
                   onClick={toggleTheme}
+                  onMouseEnter={() => setIsThemeHovered(true)}
+                  onMouseLeave={() => setIsThemeHovered(false)}
                   aria-label={isDark ? '라이트 모드로 전환' : '다크 모드로 전환'}
                 >
-                  {isDark ? <SunIcon /> : <MoonIcon />}
+                  {getThemeIcon()}
                 </button>
                 <div className="gnb-divider" />
                 <div className="gnb-profile-wrapper">

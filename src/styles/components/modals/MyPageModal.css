@@ -117,6 +117,14 @@
   border: 1px solid var(--border-soft);
   cursor: default;
   text-align: left;
+  transition: all 0.2s ease;
+}
+
+/* Dark Mode Visibility Fix */
+.dark-theme .mypage-email-static {
+  background-color: rgba(0, 0, 0, 0.2); /* Deeper than card bg for field look */
+  border-color: var(--border-default); /* More distinct boundary */
+  color: var(--text-muted); /* Subdued feel for read-only */
 }
 
 .mypage-input-group {
