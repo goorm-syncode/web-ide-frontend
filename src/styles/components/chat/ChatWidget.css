@@ -18,7 +18,7 @@
   cursor: grab;
   color: #FFFFFF;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  transition: background-color 0.2s, box-shadow 0.2s;
   z-index: 9999;
 }
 
@@ -31,6 +31,10 @@
 .chat-floating-btn:active {
   cursor: grabbing;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chat-floating-btn.dragging {
+  transition: none !important;
 }
 
 .chat-unread-badge {

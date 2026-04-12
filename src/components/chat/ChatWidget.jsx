@@ -329,7 +329,7 @@ const ChatWidget = () => {
       {!isOpen && (
         <button
           type="button"
-          className="chat-floating-btn"
+          className={`chat-floating-btn ${btnDrag.isDragging ? 'dragging' : ''}`}
           style={{
             transform: `translate(${btnDrag.position.x}px, ${btnDrag.position.y}px)`,
           }}
