@@ -321,6 +321,7 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
                   helperText={passwordErrors.currentPassword}
                   autoFocus
                   disabled={loading}
+                  forceEnglish={true}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') handlePasswordChange(e);
                   }}
@@ -334,6 +335,7 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
                   error={!!passwordErrors.newPassword}
                   helperText={passwordErrors.newPassword || '8~72자, 대/소문자, 숫자, 특수문자 포함'}
                   disabled={loading}
+                  forceEnglish={true}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') handlePasswordChange(e);
                   }}
@@ -347,6 +349,7 @@ const MyPageModal = ({ isOpen = true, onClose }) => {
                   error={!!passwordErrors.confirmPassword}
                   helperText={passwordErrors.confirmPassword}
                   disabled={loading}
+                  forceEnglish={true}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') handlePasswordChange(e);
                   }}

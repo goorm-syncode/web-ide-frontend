@@ -235,6 +235,7 @@ const ResetPasswordPage = () => {
               disabled={loading}
               required
               autoFocus
+              forceEnglish={true}
             />
             <Input
               type="password"
@@ -246,6 +247,7 @@ const ResetPasswordPage = () => {
               helperText={errors.passwordConfirm}
               disabled={loading}
               required
+              forceEnglish={true}
             />
             {serverError && (
               <div className="auth-error-message">

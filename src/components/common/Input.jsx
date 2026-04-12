@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
+import { getEnglishCharFromCode } from '../../utils/keyboardUtils';
 import '../../styles/components/common/Input.css';
 const Input = forwardRef(
   (
@@ -11,10 +12,49 @@ const Input = forwardRef(
       className = '',
       disabled = false,
       icon,
+      forceEnglish = false,
       ...props
     },
     ref,
   ) => {
+    const handleKeyDown = (e) => {
+      if (forceEnglish) {
+        // We only want to intercept letter/number/symbol keys for English forcing
+        // Avoid intercepting Control keys like Backspace, Enter, Tab, etc.
+        const char = getEnglishCharFromCode(e.code, e.shiftKey);
+        
+        if (char !== null && !e.ctrlKey && !e.metaKey && !e.altKey) {
+          e.preventDefault();
+          
+          const input = e.target;
+          const start = input.selectionStart;
+          const end = input.selectionEnd;
+          const value = input.value;
+          
+          const newValue = value.substring(0, start) + char + value.substring(end);
+          
+          // Force update the input value and trigger React's onChange
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLInputElement.prototype,
+            'value'
+          ).set;
+          nativeInputValueSetter.call(input, newValue);
+          
+          const inputEvent = new Event('input', { bubbles: true });
+          input.dispatchEvent(inputEvent);
+          
+          // Restore selection
+          setTimeout(() => {
+            input.setSelectionRange(start + 1, start + 1);
+          }, 0);
+        }
+      }
+
+      if (props.onKeyDown) {
+        props.onKeyDown(e);
+      }
+    };
+
     return (
       <div className={`input-wrapper ${className}`.trim()}>
         <div className="input-inner-wrapper">
@@ -42,6 +82,7 @@ const Input = forwardRef(
             className={`input-field ${error ? 'input-error' : ''} ${icon ? 'input-with-icon' : ''} ${error ? 'input-with-error-icon' : ''}`.trim()}
             disabled={disabled}
             {...props}
+            onKeyDown={handleKeyDown}
           />
           {error && (
             <div className="input-error-icon">!</div>
@@ -66,6 +107,8 @@ Input.propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool,
   icon: PropTypes.oneOf(['search']),
+  forceEnglish: PropTypes.bool,
+  onKeyDown: PropTypes.func,
 };
 
 export default Input;

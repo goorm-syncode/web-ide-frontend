@@ -174,6 +174,7 @@ const LoginPage = () => {
             error={!!errors.password}
             helperText={errors.password}
             disabled={isLoading}
+            forceEnglish={true}
           />
 
           {serverError && (
