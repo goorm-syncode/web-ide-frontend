@@ -115,6 +115,10 @@ const router = createBrowserRouter([
       </AuthGuard>
     ),
   },
+  {
+    path: '/presentation/final',
+    element: <Suspense fallback={<PageLoader />}><Pages.PresentationPage /></Suspense>,
+  },
 ]);
 
 export default router;
