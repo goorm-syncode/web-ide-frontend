@@ -43,11 +43,11 @@ const ProblemCard = ({
   const getDifficultyText = (level) => {
     switch (level) {
       case 'EASY':
-        return 'Easy';
+        return '쉬움';
       case 'MEDIUM':
-        return 'Medium';
+        return '보통';
       case 'HARD':
-        return 'Hard';
+        return '어려움';
       default:
         return level;
     }
