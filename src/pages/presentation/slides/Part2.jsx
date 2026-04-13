@@ -277,15 +277,15 @@ export const Slide10CoreIDE = () => {
 
 export const Slide11CoreBackend = () => {
   return (
-    <SlideLayout title="코드 채점과 학습 상태 관리" subtitle="보이지 않는 곳에서의 정밀한 학습 진척 관리">
+    <SlideLayout title="코드 제출 및 학습 데이터 플로우" subtitle="코드 제출부터 진척도 반영까지의 단계별 데이터 처리 과정">
       <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', gap: '1.5rem', padding: '2rem' }}>
-        <InfoNode icon={<FaCode />} label="코드 제출" desc="Draft 자동 저장 & 검증" style={{ flex: 1, padding: '3rem' }} />
+        <InfoNode icon={<FaCode />} label="1. 제출 및 검증" desc="사용자 코드 수신 및 API 서버 유효성 검사" style={{ flex: 1, padding: '3rem' }} />
         <Arrow />
-        <InfoNode icon={<FaRobot />} label="코드 채점" desc="격리된 가상 환경에서의 컴파일 및 실행" color="#0c8599" style={{ flex: 1, padding: '3rem' }} />
+        <InfoNode icon={<FaRobot />} label="2. 코드 실행 및 채점" desc="API 서버와 분리된 독립 환경에서 안전하게 채점 수행" color="#0c8599" style={{ flex: 1, padding: '3rem' }} />
         <Arrow />
-        <InfoNode icon={<FaDatabase />} label="기록 및 결과" desc="Submission History 저장" color="#6DB33F" style={{ flex: 1, padding: '3rem' }} />
+        <InfoNode icon={<FaDatabase />} label="3. 결과 영속화" desc="채점 결과 및 상세 실행 이력을 DB에 저장" color="#6DB33F" style={{ flex: 1, padding: '3rem' }} />
         <Arrow />
-        <InfoNode icon={<FaCheckCircle />} label="상태 업데이트" desc="달성률(Progress) 업서트" color="var(--slide-accent)" style={{ flex: 1, padding: '3rem' }} />
+        <InfoNode icon={<FaCheckCircle />} label="4. 성취도 갱신" desc="학습 성공 여부에 따라 사용자의 진행률 업데이트" color="var(--slide-accent)" style={{ flex: 1, padding: '3rem' }} />
       </div>
     </SlideLayout>
   );
@@ -293,7 +293,7 @@ export const Slide11CoreBackend = () => {
 
 export const Slide12CoreChat = () => {
   return (
-    <SlideLayout title="실시간 소통과 연결" subtitle="고립된 학습이 아닌 '함께' 하는 경험 제공">
+    <SlideLayout title="실시간 채팅 서비스 구현" subtitle="SSE 기술을 활용한 효율적인 메시지 수신 및 접속 상태 관리">
       <div style={{ display: 'flex', gap: '4rem', marginTop: '3rem', alignItems: 'center' }}>
         <div style={{ flex: 1.5, position: 'relative' }}>
            <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
@@ -303,28 +303,28 @@ export const Slide12CoreChat = () => {
                     <div style={{ position: 'absolute', top: -5, right: -5, background: 'red', width: '25px', height: '25px', borderRadius: '50%', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 900 }}>12</div>
                  </div>
                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#6f42c1', marginBottom: '0.5rem' }}>SSE Real-time Broadcast</div>
-                    <div style={{ fontSize: '1.6rem', color: 'var(--slide-muted)' }}>브라우저의 리소스 소모를 최소화한 단방향 스트리밍</div>
+                    <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#6f42c1', marginBottom: '0.5rem' }}>실시간 메시지 수신 (SSE)</div>
+                    <div style={{ fontSize: '1.6rem', color: 'var(--slide-muted)' }}>서버 부하를 낮추는 효율적인 실시간 데이터 전송</div>
                  </div>
               </div>
               
               <div style={{ display: 'flex', gap: '2rem' }}>
-                 <SlideCard title="Heartbeat" icon={<FaSync />} style={{ flex: 1, padding: '2rem' }}>
-                    <div style={{ fontSize: '1.5rem' }}>30초 주기 <strong>연결 유지</strong> 설계</div>
+                 <SlideCard title="연결 상태 유지" icon={<FaSync />} style={{ flex: 1, padding: '2rem' }}>
+                    <div style={{ fontSize: '1.5rem' }}>30초 주기 <strong>Heartbeat</strong> 설계</div>
                  </SlideCard>
-                 <SlideCard title="Online Count" icon={<FaUsers />} style={{ flex: 1, padding: '2rem' }}>
-                    <div style={{ fontSize: '1.5rem' }}>동시 접속자 <strong>실시간 연동</strong></div>
+                 <SlideCard title="접속자 수 확인" icon={<FaUsers />} style={{ flex: 1, padding: '2rem' }}>
+                    <div style={{ fontSize: '1.5rem' }}>동시 접속자 <strong>실시간 정보 연동</strong></div>
                  </SlideCard>
               </div>
            </div>
         </div>
         <div style={{ flex: 1 }}>
-           <SlideCard title="Technical Detail" icon={<FaShieldAlt color="var(--slide-primary)" />}>
+           <SlideCard title="기술적 세부 사항" icon={<FaShieldAlt color="var(--slide-primary)" />}>
               <ul style={{ fontSize: '1.8rem', lineHeight: '2.2', paddingLeft: '2.5rem' }}>
-                <li><strong>Stateless</strong> Token Auth</li>
-                <li><strong>Memory-efficient</strong> Stream</li>
-                <li><strong>Automatic</strong> Reconnection</li>
-                <li>Direct <strong>MIME-type</strong> Control</li>
+                <li><strong>효율적인 서버 푸시(SSE)</strong></li>
+                <li><strong>브라우저 리소스 최적화</strong></li>
+                <li><strong>자동 재연결</strong> 메커니즘</li>
+                <li><strong>보안 인증</strong> 통합 관리</li>
               </ul>
            </SlideCard>
         </div>
