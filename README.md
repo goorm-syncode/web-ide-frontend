@@ -3,7 +3,7 @@
 학습형 웹 IDE 플랫폼의 프론트엔드 애플리케이션 저장소입니다.  
 사용자가 미션을 탐색하고, 브라우저 환경에서 실시간으로 코드를 작성, 실행 및 제출할 수 있는 통합 개발 환경을 제공합니다.
 
-- **실치 서비스 URL**: [https://d3mpsqo9lnx0wo.cloudfront.net](https://d3mpsqo9lnx0wo.cloudfront.net)
+- **데모 서비스 URL**: [https://d3mpsqo9lnx0wo.cloudfront.net](https://d3mpsqo9lnx0wo.cloudfront.net)
 
 ## 데모 계정
 
@@ -24,16 +24,19 @@
 ## 🛠 기술 스택
 
 ### 핵심 프레임워크 & 라이브러리
+
 - **React 19**: 최신 Concurrent 기능을 활용한 고성능 UI 구현
 - **Vite 8**: 초고속 개발 및 빌드 환경 구성
 - **React Router DOM 7**: 선언적 라우팅 및 데이터 로딩 처리
 - **Redux Toolkit**: 중앙 집중식 상태 관리 및 비동기 로직 제어
 
 ### 통신 & 실시간 처리
+
 - **Axios**: 인터셉터를 통한 인증 토큰 통합 관리 및 API 통신
 - **SSE (Server-Sent Events)**: 서버와의 실시간 단방향 통신 알림 구현
 
 ### 개발 도구
+
 - **Monaco Editor**: VS Code 엔진 기반의 고도화된 코드 편집 환경
 - **ESLint & Prettier**: 코드 품질 유지 및 일관된 스타일링
 - **Husky & Lint-staged**: 커밋 전 코드 검사 자동화
@@ -76,12 +79,12 @@ npm run format:check
 
 더 효율적인 코드 작성을 위해 다음과 같은 단축키를 지원합니다. (macOS 환경은 `Ctrl` 대신 `Cmd` 사용)
 
-| 기능 | 단축키 | 설명 |
-| :--- | :--- | :--- |
-| **저장** | `Ctrl + S` | 현재 작성 중인 코드를 드래그 저장소에 보관합니다. |
-| **실행** | `Ctrl + Enter` | 코드를 테스트 케이스와 함께 실행합니다. |
-| **제출** | `Ctrl + Shift + Enter` | 코드를 최종 제출하고 채점 결과 확인을 요청합니다. |
-| **초기화** | `Ctrl + Shift + R` | 코드를 문제의 초기 상태(Starter Code)로 되돌립니다. |
+| 기능       | 단축키                 | 설명                                                |
+| :--------- | :--------------------- | :-------------------------------------------------- |
+| **저장**   | `Ctrl + S`             | 현재 작성 중인 코드를 드래그 저장소에 보관합니다.   |
+| **실행**   | `Ctrl + Enter`         | 코드를 테스트 케이스와 함께 실행합니다.             |
+| **제출**   | `Ctrl + Shift + Enter` | 코드를 최종 제출하고 채점 결과 확인을 요청합니다.   |
+| **초기화** | `Ctrl + Shift + R`     | 코드를 문제의 초기 상태(Starter Code)로 되돌립니다. |
 
 ## ⚙️ 환경 변수 설정
 
@@ -93,11 +96,12 @@ VITE_API_BASE_URL=https://api.your-domain.com
 ```
 
 > [!TIP]
-> 자세한 설정 예시는 [.env.example](file:///Volumes/DEV_EXTERNAL/30_lab/web/web-ide-frontend/.env.example) 파일을 참고하세요.
+> 자세한 설정 예시는 [.env.example](./.env.example) 파일을 참고하세요.
 
 ## 🛣 라우트 구조
 
 ### 메인 서비스 라우트
+
 - `/`: 인증 상태에 따른 자동 리다이렉트
 - `/home`: 미션 목록, 진행률 대시보드 (인증 필요)
 - `/login` / `/signup`: 인증 관련 페이지
@@ -105,7 +109,9 @@ VITE_API_BASE_URL=https://api.your-domain.com
 - `/reset-password`: 비밀번호 재설정 관련
 
 ### 개발 지원 라우트 (`/dev/*`)
+
 컴포넌트 단위의 빠르고 독립적인 검증을 위해 제공됩니다.
+
 - `/dev/home`, `/dev/problem-list`, `/dev/chat-widget` 등
 
 ## 📦 프로젝트 구조
@@ -126,8 +132,8 @@ src/
 
 프로젝트의 품질 관리와 자동화된 배포를 위해 GitHub Actions를 사용합니다.
 
-- **CI**: 모든 PR에 대해 ESLint와 Prettier 검사를 실행하여 코드 품질을 보장합니다. ([ci.yml](file:///Volumes/DEV_EXTERNAL/30_lab/web/web-ide-frontend/.github/workflows/ci.yml))
-- **Deployment**: `develop` 브랜치에 푸시될 경우 AWS CloudFront로 자동 배포가 수행됩니다. ([deploy-dev.yml](file:///Volumes/DEV_EXTERNAL/30_lab/web/web-ide-frontend/.github/workflows/deploy-dev.yml))
+- **CI**: 모든 PR에 대해 ESLint와 Prettier 검사를 실행하여 코드 품질을 보장합니다. ([ci.yml](./.github/workflows/ci.yml))
+- **Deployment**: `develop` 브랜치에 푸시될 경우 AWS CloudFront로 자동 배포가 수행됩니다. ([deploy-dev.yml](./.github/workflows/deploy-dev.yml))
 
 ## 인증 및 상태 관리
 
