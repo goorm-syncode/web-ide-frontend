@@ -160,7 +160,7 @@
 
 .mypage-divider {
   height: 1px;
-  background-color: var(--border-soft);
+  background-color: var(--border-default);
   margin: var(--space-xs) 0;
 }
 
