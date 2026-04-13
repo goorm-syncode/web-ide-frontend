@@ -14,8 +14,8 @@ export const SlideLayout = ({ title, subtitle, children }) => (
   </div>
 );
 
-export const SlideCard = ({ title, icon, children, style }) => (
-  <div className="slide-card" style={style}>
+export const SlideCard = ({ title, icon, children, style, ...props }) => (
+  <div className="slide-card" style={style} {...props}>
     {title && (
       <div className="slide-card-title">
         {icon && <span className="infographic-icon" style={{ fontSize: '3.5rem', marginBottom: 0 }}>{icon}</span>}

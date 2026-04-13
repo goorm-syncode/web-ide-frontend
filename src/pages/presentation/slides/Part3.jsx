@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { SlideLayout, SlideCard, MetricCard, Badge, InfoNode } from '../components/SlideBase';
-import { FaGithub, FaChartLine, FaExclamationTriangle, FaCheckCircle, FaLaptopCode, FaCommentDots, FaClock, FaCode, FaRocket, FaCheck, FaSync, FaCloud, FaRobot, FaGamepad, FaDesktop } from 'react-icons/fa';
+import { FaGithub, FaChartLine, FaExclamationTriangle, FaCheckCircle, FaLaptopCode, FaCommentDots, FaClock, FaCode, FaRocket, FaCheck, FaSync, FaCloud, FaRobot, FaGamepad, FaDesktop, FaBox } from 'react-icons/fa';
 
 const Counter = ({ target, duration = 1500, isActive }) => {
   const [count, setCount] = useState(0);
@@ -35,7 +35,7 @@ const Counter = ({ target, duration = 1500, isActive }) => {
 
 export const Slide13Productivity = ({ isActive }) => {
   return (
-    <SlideLayout title="협업과 개발 생산성" subtitle="숫자로 증명하는 팀의 몰입도와 자동화 성과">
+    <SlideLayout title="협업과 개발 생산성" subtitle="숫자로 증명하는 팀의 협업 밀도와 자동화 성과">
        <div style={{ display: 'flex', gap: '4rem', marginTop: '4rem' }}>
           <MetricCard value={<Counter target="74" isActive={isActive} />} label="Frontend PRs" style={{ flex: 1, padding: '5rem 2rem' }} />
           <MetricCard value={<Counter target="229" isActive={isActive} />} label="Frontend Commits" style={{ flex: 1, padding: '5rem 2rem', borderTop: '1rem solid var(--slide-primary)' }} />
@@ -52,7 +52,7 @@ export const Slide13Productivity = ({ isActive }) => {
 
 export const Slide14CICD = () => {
   return (
-    <SlideLayout title="CI/CD와 배포 파이프라인" subtitle="자동화된 검증과 전세계로 서빙되는 고가용성 인프라">
+    <SlideLayout title="CI/CD와 배포 파이프라인" subtitle="반복적인 배포 과정 자동화를 통한 신속한 개발 주기와 서비스 안정성 확보">
        <div style={{ display: 'flex', gap: '4rem', height: '100%', marginTop: '3rem' }}>
           <div style={{ flex: 1 }}>
              <SlideCard title="Frontend Delivery" icon={<FaRocket color="#61DAFB" />} style={{ height: '100%', borderTop: '1rem solid #61DAFB' }}>
@@ -78,6 +78,7 @@ export const Slide14CICD = () => {
                    {[
                      { l: 'GitHub Action Trigger', i: <FaGithub /> },
                      { l: 'Gradle Test & Build', i: <FaCheck /> },
+                     { l: 'Docker Image Build', i: <FaBox /> },
                      { l: 'AWS ECR Image Push', i: <FaRocket /> },
                      { l: 'EC2 Docker Deployment', i: <FaCode /> }
                    ].map((s, idx) => (
