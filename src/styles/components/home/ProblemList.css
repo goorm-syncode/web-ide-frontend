@@ -6,7 +6,7 @@
 /* 기본: 1열 (모바일 ~ 태블릿 미만) */
 .problem-list-container {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   width: 100%;
 }
@@ -14,7 +14,7 @@
 /* 태블릿 이상 (768px -> 900px 전후로 조정 가능, 여기선 900px 근처로 상향하여 1열 유지 기간 확대) */
 @media screen and (min-width: 900px) {
   .problem-list-container {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
   }
 }
@@ -22,7 +22,7 @@
 /* 소형 데스크탑 (1200px 이상) → 3열 */
 @media screen and (min-width: 1200px) {
   .problem-list-container {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
   }
 }
@@ -30,7 +30,7 @@
 /* 대형 데스크탑 (1500px 이상) → 4열 고정 */
 @media screen and (min-width: 1500px) {
   .problem-list-container {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 24px;
   }
 }
