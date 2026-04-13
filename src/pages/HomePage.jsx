@@ -99,7 +99,7 @@ const HomePage = () => {
     }
 
     setSearchParams(params, { replace: true });
-  }, [searchQuery, selectedDifficulty, selectedStatus, currentPage, setSearchParams]);
+  }, [searchQuery, selectedDifficulty, selectedStatus, currentPage, setSearchParams, searchParams]);
 
   // 최초 진입 시 이어하기 미션 페이지로 자동 점프
   useEffect(() => {
