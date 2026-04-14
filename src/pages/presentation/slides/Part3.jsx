@@ -250,7 +250,7 @@ export const Slide18Retrospective = () => {
               <li style={{ marginBottom: '0.8rem' }}><strong>기획/설계 정교화</strong><br/>사용자 흐름을 반영한 면밀한 기획 및 아키텍처 설계의 중요성</li>
               <li style={{ marginBottom: '0.8rem' }}><strong>협업 프로세스</strong><br/>팀 내 컨벤션 정립 및 기술 문서화의 필요성</li>
               <li style={{ marginBottom: '0.8rem' }}><strong>최적화 과제</strong><br/>복잡한 동적 레이아웃에서의 렌더링 성능 최적화 미흡</li>
-              <li><strong>테스트 코드</strong><br/>일정 내 유닛 테스트 커버리지 확보의 아쉬움</li>
+              <li><strong>테스트 코드</strong><br/>제한된 기간 내 충분한 테스트 커버리지 미확보</li>
             </ul>
          </div>
       </div>
@@ -258,21 +258,6 @@ export const Slide18Retrospective = () => {
   );
 };
 
-export const Slide19Future = () => {
-  return (
-    <SlideLayout title="향후 확장 계획" subtitle="현재에 머물지 않고 더 넓은 학습 생태계로">
-      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '3rem', justifyContent: 'center', alignItems: 'center' }}>
-         {[
-           { icon: <FaRobot />, label: "AI 튜터 시스템", desc: "실시간 코드 분석 및 가이드", color: 'var(--slide-secondary)' },
-           { icon: <FaGamepad />, label: "게이미피케이션", desc: "레벨/경험치/뱃지 기반 동기 부여", color: 'var(--slide-accent)' },
-           { icon: <FaChartLine />, label: "데이터 분석", desc: "개인화된 학습 추천", color: '#6f42c1' }
-         ].map((r, idx) => (
-           <InfoNode key={idx} icon={r.icon} label={r.label} desc={r.desc} color={r.color} style={{ width: '300px', padding: '4rem 2rem' }} />
-         ))}
-      </div>
-    </SlideLayout>
-  );
-};
 
 export const Slide20Conclusion = () => {
   return (
@@ -287,10 +272,43 @@ export const Slide20Conclusion = () => {
       <div style={{ padding: '3rem 6rem', background: '#fff', borderRadius: '40px', boxShadow: 'var(--slide-shadow-lg)', border: '2px solid var(--slide-primary)' }}>
         <h2 style={{ fontSize: '4.5rem', color: 'var(--slide-primary)', margin: 0, fontWeight: 900 }}>Q & A</h2>
       </div>
+      
+      <a 
+        href="https://d3mpsqo9lnx0wo.cloudfront.net/" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        style={{ 
+          marginTop: '3rem', 
+          padding: '0.8rem 2.2rem', 
+          background: '#f8f9fa',
+          border: '1.5px solid #ddd',
+          color: '#777', 
+          borderRadius: '12px', 
+          fontSize: '1.4rem', 
+          fontWeight: 700, 
+          textDecoration: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.8rem',
+          transition: 'all 0.2s'
+        }}
+        onMouseEnter={(e) => { 
+          e.currentTarget.style.borderColor = 'var(--slide-primary)'; 
+          e.currentTarget.style.color = 'var(--slide-primary)';
+          e.currentTarget.style.background = '#fff';
+        }}
+        onMouseLeave={(e) => { 
+          e.currentTarget.style.borderColor = '#ddd'; 
+          e.currentTarget.style.color = '#777';
+          e.currentTarget.style.background = '#f8f9fa';
+        }}
+      >
+        <FaRocket size={14} /> Live Demo 바로가기
+      </a>
 
       <div style={{ position: 'absolute', bottom: '10%', display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '1.8rem', fontWeight: 700, color: 'var(--slide-muted)' }}>
         <div style={{ width: '12px', height: '12px', background: 'var(--slide-accent)', borderRadius: '50%' }}></div>
-        Sync Code | Final Presentation
+        Sync Code (1Team) | Final Presentation
       </div>
     </div>
   );

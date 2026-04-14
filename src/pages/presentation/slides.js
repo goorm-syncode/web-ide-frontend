@@ -1,7 +1,7 @@
 // src/pages/presentation/slides.js
 import { Slide01Cover, Slide01StartingPoint, Slide02Pivot, Slide03Overview, Slide04Team, Slide05TechStack, Slide06Tradeoff } from './slides/Part1';
 import { Slide07Architecture, Slide08BackendArch, Slide09CoreHome, Slide10CoreIDE, Slide11CoreBackend, Slide12CoreChat } from './slides/Part2';
-import { Slide13Productivity, Slide14CICD, Slide15Troubleshooting01, Slide16Troubleshooting02, Slide17Troubleshooting03, Slide18Retrospective, Slide19Future, Slide20Conclusion } from './slides/Part3';
+import { Slide13Productivity, Slide14CICD, Slide15Troubleshooting01, Slide16Troubleshooting02, Slide17Troubleshooting03, Slide18Retrospective, Slide20Conclusion } from './slides/Part3';
 
 const slides = [
   { component: Slide01Cover, title: "표지: Learn Code" },
@@ -23,7 +23,6 @@ const slides = [
   { component: Slide17Troubleshooting03, title: "트러블슈팅 #03: IDE Layout" },
   { component: Slide13Productivity, title: "협업 및 생산성 지표" },
   { component: Slide18Retrospective, title: "회고 (Retrospective)" },
-  { component: Slide19Future, title: "향후 확장 계획 (Roadmap)" },
   { component: Slide20Conclusion, title: "마무리 (Q&A)" }
 ];
 

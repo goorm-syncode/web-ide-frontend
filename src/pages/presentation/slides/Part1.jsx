@@ -23,16 +23,19 @@ export const Slide01Cover = () => {
       
       <div style={{ marginTop: '5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}>
         <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--slide-primary)', display: 'flex', alignItems: 'center', gap: '2rem' }}>
-           Team. Sync Code
+           Team. Sync Code (1Team)
         </div>
         <p style={{ fontSize: '1.8rem', color: 'var(--slide-muted)', maxWidth: '800px', lineHeight: '1.8', textAlign: 'center' }}>
           &quot;코드로 소통하고(Sync), 함께 성장하는 환경을 만든다&quot;는 의미를 담아<br/>
           팀원들 간의 완벽한 코드 동기화와 협업의 가치를 추구합니다.
         </p>
         <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
-           <Badge style={{ padding: '1rem 3rem' }}>Member 1 (Leader)</Badge>
-           <Badge style={{ padding: '1rem 3rem' }}>Member 2</Badge>
-           <Badge style={{ padding: '1rem 3rem' }}>Member 3</Badge>
+           <Badge style={{ padding: '1rem 3rem' }}>염효선 (Leader)</Badge>
+           <Badge style={{ padding: '1rem 3rem' }}>이현진</Badge>
+           <Badge style={{ padding: '1rem 3rem' }}>이혜란</Badge>
+        </div>
+        <div style={{ marginTop: '1.5rem', fontSize: '1.8rem', fontWeight: 700, color: 'var(--slide-muted)', opacity: 0.9 }}>
+           발표자 이현진
         </div>
       </div>
     </div>
