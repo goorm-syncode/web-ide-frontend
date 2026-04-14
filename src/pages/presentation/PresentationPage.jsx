@@ -13,6 +13,26 @@ const PresentationPage = () => {
   const isPrintMode = false; // Print mode is now handled via openPrintWindow
   
   const [tocOpen, setTocOpen] = React.useState(false);
+  const [scale, setScale] = React.useState(1);
+
+  // Auto-scaling logic: fit 1920x1080 into current viewport
+  useEffect(() => {
+    if (isPrintMode) return;
+    const handleResize = () => {
+      const winW = window.innerWidth;
+      const winH = window.innerHeight;
+      const baseW = 1920;
+      const baseH = 1080;
+      
+      const newScale = Math.min(winW / baseW, winH / baseH);
+      setScale(newScale);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isPrintMode]);
+
 
   // Sync index to URL just in case of out of bounds or missing param
   useEffect(() => {
@@ -147,7 +167,11 @@ const PresentationPage = () => {
 
   return (
     <div className={`presentation-wrapper ${isPrintMode ? 'print-mode' : ''}`}>
-      <div className="slide-container">
+      <div 
+        className="slide-container"
+        style={!isPrintMode ? { transform: `scale(${scale})` } : {}}
+      >
+
         
         {/* Slide Content */}
         <div className="slide-content-area">

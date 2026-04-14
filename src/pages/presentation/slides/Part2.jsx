@@ -224,9 +224,10 @@ export const Slide09CoreHome = () => {
 export const Slide10CoreIDE = () => {
   return (
     <SlideLayout title="Web IDE 환경" subtitle="번거로운 환경 설정 없이, 오직 코딩에만 몰입할 수 있는 최적화된 환경">
-      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '2rem' }}>
-        <div style={{ flex: 1 }}>
-           <SlideCard title="Feature Set" icon={<FaCode color="var(--slide-secondary)" />} style={{ height: '100%' }}>
+      <div style={{ display: 'flex', gap: '3rem', flex: 1, marginTop: '1rem', minHeight: 0 }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+           <SlideCard title="Feature Set" icon={<FaCode color="var(--slide-secondary)" />} style={{ flex: 1 }}>
+
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginTop: '1.5rem' }}>
                   {[
                     { l: 'Code Editor', d: 'VS Code 엔진 기반 에디팅 및 다양한 언어 지원' },

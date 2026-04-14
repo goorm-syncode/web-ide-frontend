@@ -33,8 +33,8 @@
 
 .slide-container {
   position: relative;
-  width: 100%;
-  max-width: 1920px;
+  width: 1920px;
+  height: 1080px;
   background-color: var(--slide-bg);
   /* Subtle pattern background */
   background-image: 
@@ -42,23 +42,14 @@
   background-size: 40px 40px;
   box-shadow: var(--slide-shadow-lg);
   overflow: hidden;
-  aspect-ratio: 16 / 9;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0; /* Prevent flex parent from squishing it */
 }
 
-@media (min-aspect-ratio: 16/9) {
-  .slide-container {
-    height: 100vh;
-    width: calc(100vh * 16 / 9);
-  }
-}
-@media (max-aspect-ratio: 16/9) {
-  .slide-container {
-    width: 100vw;
-    height: calc(100vw * 9 / 16);
-  }
-}
+
+/* Container is now fixed-size and scaled via JS transform */
+
 
 .slide-content-area {
   flex: 1;
