@@ -1,23 +1,9 @@
 import React from 'react';
-import { SlideLayout, SlideCard, Arrow, InfoNode, MetricCard } from '../components/SlideBase';
-import { FaDatabase, FaGlobe, FaDesktop, FaCode, FaRobot, FaSync, FaCheckCircle, FaRocket, FaCloud, FaShieldAlt, FaComments, FaUsers, FaArrowRight, FaStream, FaServer } from 'react-icons/fa';
-import { SiGithubactions, SiGithub, SiDocker } from 'react-icons/si';
+import { SlideLayout, SlideCard, Arrow, InfoNode } from '../components/SlideBase';
+import { FaDatabase, FaGlobe, FaDesktop, FaCode, FaRobot, FaSync, FaCheckCircle, FaRocket, FaShieldAlt, FaComments, FaUsers, FaArrowRight } from 'react-icons/fa';
 
-/* eslint-disable react/prop-types */
 
-const BrandBox = ({ icon, label, sub, color, style }) => (
-  <div style={{ 
-    display: 'flex', flexDirection: 'column', alignItems: 'center', 
-    background: '#fff', padding: '2rem', borderRadius: '24px', 
-    boxShadow: '0 10px 30px rgba(0,0,0,0.05)', border: `1px solid #eee`, 
-    width: '160px', transition: 'all 0.3s ease',
-    ...style 
-  }}>
-    <div style={{ fontSize: '4.5rem', color: color, marginBottom: '1.5rem' }}>{icon}</div>
-    <div style={{ fontWeight: 900, fontSize: '1.5rem', color: '#333', textAlign: 'center' }}>{label}</div>
-    <div style={{ fontSize: '1.1rem', color: '#888', marginTop: '0.4rem', textAlign: 'center' }}>{sub}</div>
-  </div>
-);
+
 
 const FlowArrow = () => (
   <div style={{ display: 'flex', alignItems: 'center', color: '#ccc', fontSize: '2rem' }}>
@@ -53,9 +39,9 @@ const AWSRDSIcon = () => (
 
 const AWSCloudFrontIcon = () => (
   <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 60C20 45 35 40 40 30C45 20 65 20 75 35C85 30 95 45 90 60H20Z" stroke="#FF9900" strokeWidth="4" fill="#FF9900" fillOpacity="0.1"/>
-    <path d="M40 70L50 85L60 70" stroke="#FF9900" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M50 35V85" stroke="#FF9900" strokeWidth="4" strokeDasharray="4 4"/>
+    <path d="M20 60C20 45 35 40 40 30C45 20 65 20 75 35C85 30 95 45 90 60H20Z" stroke="#569A31" strokeWidth="4" fill="#569A31" fillOpacity="0.1"/>
+    <path d="M40 70L50 85L60 70" stroke="#569A31" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M50 35V85" stroke="#569A31" strokeWidth="4" strokeDasharray="4 4"/>
   </svg>
 );
 
@@ -73,7 +59,6 @@ export const Slide07Architecture = () => {
                  <div style={{ marginTop: '0.8rem', fontWeight: 800, fontSize: '1.2rem' }}>User Browser</div>
               </div>
            </div>
-
            <FlowArrow />
 
            {/* Layer 2: Edge Location */}
@@ -81,7 +66,7 @@ export const Slide07Architecture = () => {
               <div style={{ position: 'absolute', top: '-1.2rem', left: '1.2rem', background: '#333', color: '#fff', padding: '0.3rem 1.5rem', borderRadius: '8px', fontSize: '1rem', fontWeight: 800 }}>Edge Location</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
                  <AWSCloudFrontIcon />
-                 <div style={{ fontWeight: 900, color: '#FF9900', fontSize: '1.4rem' }}>CloudFront</div>
+                 <div style={{ fontWeight: 900, color: '#569A31', fontSize: '1.4rem' }}>CloudFront</div>
                  <div style={{ fontSize: '1rem', color: '#888' }}>Global Edge Layer</div>
               </div>
            </div>
@@ -93,8 +78,8 @@ export const Slide07Architecture = () => {
               <div style={{ position: 'absolute', top: '-1.5rem', left: '3rem', background: '#FF9900', color: '#fff', padding: '0.4rem 2rem', borderRadius: '10px', fontSize: '1.2rem', fontWeight: 900 }}>Amazon VPC</div>
               
               {/* Public Subnet: Combined FE & Backend Services */}
-              <div style={{ background: '#fff', padding: '2.5rem', borderRadius: '32px', border: '2px dotted #569A31', position: 'relative' }}>
-                 <div style={{ position: 'absolute', top: '-1.1rem', left: '1.5rem', background: '#569A31', color: '#fff', padding: '0.2rem 1rem', borderRadius: '6px', fontSize: '0.9rem', fontWeight: 700 }}>Public Subnet</div>
+              <div style={{ background: '#fff', padding: '2.5rem', borderRadius: '32px', border: '2px dotted rgba(82, 127, 255, 0.3)', position: 'relative' }}>
+                 <div style={{ position: 'absolute', top: '-1.1rem', left: '1.5rem', background: '#E3F2FD', border: '1px solid #90CAF9', color: '#1565C0', padding: '0.2rem 1.2rem', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 800 }}>Public Subnet</div>
                  <div style={{ display: 'flex', gap: '3rem', alignItems: 'center', justifyContent: 'center' }}>
                     
                     {/* S3 */}
@@ -129,8 +114,8 @@ export const Slide07Architecture = () => {
               </div>
 
               {/* Private Database Subnet */}
-              <div style={{ background: '#fff', padding: '1.5rem 2.5rem', borderRadius: '24px', border: '2px dotted #527FFF', position: 'relative', alignSelf: 'center', display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                 <div style={{ position: 'absolute', top: '-1.1rem', left: '1.5rem', background: '#527FFF', color: '#fff', padding: '0.2rem 1rem', borderRadius: '6px', fontSize: '0.9rem', fontWeight: 700 }}>Private Subnet</div>
+              <div style={{ background: '#fff', padding: '1.5rem 2.5rem', borderRadius: '24px', border: '2px dotted rgba(150, 150, 150, 0.3)', position: 'relative', alignSelf: 'center', display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                 <div style={{ position: 'absolute', top: '-1.1rem', left: '1.5rem', background: '#F5F5F5', border: '1px solid #E0E0E0', color: '#616161', padding: '0.2rem 1.2rem', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 800 }}>Private Subnet</div>
                  <AWSRDSIcon />
                  <div style={{ textAlign: 'left' }}>
                     <div style={{ fontWeight: 800, fontSize: '1.3rem', color: '#527FFF' }}>RDS (MySQL)</div>
@@ -324,7 +309,7 @@ export const Slide12CoreChat = () => {
                 <li><strong>효율적인 서버 푸시(SSE)</strong></li>
                 <li><strong>브라우저 리소스 최적화</strong></li>
                 <li><strong>자동 재연결</strong> 메커니즘</li>
-                <li><strong>보안 인증</strong> 통합 관리</li>
+                <li><strong>JWT 기반</strong> 스트림 인증</li>
               </ul>
            </SlideCard>
         </div>

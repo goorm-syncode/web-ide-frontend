@@ -1,20 +1,16 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
-import { SlideLayout, SlideCard, MetricCard, Badge, InfoNode } from '../components/SlideBase';
-import { FaGithub, FaChartLine, FaExclamationTriangle, FaCheckCircle, FaLaptopCode, FaCommentDots, FaClock, FaCode, FaRocket, FaCheck, FaSync, FaCloud, FaRobot, FaGamepad, FaDesktop, FaBox } from 'react-icons/fa';
+import { SlideLayout, SlideCard, MetricCard } from '../components/SlideBase';
+import { FaGithub, FaExclamationTriangle, FaCheckCircle, FaLaptopCode, FaCode, FaRocket, FaCheck, FaSync, FaCloud, FaBox } from 'react-icons/fa';
 
 const Counter = ({ target, duration = 1500, isActive }) => {
   const [count, setCount] = useState(0);
+  const end = parseInt(target);
 
   useEffect(() => {
-    if (!isActive) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setCount(0);
-      return;
-    }
+    if (!isActive) return;
 
     let start = 0;
-    const end = parseInt(target);
     const increment = end / (duration / 16); 
 
     const timer = setInterval(() => {
@@ -27,24 +23,75 @@ const Counter = ({ target, duration = 1500, isActive }) => {
       }
     }, 16);
 
-    return () => clearInterval(timer);
-  }, [target, duration, isActive]);
+    return () => {
+      clearInterval(timer);
+      setCount(0); // Cleanup on unmount or when isActive changes to false
+    };
+  }, [end, duration, isActive]);
 
-  return <>{count}</>;
+  const displayCount = isActive ? count : 0;
+
+  return (
+    <>
+      {displayCount}
+      {isActive && displayCount === end && <span style={{ marginLeft: '2px', fontSize: '0.8em' }}>+</span>}
+    </>
+  );
 };
 
 export const Slide13Productivity = ({ isActive }) => {
   return (
-    <SlideLayout title="협업과 개발 생산성" subtitle="숫자로 증명하는 팀의 협업 밀도와 자동화 성과">
+    <SlideLayout title="협업과 개발 생산성" subtitle="더 나은 협업과 성장을 위해 함께 고민하며 남겨온 지표와 방법들">
        <div style={{ display: 'flex', gap: '4rem', marginTop: '4rem' }}>
           <MetricCard value={<Counter target="74" isActive={isActive} />} label="Frontend PRs" style={{ flex: 1, padding: '5rem 2rem' }} />
           <MetricCard value={<Counter target="229" isActive={isActive} />} label="Frontend Commits" style={{ flex: 1, padding: '5rem 2rem', borderTop: '1rem solid var(--slide-primary)' }} />
           <MetricCard value={<Counter target="67" isActive={isActive} />} label="Backend Commits" style={{ flex: 1, padding: '5rem 2rem' }} />
        </div>
 
-       <div style={{ marginTop: '5rem', display: 'flex', justifyContent: 'center', gap: '4rem' }}>
-          <Badge style={{ padding: '1.5rem 3rem', fontSize: '2rem' }}><FaCheckCircle style={{ marginRight: '1rem' }} /> PR Lint & Build Checks</Badge>
-          <Badge variant="accent" style={{ padding: '1.5rem 3rem', fontSize: '2rem' }}><FaLaptopCode style={{ marginRight: '1rem' }} /> Dev Routes Component Testing</Badge>
+       {/* Bottom Highlight Cards */}
+       {/* Bottom Highlight Cards */}
+       <div style={{ display: 'flex', justifyContent: 'center', gap: '5rem', marginTop: '4rem', width: '100%', padding: '0 4rem' }}>
+          <div style={{ 
+            background: 'rgba(255, 255, 255, 0.9)', 
+            padding: '2rem 2.5rem', 
+            borderRadius: '24px', 
+            boxShadow: '0 15px 35px rgba(0,0,0,0.06)',
+            border: '1px solid #e0e0e0',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1.8rem',
+            flex: 1,
+            maxWidth: '520px'
+          }}>
+            <div style={{ background: '#E8F5E9', padding: '1.2rem', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <FaCheckCircle size={36} color="#27ae60" />
+            </div>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: '1.45rem', color: '#1a1a1a', marginBottom: '0.4rem' }}>PR 단위 자동 빌드 테스트</div>
+              <div style={{ fontSize: '1.05rem', color: '#555', lineHeight: '1.5', wordBreak: 'keep-all' }}>GitHub Actions를 활용한 린트 체크 및 빌드 오류 사전 검증</div>
+            </div>
+          </div>
+
+          <div style={{ 
+            background: 'rgba(255, 255, 255, 0.9)', 
+            padding: '2rem 2.5rem', 
+            borderRadius: '24px', 
+            boxShadow: '0 15px 35px rgba(0,0,0,0.06)',
+            border: '1px solid #e0e0e0',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1.8rem',
+            flex: 1,
+            maxWidth: '520px'
+          }}>
+            <div style={{ background: '#E3F2FD', padding: '1.2rem', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <FaLaptopCode size={36} color="#2980b9" />
+            </div>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: '1.45rem', color: '#1a1a1a', marginBottom: '0.4rem' }}>컴포넌트 독립 테스트 라우트</div>
+              <div style={{ fontSize: '1.05rem', color: '#555', lineHeight: '1.5', wordBreak: 'keep-all' }}>서버 미완성 상태에서도 자유로운 UI 가시화 및 기능 검증</div>
+            </div>
+          </div>
        </div>
     </SlideLayout>
   );
@@ -103,9 +150,9 @@ export const Slide15Troubleshooting01 = () => {
            <SlideCard title="The Challenge" icon={<FaExclamationTriangle color="#e67e22" />} style={{ borderTop: '8px solid #e67e22' }}>
               <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#e67e22' }}>액세스 토큰 만료 처리</div>
               <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '1.8', paddingLeft: '2rem' }}>
-                <li>짧은 유효기간의 액세스 토큰 사용으로 인한 빈번한 로그아웃 발생</li>
-                <li>학습 몰입도를 저해하는 UX 중단 현상</li>
-                <li>발표 시연 중 발생할 수 있는 인증 흐름의 복잡성</li>
+                <li><strong>짧은 토큰 유효기간</strong>: 보안 정책에 따른 Access Token의 주기적 만료</li>
+                <li><strong>사용자 경험(UX)의 단절</strong>: 코드 작성 중 발생하는 갑작스러운 로그아웃</li>
+                <li><strong>무중단 인증 환경 구축</strong>: 사용자 개입 없이 백그라운드에서 세션을 관리하는 자동화 로직 필요</li>
               </ul>
            </SlideCard>
         </div>
@@ -114,9 +161,9 @@ export const Slide15Troubleshooting01 = () => {
               <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#27ae60' }}>Silent Refresh & Rotation</div>
               <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '2', paddingLeft: '2.5rem' }}>
                 <li><strong>Axios Interceptor</strong>: 401 에러 감지 및 자동 갱신 요청</li>
-                <li><strong>Refresh Token Rotation</strong>: 토큰 탈취 방지 및 보안성 확보</li>
-                <li><strong>Promise Queueing</strong>: 동시다발적 API 요청 시 갱신 로직 동기화</li>
-                <li><strong>Result</strong>: 사용자 개입 없는 영구적인 로그인 상태 유지</li>
+                <li><strong>Refresh Token Rotation</strong>: 탈취 토큰의 오남용 방지 및 피해 최소화</li>
+                <li><strong>Promise Queueing</strong>: 다중 API 요청 시 토큰 중복 갱신 방지 및 동기화</li>
+                <li><strong>Result</strong>: 사용자 개입 없이도 지속적인 로그인 상태 유지 가능</li>
               </ul>
            </SlideCard>
         </div>
@@ -127,14 +174,14 @@ export const Slide15Troubleshooting01 = () => {
 
 export const Slide16Troubleshooting02 = () => {
   return (
-    <SlideLayout title="트러블슈팅 #02: SSE 통신과 보안 헤더" subtitle="표준 API의 한계를 극복하고 실시간 통신 모듈 직접 구현">
+    <SlideLayout title="트러블슈팅 #02: SSE 통신과 보안 헤더" subtitle="보안 헤더 주입이 가능한 커스텀 SSE 통신 모듈 구현">
       <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '2rem' }}>
         <div style={{ flex: 1 }}>
            <SlideCard title="The Challenge" icon={<FaExclamationTriangle color="#e67e22" />} style={{ borderTop: '8px solid #e67e22' }}>
               <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#e67e22' }}>EventSource 인증의 한계</div>
               <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '1.8', paddingLeft: '2rem' }}>
                 <li>표준 <strong>EventSource</strong> 객체는 커스텀 헤더 지원 불가</li>
-                <li>채팅 보안을 위한 Bearer Token 전달의 어려움</li>
+                <li>스트림 기반 사용자 인증을 위한 Bearer Token 전달의 제약</li>
                 <li>Axios의 스트리밍 데이터 처리 안정성 부족</li>
               </ul>
            </SlideCard>
@@ -144,8 +191,9 @@ export const Slide16Troubleshooting02 = () => {
               <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#27ae60' }}>Custom Stream Parser</div>
               <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '2', paddingLeft: '2.5rem' }}>
                 <li><strong>Fetch API & ReadableStream</strong> 활용 모듈화</li>
-                <li><strong>Header Injection</strong>: 인증 토큰 수동 주입 성공</li>
-                <li><strong>Manual Event Parsing</strong>: <code>data:</code> 프리픽스 실시간 파싱 로직</li>
+                <li><strong>Header Injection</strong>: 커스텀 헤더를 통한 Bearer Token 인증 구현</li>
+                <li><strong>Stream Data Parsing</strong>: SSE 데이터 메시지 규격에 따른 실시간 파싱</li>
+                <li><strong>Silent Refresh Porting</strong>: Axios 인터셉터 기반의 자동 갱신 로직을 Fetch 커스텀 모듈에 통합 이식</li>
                 <li><strong>Graceful Degradation</strong>: 연결 해제 시 자동 재연결 관리</li>
               </ul>
            </SlideCard>
@@ -157,7 +205,7 @@ export const Slide16Troubleshooting02 = () => {
 
 export const Slide17Troubleshooting03 = () => {
   return (
-    <SlideLayout title="트러블슈팅 #03: 반응형 Web IDE 레이아웃" subtitle="데스크탑의 강력한 기능을 모바일에서도 끊김 없이 제공">
+    <SlideLayout title="트러블슈팅 #03: 반응형 Web IDE 레이아웃" subtitle="제한된 화면 환경을 고려한 모바일 전용 레이아웃 최적화">
       <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '2rem' }}>
         <div style={{ flex: 1 }}>
            <SlideCard title="The Challenge" icon={<FaExclamationTriangle color="#e67e22" />} style={{ borderTop: '8px solid #e67e22' }}>
@@ -165,7 +213,6 @@ export const Slide17Troubleshooting03 = () => {
               <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '1.8', paddingLeft: '2rem' }}>
                 <li>좁은 모바일 화면에서의 에디터 터치 조작 문제</li>
                 <li>사이드바, 에디터, 결과창의 동시 노출 불가</li>
-                <li>동적 크기 변경 시 Monaco Editor의 렌더링 깨짐</li>
               </ul>
            </SlideCard>
         </div>
@@ -175,8 +222,8 @@ export const Slide17Troubleshooting03 = () => {
               <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '2', paddingLeft: '2.5rem' }}>
                 <li><strong>Hybrid Grid/Flex</strong>: 해상도별 동적 레이아웃 전환</li>
                 <li><strong>Mobile Tab UI</strong>: 다중 패널을 탭 인터페이스로 일원화</li>
-                <li><strong>Resize Observer</strong>: 패널 크기 변경 시 에디터 즉시 리스케일링</li>
-                <li><strong>Context Preservation</strong>: 탭 전환 시 작업 상태 완벽 유지</li>
+                <li><strong>Touch-friendly UI</strong>: 모바일 환경을 고려한 버튼 크기 및 조작 편의성 최적화</li>
+                <li><strong>Context Preservation</strong>: 탭 전환 시에도 작업 상태 완벽 유지</li>
               </ul>
            </SlideCard>
         </div>
@@ -205,7 +252,7 @@ export const Slide18Retrospective = () => {
               <li style={{ marginBottom: '0.8rem' }}><strong>기획/설계 정교화</strong><br/>사용자 흐름을 반영한 면밀한 기획 및 아키텍처 설계의 중요성</li>
               <li style={{ marginBottom: '0.8rem' }}><strong>협업 프로세스</strong><br/>팀 내 컨벤션 정립 및 기술 문서화의 필요성</li>
               <li style={{ marginBottom: '0.8rem' }}><strong>최적화 과제</strong><br/>복잡한 동적 레이아웃에서의 렌더링 성능 최적화 미흡</li>
-              <li><strong>테스트 코드</strong><br/>일정 내 유닛 테스트 커버리지 확보의 아쉬움</li>
+              <li><strong>테스트 코드</strong><br/>제한된 기간 내 충분한 테스트 커버리지 미확보</li>
             </ul>
          </div>
       </div>
@@ -213,21 +260,6 @@ export const Slide18Retrospective = () => {
   );
 };
 
-export const Slide19Future = () => {
-  return (
-    <SlideLayout title="향후 확장 계획" subtitle="현재에 머물지 않고 더 넓은 학습 생태계로">
-      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '3rem', justifyContent: 'center', alignItems: 'center' }}>
-         {[
-           { icon: <FaRobot />, label: "AI 튜터 시스템", desc: "실시간 코드 분석 및 가이드", color: 'var(--slide-secondary)' },
-           { icon: <FaGamepad />, label: "게이미피케이션", desc: "레벨/경험치/뱃지 기반 동기 부여", color: 'var(--slide-accent)' },
-           { icon: <FaChartLine />, label: "데이터 분석", desc: "개인화된 학습 추천", color: '#6f42c1' }
-         ].map((r, idx) => (
-           <InfoNode key={idx} icon={r.icon} label={r.label} desc={r.desc} color={r.color} style={{ width: '300px', padding: '4rem 2rem' }} />
-         ))}
-      </div>
-    </SlideLayout>
-  );
-};
 
 export const Slide20Conclusion = () => {
   return (
@@ -242,10 +274,43 @@ export const Slide20Conclusion = () => {
       <div style={{ padding: '3rem 6rem', background: '#fff', borderRadius: '40px', boxShadow: 'var(--slide-shadow-lg)', border: '2px solid var(--slide-primary)' }}>
         <h2 style={{ fontSize: '4.5rem', color: 'var(--slide-primary)', margin: 0, fontWeight: 900 }}>Q & A</h2>
       </div>
+      
+      <a 
+        href="https://d3mpsqo9lnx0wo.cloudfront.net/" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        style={{ 
+          marginTop: '3rem', 
+          padding: '0.8rem 2.2rem', 
+          background: '#f8f9fa',
+          border: '1.5px solid #ddd',
+          color: '#777', 
+          borderRadius: '12px', 
+          fontSize: '1.4rem', 
+          fontWeight: 700, 
+          textDecoration: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.8rem',
+          transition: 'all 0.2s'
+        }}
+        onMouseEnter={(e) => { 
+          e.currentTarget.style.borderColor = 'var(--slide-primary)'; 
+          e.currentTarget.style.color = 'var(--slide-primary)';
+          e.currentTarget.style.background = '#fff';
+        }}
+        onMouseLeave={(e) => { 
+          e.currentTarget.style.borderColor = '#ddd'; 
+          e.currentTarget.style.color = '#777';
+          e.currentTarget.style.background = '#f8f9fa';
+        }}
+      >
+        <FaRocket size={14} /> Live Demo 바로가기
+      </a>
 
       <div style={{ position: 'absolute', bottom: '10%', display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '1.8rem', fontWeight: 700, color: 'var(--slide-muted)' }}>
         <div style={{ width: '12px', height: '12px', background: 'var(--slide-accent)', borderRadius: '50%' }}></div>
-        Sync Code | Final Presentation
+        Sync Code (1Team) | Final Presentation
       </div>
     </div>
   );

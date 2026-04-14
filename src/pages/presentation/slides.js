@@ -1,7 +1,7 @@
 // src/pages/presentation/slides.js
 import { Slide01Cover, Slide01StartingPoint, Slide02Pivot, Slide03Overview, Slide04Team, Slide05TechStack, Slide06Tradeoff } from './slides/Part1';
 import { Slide07Architecture, Slide08BackendArch, Slide09CoreHome, Slide10CoreIDE, Slide11CoreBackend, Slide12CoreChat } from './slides/Part2';
-import { Slide13Productivity, Slide14CICD, Slide15Troubleshooting01, Slide16Troubleshooting02, Slide17Troubleshooting03, Slide18Retrospective, Slide19Future, Slide20Conclusion } from './slides/Part3';
+import { Slide13Productivity, Slide14CICD, Slide15Troubleshooting01, Slide16Troubleshooting02, Slide17Troubleshooting03, Slide18Retrospective, Slide20Conclusion } from './slides/Part3';
 
 const slides = [
   { component: Slide01Cover, title: "표지: Learn Code" },
@@ -18,12 +18,11 @@ const slides = [
   { component: Slide08BackendArch, title: "백엔드 아키텍처" },
   { component: Slide11CoreBackend, title: "실행/채점 시스템 흐름" },
   { component: Slide12CoreChat, title: "SSE 기반 실시간 채팅" },
-  { component: Slide15Troubleshooting01, title: "트러블슈팅 #01: JWT/Auth" },
-  { component: Slide16Troubleshooting02, title: "트러블슈팅 #02: SSE Stream" },
-  { component: Slide17Troubleshooting03, title: "트러블슈팅 #03: IDE Layout" },
-  { component: Slide13Productivity, title: "협업 및 생산성 지표" },
-  { component: Slide18Retrospective, title: "회고 (Retrospective)" },
-  { component: Slide19Future, title: "향후 확장 계획 (Roadmap)" },
+  { component: Slide15Troubleshooting01, title: "트러블슈팅 #01: JWT 인증과 UX 연속성" },
+  { component: Slide16Troubleshooting02, title: "트러블슈팅 #02: SSE 통신과 보안 헤더" },
+  { component: Slide17Troubleshooting03, title: "트러블슈팅 #03: 반응형 Web IDE 레이아웃" },
+  { component: Slide13Productivity, title: "협업과 개발 생산성" },
+  { component: Slide18Retrospective, title: "성과 및 회고 (Retrospective)" },
   { component: Slide20Conclusion, title: "마무리 (Q&A)" }
 ];
 
