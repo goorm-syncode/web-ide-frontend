@@ -391,3 +391,70 @@
   color: var(--slide-primary);
   font-weight: 800;
 }
+
+/* Print Mode Styles */
+.presentation-wrapper.print-mode {
+  position: relative !important;
+  height: auto !important;
+  overflow: visible !important;
+  background: #fff !important;
+}
+
+.presentation-wrapper.print-mode .slide-container {
+  height: auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  overflow: visible !important;
+  box-shadow: none !important;
+  aspect-ratio: auto !important;
+}
+
+.presentation-wrapper.print-mode .slide-content-area {
+  position: relative !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.presentation-wrapper.print-mode .slide-wrapper.print-item {
+  position: relative !important;
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+  display: block !important;
+  height: 56.25vw !important; /* 16:9 ratio in width */
+  max-height: 100vh !important;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+  background: #fff !important;
+  page-break-after: always;
+}
+
+/* Actual Browser Print Settings */
+@media print {
+  @page {
+    size: 1600px 900px;
+    margin: 0;
+  }
+  
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .presentation-wrapper.print-mode {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .presentation-wrapper.print-mode .slide-wrapper.print-item {
+    margin: 0 !important;
+    border: none !important;
+    height: 100vh !important;
+    width: 100vw !important;
+  }
+
+  .toc-toggle-btn, .slide-footer-bar, .toc-backdrop, .toc-overlay {
+    display: none !important;
+  }
+}
