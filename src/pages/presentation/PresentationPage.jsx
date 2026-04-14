@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MdOutlineFormatListBulleted, MdChevronLeft, MdChevronRight, MdPictureAsPdf } from 'react-icons/md';
+import { MdOutlineFormatListBulleted, MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { createRoot } from 'react-dom/client';
 import '../../styles/presentation.css';
 import slides from './slides';
@@ -13,6 +13,26 @@ const PresentationPage = () => {
   const isPrintMode = false; // Print mode is now handled via openPrintWindow
   
   const [tocOpen, setTocOpen] = React.useState(false);
+  const [scale, setScale] = React.useState(1);
+
+  // Auto-scaling logic: fit 1920x1080 into current viewport
+  useEffect(() => {
+    if (isPrintMode) return;
+    const handleResize = () => {
+      const winW = window.innerWidth;
+      const winH = window.innerHeight;
+      const baseW = 1920;
+      const baseH = 1080;
+      
+      const newScale = Math.min(winW / baseW, winH / baseH);
+      setScale(newScale);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isPrintMode]);
+
 
   // Sync index to URL just in case of out of bounds or missing param
   useEffect(() => {
@@ -135,17 +155,23 @@ const PresentationPage = () => {
         goToSlide(0);
       } else if (e.key === 'End') {
         goToSlide(slides.length - 1);
+      } else if (e.key === 'p' || e.key === 'P' || e.key === 'ㅔ') {
+        openPrintWindow();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [nextSlide, prevSlide, toggleFullscreen, isPrintMode, goToSlide]);
+  }, [nextSlide, prevSlide, toggleFullscreen, isPrintMode, goToSlide, openPrintWindow]);
 
   const progress = ((currentIndex + 1) / slides.length) * 100;
 
   return (
     <div className={`presentation-wrapper ${isPrintMode ? 'print-mode' : ''}`}>
-      <div className="slide-container">
+      <div 
+        className="slide-container"
+        style={!isPrintMode ? { transform: `scale(${scale})` } : {}}
+      >
+
         
         {/* Slide Content */}
         <div className="slide-content-area">
@@ -251,32 +277,6 @@ const PresentationPage = () => {
                 ))}
               </ul>
             </div>
-            {/* Print Button */}
-            <button
-              onClick={openPrintWindow}
-              title="PDF로 내보내기"
-              style={{
-                position: 'absolute',
-                right: '12rem',
-                top: '4rem',
-                width: '50px',
-                height: '50px',
-                borderRadius: '50%',
-                background: '#fff',
-                border: '2px solid var(--slide-border)',
-                color: 'var(--slide-primary)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '2rem',
-                cursor: 'pointer',
-                zIndex: 101,
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <MdPictureAsPdf />
-            </button>
           </>
         )}
       </div>

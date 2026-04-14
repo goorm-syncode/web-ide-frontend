@@ -48,8 +48,9 @@ const AWSCloudFrontIcon = () => (
 export const Slide07Architecture = () => {
   return (
     <SlideLayout title="전체 시스템 아키텍처" subtitle="부하 분산과 안정성을 고려한 별도의 채점 인프라 구성">
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', gap: '2rem', padding: '1rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', gap: '2rem', padding: '1rem' }}>
         
+
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem' }}>
            
            {/* Layer 1: Users */}
@@ -146,8 +147,9 @@ export const Slide07Architecture = () => {
 export const Slide08BackendArch = () => {
   return (
     <SlideLayout title="백엔드 서비스 아키텍처" subtitle="표준적인 계층 설계와 주요 기술 전략을 반영한 백엔드 시스템 구조">
-      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '1rem', alignItems: 'flex-start' }}>
-        <div style={{ flex: 1.3, display: 'flex', flexDirection: 'column', gap: '1rem', height: '100%' }}>
+      <div style={{ display: 'flex', gap: '3rem', flex: 1, marginTop: '1rem', alignItems: 'flex-start' }}>
+        <div style={{ flex: 1.3, display: 'flex', flexDirection: 'column', gap: '0.8rem', height: '100%' }}>
+
           {[
             { label: 'Web / REST Controller', bg: '#f8f9fa', border: 'var(--slide-primary)', icon: <FaGlobe /> },
             { label: 'Security (JWT Filter)', bg: 'rgba(0, 68, 148, 0.05)', border: 'var(--slide-primary)', icon: <FaShieldAlt /> },
@@ -186,9 +188,10 @@ export const Slide08BackendArch = () => {
 export const Slide09CoreHome = () => {
   return (
     <SlideLayout title="학습의 시작, 홈 대시보드" subtitle="내가 무엇을 해야 할지, 얼마나 성장했는지 한눈에 보여줍니다">
-      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '2rem' }}>
-        <div style={{ flex: 1.5 }}>
-           <SlideCard title="핵심 UI 컴포넌트" icon={<FaRocket color="var(--slide-primary)" />}>
+      <div style={{ display: 'flex', gap: '3rem', flex: 1, marginTop: '1.5rem' }}>
+        <div style={{ flex: 1.5, display: 'flex', flexDirection: 'column' }}>
+           <SlideCard title="핵심 UI 컴포넌트" icon={<FaRocket color="var(--slide-primary)" />} style={{ flex: 1 }}>
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '1rem' }}>
                  {[
                    { l: '진행률 배너 (Progress)', d: 'Run Cat 애니메이션으로 표현되는 직관적인 학습 성취도' },
@@ -224,9 +227,10 @@ export const Slide09CoreHome = () => {
 export const Slide10CoreIDE = () => {
   return (
     <SlideLayout title="Web IDE 환경" subtitle="번거로운 환경 설정 없이, 오직 코딩에만 몰입할 수 있는 최적화된 환경">
-      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '2rem' }}>
-        <div style={{ flex: 1 }}>
-           <SlideCard title="Feature Set" icon={<FaCode color="var(--slide-secondary)" />} style={{ height: '100%' }}>
+      <div style={{ display: 'flex', gap: '3rem', flex: 1, marginTop: '1rem', minHeight: 0 }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+           <SlideCard title="Feature Set" icon={<FaCode color="var(--slide-secondary)" />} style={{ flex: 1 }}>
+
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginTop: '1.5rem' }}>
                   {[
                     { l: 'Code Editor', d: 'VS Code 엔진 기반 에디팅 및 다양한 언어 지원' },

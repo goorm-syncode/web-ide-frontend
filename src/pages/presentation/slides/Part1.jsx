@@ -144,7 +144,8 @@ export const Slide02Why = () => {
 export const Slide03Overview = () => {
   return (
     <SlideLayout title="사용자 인터렉션 흐름" subtitle="사용자의 액션에 따른 서비스 내부의 전체적인 흐름">
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', gap: '4rem', padding: '0 5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', gap: '2.5rem', padding: '0 5rem' }}>
+
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4rem' }}>
           <InfoNode 
             icon={<FaUsers />} 
@@ -320,8 +321,9 @@ export const Slide05TechStack = () => {
 export const Slide06Tradeoff = () => {
   return (
     <SlideLayout title="기술 선택의 기준" subtitle="실무적인 개발 효율성과 안정적인 서비스 구현 사이의 기술적 균형">
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginTop: '1rem' }}>
-        <SlideCard title="JavaScript + PropTypes" icon={<FaBalanceScale />} style={{ background: 'rgba(0, 68, 148, 0.02)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem', marginTop: '0.5rem' }}>
+        <SlideCard title="JavaScript + PropTypes" icon={<FaBalanceScale />} style={{ background: 'rgba(0, 68, 148, 0.02)', padding: '2.5rem' }}>
+
           <div style={{ marginBottom: '1rem', fontWeight: 800 }}>TypeScript 대신 <strong>현실적인 개발 생산성</strong> 선택</div>
           <ul style={{ fontSize: '1.6rem', lineHeight: '1.6', paddingLeft: '2rem', color: 'var(--slide-muted)' }}>
             <li>초기 세팅 비용 최소화 및 빠른 개발 속도 확보</li>

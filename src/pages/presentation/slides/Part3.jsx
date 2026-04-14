@@ -42,7 +42,8 @@ const Counter = ({ target, duration = 1500, isActive }) => {
 export const Slide13Productivity = ({ isActive }) => {
   return (
     <SlideLayout title="협업과 개발 생산성" subtitle="더 나은 협업과 성장을 위해 함께 고민하며 남겨온 지표와 방법들">
-       <div style={{ display: 'flex', gap: '4rem', marginTop: '4rem' }}>
+       <div style={{ display: 'flex', gap: '3rem', flex: 1, marginTop: '2rem', alignItems: 'center' }}>
+
           <MetricCard value={<Counter target="74" isActive={isActive} />} label="Frontend PRs" style={{ flex: 1, padding: '5rem 2rem' }} />
           <MetricCard value={<Counter target="229" isActive={isActive} />} label="Frontend Commits" style={{ flex: 1, padding: '5rem 2rem', borderTop: '1rem solid var(--slide-primary)' }} />
           <MetricCard value={<Counter target="67" isActive={isActive} />} label="Backend Commits" style={{ flex: 1, padding: '5rem 2rem' }} />
@@ -100,9 +101,10 @@ export const Slide13Productivity = ({ isActive }) => {
 export const Slide14CICD = () => {
   return (
     <SlideLayout title="CI/CD와 배포 파이프라인" subtitle="반복적인 배포 과정 자동화를 통한 신속한 개발 주기와 서비스 안정성 확보">
-       <div style={{ display: 'flex', gap: '4rem', height: '100%', marginTop: '3rem' }}>
-          <div style={{ flex: 1 }}>
-             <SlideCard title="Frontend Delivery" icon={<FaRocket color="#61DAFB" />} style={{ height: '100%', borderTop: '1rem solid #61DAFB' }}>
+       <div style={{ display: 'flex', gap: '4rem', flex: 1, marginTop: '1rem' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+             <SlideCard title="Frontend Delivery" icon={<FaRocket color="#61DAFB" />} style={{ flex: 1, borderTop: '1rem solid #61DAFB' }}>
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginTop: '2rem' }}>
                    {[
                      { l: 'GitHub Action Trigger', i: <FaGithub /> },
@@ -119,8 +121,9 @@ export const Slide14CICD = () => {
              </SlideCard>
           </div>
           
-          <div style={{ flex: 1 }}>
-             <SlideCard title="Backend Delivery" icon={<FaRocket color="#6DB33F" />} style={{ height: '100%', borderTop: '1rem solid #6DB33F' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+             <SlideCard title="Backend Delivery" icon={<FaRocket color="#6DB33F" />} style={{ flex: 1, borderTop: '1rem solid #6DB33F' }}>
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginTop: '2rem' }}>
                    {[
                      { l: 'GitHub Action Trigger', i: <FaGithub /> },
@@ -145,7 +148,8 @@ export const Slide14CICD = () => {
 export const Slide15Troubleshooting01 = () => {
   return (
     <SlideLayout title="트러블슈팅 #01: JWT 인증과 UX 연속성" subtitle="보안 강화와 사용자 편의성 사이의 기술적 균형점 찾기">
-      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '2rem' }}>
+      <div style={{ display: 'flex', gap: '3rem', flex: 1, marginTop: '1rem' }}>
+
         <div style={{ flex: 1 }}>
            <SlideCard title="The Challenge" icon={<FaExclamationTriangle color="#e67e22" />} style={{ borderTop: '8px solid #e67e22' }}>
               <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#e67e22' }}>액세스 토큰 만료 처리</div>
@@ -175,7 +179,8 @@ export const Slide15Troubleshooting01 = () => {
 export const Slide16Troubleshooting02 = () => {
   return (
     <SlideLayout title="트러블슈팅 #02: SSE 통신과 보안 헤더" subtitle="보안 헤더 주입이 가능한 커스텀 SSE 통신 모듈 구현">
-      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '2rem' }}>
+      <div style={{ display: 'flex', gap: '3rem', flex: 1, marginTop: '1rem' }}>
+
         <div style={{ flex: 1 }}>
            <SlideCard title="The Challenge" icon={<FaExclamationTriangle color="#e67e22" />} style={{ borderTop: '8px solid #e67e22' }}>
               <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#e67e22' }}>EventSource 인증의 한계</div>
@@ -206,7 +211,8 @@ export const Slide16Troubleshooting02 = () => {
 export const Slide17Troubleshooting03 = () => {
   return (
     <SlideLayout title="트러블슈팅 #03: 반응형 Web IDE 레이아웃" subtitle="제한된 화면 환경을 고려한 모바일 전용 레이아웃 최적화">
-      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '2rem' }}>
+      <div style={{ display: 'flex', gap: '3rem', flex: 1, marginTop: '1rem' }}>
+
         <div style={{ flex: 1 }}>
            <SlideCard title="The Challenge" icon={<FaExclamationTriangle color="#e67e22" />} style={{ borderTop: '8px solid #e67e22' }}>
               <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#e67e22' }}>화면 공간의 절대적 부족</div>
