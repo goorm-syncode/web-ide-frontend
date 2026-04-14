@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MdOutlineFormatListBulleted } from 'react-icons/md';
+import { MdOutlineFormatListBulleted, MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import '../../styles/presentation.css';
 import slides from './slides';
 import logoImg from '../../assets/logo-gnb.png';
@@ -46,7 +46,7 @@ const PresentationPage = () => {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (isPrintMode) return;
-      if (e.key === 'ArrowRight' || e.key === 'Space') {
+      if (e.key === 'ArrowRight' || e.code === 'Space') {
         nextSlide();
       } else if (e.key === 'ArrowLeft') {
         prevSlide();
@@ -54,6 +54,10 @@ const PresentationPage = () => {
         setTocOpen(false);
       } else if (e.key === 'f' || e.key === 'F' || e.key === 'ㄹ') {
         toggleFullscreen();
+      } else if (e.key === 'Home') {
+        goToSlide(0);
+      } else if (e.key === 'End') {
+        goToSlide(slides.length - 1);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -102,8 +106,26 @@ const PresentationPage = () => {
               <div className="progress-track">
                 <div className="progress-fill" style={{ width: `${progress}%` }} />
               </div>
-              <div className="slide-number">
-                {currentIndex + 1} / {slides.length}
+              <div className="slide-navigation">
+                <button 
+                  className="nav-btn prev" 
+                  onClick={prevSlide} 
+                  title="이전 (←)" 
+                  disabled={currentIndex === 0}
+                >
+                  <MdChevronLeft />
+                </button>
+                <div className="slide-number">
+                  {currentIndex + 1} / {slides.length}
+                </div>
+                <button 
+                  className="nav-btn next" 
+                  onClick={nextSlide} 
+                  title="다음 (→, Space)" 
+                  disabled={currentIndex === slides.length - 1}
+                >
+                  <MdChevronRight />
+                </button>
               </div>
             </div>
 
