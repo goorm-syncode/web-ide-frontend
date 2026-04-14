@@ -95,33 +95,97 @@ export const Slide14CICD = () => {
   );
 };
 
-
-export const Slide15Troubleshooting = () => {
+export const Slide15Troubleshooting01 = () => {
   return (
-    <SlideLayout title="트러블슈팅 (Troubleshooting)" subtitle="직면한 기술적 한계를 극복하며 배운 점">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginTop: '1rem' }}>
-        <div style={{ display: 'flex', gap: '2.5rem' }}>
-           <SlideCard title="JWT Token Rotation" icon={<FaExclamationTriangle color="var(--slide-accent)" />} style={{ flex: 1, borderLeft: '1rem solid var(--slide-accent)', padding: '2rem' }}>
-              <div style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--slide-accent)', marginBottom: '1rem' }}>Challenge: UX Continuity</div>
-              <p style={{ fontSize: '1.5rem', color: 'var(--slide-muted)' }}>액세스 토큰 만료 시 로그인 튕김 현상을 Axios Interceptor와 Refresh Token Rotation으로 해결하여 끊김 없는 학습 환경 구축.</p>
-           </SlideCard>
-           
-           <SlideCard title="SSE Authenticated Stream" icon={<FaCommentDots color="var(--slide-accent)" />} style={{ flex: 1, borderLeft: '1rem solid var(--slide-accent)', padding: '2rem' }}>
-              <div style={{ fontSize: '1.7rem', fontWeight: 900, color: 'var(--slide-accent)', marginBottom: '1rem' }}>Challenge: Header Authentication</div>
-              <p style={{ fontSize: '1.4rem', color: 'var(--slide-muted)' }}>브라우저의 EventSource는 커스텀 헤더를 지원하지 않고, Axios는 스트림 응답 처리에 한계가 있었습니다. 이를 해결하고자 fetch API와 ReadableStream을 이용해 Bearer 토큰 인증과 실시간 데이터 수신을 모두 충족하는 라이브 통신 모듈을 직접 구현했습니다.</p>
+    <SlideLayout title="트러블슈팅 #01: JWT 인증과 UX 연속성" subtitle="보안 강화와 사용자 편의성 사이의 기술적 균형점 찾기">
+      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '2rem' }}>
+        <div style={{ flex: 1 }}>
+           <SlideCard title="The Challenge" icon={<FaExclamationTriangle color="#e67e22" />} style={{ borderTop: '8px solid #e67e22' }}>
+              <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#e67e22' }}>액세스 토큰 만료 처리</div>
+              <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '1.8', paddingLeft: '2rem' }}>
+                <li>짧은 유효기간의 액세스 토큰 사용으로 인한 빈번한 로그아웃 발생</li>
+                <li>학습 몰입도를 저해하는 UX 중단 현상</li>
+                <li>발표 시연 중 발생할 수 있는 인증 흐름의 복잡성</li>
+              </ul>
            </SlideCard>
         </div>
-        
-        <SlideCard title="Web IDE Responsive Layout" icon={<FaDesktop color="var(--slide-accent)" />} style={{ borderLeft: '1rem solid var(--slide-accent)', padding: '2.5rem' }}>
-            <div style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--slide-accent)', marginBottom: '1rem' }}>Challenge: Screen Space Management</div>
-            <p style={{ fontSize: '1.5rem', color: 'var(--slide-muted)' }}>브라우저 내 복잡한 IDE 레이아웃(사이드바/에디터/터미널)을 모바일 및 다양한 해상도에서 유지하기 위해 Flex/Grid 하이브리드 설계 및 동적 리사이징 로직 구현.</p>
-        </SlideCard>
+        <div style={{ flex: 1.2 }}>
+           <SlideCard title="Implementation" icon={<FaCheckCircle color="#27ae60" />} style={{ borderTop: '8px solid #27ae60' }}>
+              <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#27ae60' }}>Silent Refresh & Rotation</div>
+              <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '2', paddingLeft: '2.5rem' }}>
+                <li><strong>Axios Interceptor</strong>: 401 에러 감지 및 자동 갱신 요청</li>
+                <li><strong>Refresh Token Rotation</strong>: 토큰 탈취 방지 및 보안성 확보</li>
+                <li><strong>Promise Queueing</strong>: 동시다발적 API 요청 시 갱신 로직 동기화</li>
+                <li><strong>Result</strong>: 사용자 개입 없는 영구적인 로그인 상태 유지</li>
+              </ul>
+           </SlideCard>
+        </div>
       </div>
     </SlideLayout>
   );
 };
 
-export const Slide16Retrospective = () => {
+export const Slide16Troubleshooting02 = () => {
+  return (
+    <SlideLayout title="트러블슈팅 #02: SSE 통신과 보안 헤더" subtitle="표준 API의 한계를 극복하고 실시간 통신 모듈 직접 구현">
+      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '2rem' }}>
+        <div style={{ flex: 1 }}>
+           <SlideCard title="The Challenge" icon={<FaExclamationTriangle color="#e67e22" />} style={{ borderTop: '8px solid #e67e22' }}>
+              <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#e67e22' }}>EventSource 인증의 한계</div>
+              <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '1.8', paddingLeft: '2rem' }}>
+                <li>표준 <strong>EventSource</strong> 객체는 커스텀 헤더 지원 불가</li>
+                <li>채팅 보안을 위한 Bearer Token 전달의 어려움</li>
+                <li>Axios의 스트리밍 데이터 처리 안정성 부족</li>
+              </ul>
+           </SlideCard>
+        </div>
+        <div style={{ flex: 1.2 }}>
+           <SlideCard title="Implementation" icon={<FaCheckCircle color="#27ae60" />} style={{ borderTop: '8px solid #27ae60' }}>
+              <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#27ae60' }}>Custom Stream Parser</div>
+              <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '2', paddingLeft: '2.5rem' }}>
+                <li><strong>Fetch API & ReadableStream</strong> 활용 모듈화</li>
+                <li><strong>Header Injection</strong>: 인증 토큰 수동 주입 성공</li>
+                <li><strong>Manual Event Parsing</strong>: <code>data:</code> 프리픽스 실시간 파싱 로직</li>
+                <li><strong>Graceful Degradation</strong>: 연결 해제 시 자동 재연결 관리</li>
+              </ul>
+           </SlideCard>
+        </div>
+      </div>
+    </SlideLayout>
+  );
+};
+
+export const Slide17Troubleshooting03 = () => {
+  return (
+    <SlideLayout title="트러블슈팅 #03: 반응형 Web IDE 레이아웃" subtitle="데스크탑의 강력한 기능을 모바일에서도 끊김 없이 제공">
+      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '2rem' }}>
+        <div style={{ flex: 1 }}>
+           <SlideCard title="The Challenge" icon={<FaExclamationTriangle color="#e67e22" />} style={{ borderTop: '8px solid #e67e22' }}>
+              <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#e67e22' }}>화면 공간의 절대적 부족</div>
+              <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '1.8', paddingLeft: '2rem' }}>
+                <li>좁은 모바일 화면에서의 에디터 터치 조작 문제</li>
+                <li>사이드바, 에디터, 결과창의 동시 노출 불가</li>
+                <li>동적 크기 변경 시 Monaco Editor의 렌더링 깨짐</li>
+              </ul>
+           </SlideCard>
+        </div>
+        <div style={{ flex: 1.2 }}>
+           <SlideCard title="Implementation" icon={<FaCheckCircle color="#27ae60" />} style={{ borderTop: '8px solid #27ae60' }}>
+              <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem', color: '#27ae60' }}>Layout Engine Optimization</div>
+              <ul style={{ fontSize: '1.6rem', color: '#555', lineHeight: '2', paddingLeft: '2.5rem' }}>
+                <li><strong>Hybrid Grid/Flex</strong>: 해상도별 동적 레이아웃 전환</li>
+                <li><strong>Mobile Tab UI</strong>: 다중 패널을 탭 인터페이스로 일원화</li>
+                <li><strong>Resize Observer</strong>: 패널 크기 변경 시 에디터 즉시 리스케일링</li>
+                <li><strong>Context Preservation</strong>: 탭 전환 시 작업 상태 완벽 유지</li>
+              </ul>
+           </SlideCard>
+        </div>
+      </div>
+    </SlideLayout>
+  );
+};
+
+export const Slide18Retrospective = () => {
   return (
     <SlideLayout title="성과 및 회고" subtitle="협업의 경험과 기술적 성장을 복기하며">
       <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem', alignItems: 'stretch' }}>
@@ -149,12 +213,11 @@ export const Slide16Retrospective = () => {
   );
 };
 
-export const Slide17Future = () => {
+export const Slide19Future = () => {
   return (
-    <SlideLayout title="향후 확장 로드맵" subtitle="플랫폼의 성장을 위한 다음 단계">
-      <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'center', gap: '4rem' }}>
+    <SlideLayout title="향후 확장 계획" subtitle="현재에 머물지 않고 더 넓은 학습 생태계로">
+      <div style={{ display: 'flex', gap: '3rem', height: '100%', marginTop: '3rem', justifyContent: 'center', alignItems: 'center' }}>
          {[
-           { icon: <FaClock />, label: "비동기 채점 고도화", desc: "MQ 도입 & 대규모 처리", color: 'var(--slide-primary)' },
            { icon: <FaRobot />, label: "AI 튜터 시스템", desc: "실시간 코드 분석 및 가이드", color: 'var(--slide-secondary)' },
            { icon: <FaGamepad />, label: "게이미피케이션", desc: "레벨/경험치/뱃지 기반 동기 부여", color: 'var(--slide-accent)' },
            { icon: <FaChartLine />, label: "데이터 분석", desc: "개인화된 학습 추천", color: '#6f42c1' }
@@ -166,7 +229,7 @@ export const Slide17Future = () => {
   );
 };
 
-export const Slide18Conclusion = () => {
+export const Slide20Conclusion = () => {
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', background: 'linear-gradient(135deg, var(--slide-bg) 0%, rgba(0, 68, 148, 0.05) 100%)' }}>
       <h1 style={{ fontSize: '8rem', fontWeight: 900, color: 'var(--slide-primary)', letterSpacing: '-0.05em', marginBottom: '2rem' }}>
