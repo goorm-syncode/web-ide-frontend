@@ -1,6 +1,6 @@
 import React from 'react';
 import { SlideLayout, SlideCard, Badge, InfoNode, Grid } from '../components/SlideBase';
-import { FaReact, FaLeaf, FaGithub, FaTrello, FaCode, FaRocket, FaUsers, FaCheckCircle, FaBalanceScale, FaComments, FaCloud, FaSync, FaServer, FaDatabase } from 'react-icons/fa';
+import { FaReact, FaLeaf, FaGithub, FaTrello, FaCode, FaRocket, FaUsers, FaCheckCircle, FaBalanceScale, FaCloud, FaSync, FaServer, FaDatabase } from 'react-icons/fa';
 
 import logoImg from '../../../assets/logo-gnb.png';
 import trelloImg from '../../../assets/trello-screenshot.png';

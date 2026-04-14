@@ -472,28 +472,79 @@
   page-break-after: always;
 }
 
-/* Actual Browser Print Settings */
 @media print {
   @page {
-    size: 1600px 900px;
+    size: landscape;
     margin: 0;
   }
   
-  html, body {
+  html {
+    font-size: 9px !important;
+  }
+
+  html, body, #root, .app-layout, .main-content {
     height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
     overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .presentation-wrapper.print-mode {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
     padding: 0 !important;
     margin: 0 !important;
+    background: #fff !important;
+    z-index: 99999 !important;
+  }
+
+  .presentation-wrapper.print-mode .slide-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    background: #fff !important;
+  }
+
+  .presentation-wrapper.print-mode .slide-content-area {
+    padding: 3rem 4rem !important; /* Reduced padding for print */
+    height: auto !important;
+    min-height: 0 !important;
   }
 
   .presentation-wrapper.print-mode .slide-wrapper.print-item {
     margin: 0 !important;
     border: none !important;
-    height: 100vh !important;
+    height: 99vh !important;
     width: 100vw !important;
+    page-break-after: always !important;
+    page-break-inside: avoid !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  /* No extra page after the last slide */
+  .presentation-wrapper.print-mode .slide-wrapper.print-item:last-child {
+    page-break-after: auto !important;
+  }
+
+  /* Specific fix for dense slides in print */
+  .presentation-wrapper.print-mode .slide-content-area > div {
+    gap: 1rem !important; /* Reduce gaps in diagrams/grids */
+  }
+
+  .presentation-wrapper.print-mode .slide-card,
+  .presentation-wrapper.print-mode .infographic-node {
+    padding: 1.5rem !important; /* Shrink cards in print */
+    flex-shrink: 0 !important;
   }
 
   .toc-toggle-btn, .slide-footer-bar, .toc-backdrop, .toc-overlay {

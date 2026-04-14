@@ -1,23 +1,9 @@
 import React from 'react';
-import { SlideLayout, SlideCard, Arrow, InfoNode, MetricCard } from '../components/SlideBase';
-import { FaDatabase, FaGlobe, FaDesktop, FaCode, FaRobot, FaSync, FaCheckCircle, FaRocket, FaCloud, FaShieldAlt, FaComments, FaUsers, FaArrowRight, FaStream, FaServer } from 'react-icons/fa';
-import { SiGithubactions, SiGithub, SiDocker } from 'react-icons/si';
+import { SlideLayout, SlideCard, Arrow, InfoNode } from '../components/SlideBase';
+import { FaDatabase, FaGlobe, FaDesktop, FaCode, FaRobot, FaSync, FaCheckCircle, FaRocket, FaShieldAlt, FaComments, FaUsers, FaArrowRight } from 'react-icons/fa';
 
-/* eslint-disable react/prop-types */
 
-const BrandBox = ({ icon, label, sub, color, style }) => (
-  <div style={{ 
-    display: 'flex', flexDirection: 'column', alignItems: 'center', 
-    background: '#fff', padding: '2rem', borderRadius: '24px', 
-    boxShadow: '0 10px 30px rgba(0,0,0,0.05)', border: `1px solid #eee`, 
-    width: '160px', transition: 'all 0.3s ease',
-    ...style 
-  }}>
-    <div style={{ fontSize: '4.5rem', color: color, marginBottom: '1.5rem' }}>{icon}</div>
-    <div style={{ fontWeight: 900, fontSize: '1.5rem', color: '#333', textAlign: 'center' }}>{label}</div>
-    <div style={{ fontSize: '1.1rem', color: '#888', marginTop: '0.4rem', textAlign: 'center' }}>{sub}</div>
-  </div>
-);
+
 
 const FlowArrow = () => (
   <div style={{ display: 'flex', alignItems: 'center', color: '#ccc', fontSize: '2rem' }}>

@@ -1,17 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
-import { SlideLayout, SlideCard, MetricCard, Badge, InfoNode } from '../components/SlideBase';
-import { FaGithub, FaChartLine, FaExclamationTriangle, FaCheckCircle, FaLaptopCode, FaCommentDots, FaClock, FaCode, FaRocket, FaCheck, FaSync, FaCloud, FaRobot, FaGamepad, FaDesktop, FaBox } from 'react-icons/fa';
+import { SlideLayout, SlideCard, MetricCard } from '../components/SlideBase';
+import { FaGithub, FaExclamationTriangle, FaCheckCircle, FaLaptopCode, FaCode, FaRocket, FaCheck, FaSync, FaCloud, FaBox } from 'react-icons/fa';
 
 const Counter = ({ target, duration = 1500, isActive }) => {
   const [count, setCount] = useState(0);
   const end = parseInt(target);
 
   useEffect(() => {
-    if (!isActive) {
-      setCount(0);
-      return;
-    }
+    if (!isActive) return;
 
     let start = 0;
     const increment = end / (duration / 16); 
@@ -26,13 +23,18 @@ const Counter = ({ target, duration = 1500, isActive }) => {
       }
     }, 16);
 
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      setCount(0); // Cleanup on unmount or when isActive changes to false
+    };
   }, [end, duration, isActive]);
+
+  const displayCount = isActive ? count : 0;
 
   return (
     <>
-      {count}
-      {isActive && count === end && <span style={{ marginLeft: '2px', fontSize: '0.8em' }}>+</span>}
+      {displayCount}
+      {isActive && displayCount === end && <span style={{ marginLeft: '2px', fontSize: '0.8em' }}>+</span>}
     </>
   );
 };

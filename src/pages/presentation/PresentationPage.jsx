@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MdOutlineFormatListBulleted, MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { MdOutlineFormatListBulleted, MdChevronLeft, MdChevronRight, MdPictureAsPdf } from 'react-icons/md';
+import { createRoot } from 'react-dom/client';
 import '../../styles/presentation.css';
 import slides from './slides';
 import logoImg from '../../assets/logo-gnb.png';
@@ -8,8 +9,8 @@ import logoImg from '../../assets/logo-gnb.png';
 const PresentationPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const slideParam = parseInt(searchParams.get('slide') || '1', 10);
-  const isPrintMode = searchParams.get('print') === 'true';
   const currentIndex = isNaN(slideParam) ? 0 : Math.max(0, Math.min(slideParam - 1, slides.length - 1));
+  const isPrintMode = false; // Print mode is now handled via openPrintWindow
   
   const [tocOpen, setTocOpen] = React.useState(false);
 
@@ -43,6 +44,82 @@ const PresentationPage = () => {
     goToSlide(currentIndex + 1);
   }, [currentIndex, goToSlide]);
 
+  const openPrintWindow = useCallback(() => {
+    const printWin = window.open('', '_blank', 'width=1600,height=900');
+    if (!printWin) return;
+
+    // Collect all stylesheets from current page
+    const styleLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+      .map(l => `<link rel="stylesheet" href="${l.href}">`)
+      .join('\n');
+    const inlineStyles = Array.from(document.querySelectorAll('style'))
+      .map(s => `<style>${s.innerHTML}</style>`)
+      .join('\n');
+
+    printWin.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Sync Code - Presentation</title>
+        ${styleLinks}
+        ${inlineStyles}
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          html, body { width: 100%; height: 100%; background: #fff; }
+          .print-page {
+            width: 297mm;
+            height: 210mm;
+            overflow: hidden;
+            page-break-after: always;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: #fff;
+          }
+          .print-page:last-child { page-break-after: auto; }
+          .print-page .slide-wrapper {
+            position: relative !important;
+            width: 100% !important;
+            height: 100% !important;
+            opacity: 1 !important;
+            transform: none !important;
+            display: flex !important;
+            flex-direction: column !important;
+          }
+          @page { size: A4 landscape; margin: 0; }
+          @media print {
+            html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          }
+        </style>
+      </head>
+      <body id="print-body"></body>
+      </html>
+    `);
+    printWin.document.close();
+
+    printWin.onload = () => {
+      const body = printWin.document.getElementById('print-body');
+      slides.forEach((slideObj) => {
+        const page = printWin.document.createElement('div');
+        page.className = 'print-page';
+        const wrapper = printWin.document.createElement('div');
+        wrapper.className = 'slide-wrapper active';
+        page.appendChild(wrapper);
+        body.appendChild(page);
+        const root = createRoot(wrapper);
+        const Comp = slideObj.component;
+        root.render(<Comp isActive={true} />);
+      });
+      setTimeout(() => {
+        printWin.focus();
+        printWin.print();
+      }, 1500);
+    };
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (isPrintMode) return;
@@ -62,7 +139,7 @@ const PresentationPage = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [nextSlide, prevSlide, toggleFullscreen, isPrintMode]);
+  }, [nextSlide, prevSlide, toggleFullscreen, isPrintMode, goToSlide]);
 
   const progress = ((currentIndex + 1) / slides.length) * 100;
 
@@ -95,7 +172,7 @@ const PresentationPage = () => {
           })}
         </div>
 
-        {!isPrintMode && (
+        {(
           <>
             {/* Footer Bar */}
             <div className="slide-footer-bar">
@@ -174,6 +251,32 @@ const PresentationPage = () => {
                 ))}
               </ul>
             </div>
+            {/* Print Button */}
+            <button
+              onClick={openPrintWindow}
+              title="PDF로 내보내기"
+              style={{
+                position: 'absolute',
+                right: '12rem',
+                top: '4rem',
+                width: '50px',
+                height: '50px',
+                borderRadius: '50%',
+                background: '#fff',
+                border: '2px solid var(--slide-border)',
+                color: 'var(--slide-primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '2rem',
+                cursor: 'pointer',
+                zIndex: 101,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <MdPictureAsPdf />
+            </button>
           </>
         )}
       </div>
