@@ -105,8 +105,26 @@ const PresentationPage = () => {
           <MdOutlineFormatListBulleted />
         </button>
 
+        {/* TOC Overlay Backdrop */}
+        {tocOpen && (
+          <div 
+            className="toc-backdrop" 
+            onClick={() => setTocOpen(false)}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              zIndex: 999,
+              background: 'rgba(0,0,0,0.1)',
+              backdropFilter: 'blur(2px)'
+            }}
+          />
+        )}
+
         {/* TOC Overlay */}
-        <div className={`toc-overlay ${tocOpen ? 'open' : ''}`}>
+        <div className={`toc-overlay ${tocOpen ? 'open' : ''}`} style={{ zIndex: 1000 }}>
           <div className="toc-title">목차 (Table of Contents)</div>
           <ul className="toc-list">
             {slides.map((slide, index) => (

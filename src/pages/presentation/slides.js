@@ -18,11 +18,11 @@ const slides = [
   { component: Slide08BackendArch, title: "백엔드 아키텍처" },
   { component: Slide11CoreBackend, title: "실행/채점 시스템 흐름" },
   { component: Slide12CoreChat, title: "SSE 기반 실시간 채팅" },
-  { component: Slide15Troubleshooting01, title: "트러블슈팅 #01: JWT/Auth" },
-  { component: Slide16Troubleshooting02, title: "트러블슈팅 #02: SSE Stream" },
-  { component: Slide17Troubleshooting03, title: "트러블슈팅 #03: IDE Layout" },
-  { component: Slide13Productivity, title: "협업 및 생산성 지표" },
-  { component: Slide18Retrospective, title: "회고 (Retrospective)" },
+  { component: Slide15Troubleshooting01, title: "트러블슈팅 #01: JWT 인증과 UX 연속성" },
+  { component: Slide16Troubleshooting02, title: "트러블슈팅 #02: SSE 통신과 보안 헤더" },
+  { component: Slide17Troubleshooting03, title: "트러블슈팅 #03: 반응형 Web IDE 레이아웃" },
+  { component: Slide13Productivity, title: "협업과 개발 생산성" },
+  { component: Slide18Retrospective, title: "성과 및 회고 (Retrospective)" },
   { component: Slide20Conclusion, title: "마무리 (Q&A)" }
 ];
 
